@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	    <title>EgyQuotes</title>
+		<script src="//code.jquery.com/jquery.js"></script>
+<!--		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script> -->
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jade/1.3.1/jade.min.js"></script>
+		
+		<style>
+/* enable absolute positioning */
+.inner-addon {
+  position: relative;
+  z-index: 10;
+}
+
+/* style glyph */
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+
+/* align glyph */
+.left-addon .glyphicon  { left:  0px;}
+.right-addon .glyphicon { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+		
+		</style>
+	</head>
+		<body style='background-color: #f9faf7;' align="center">
+<script type="jade" id="jade">
+.navbar.navbar-default.navbar-static-top
+	.container
+		.navbar-brand EgyQuotes
+		button.navbar-toggle.col-xs-3(data-toggle="collapse",data-target=".navbar-collapse")
+			span.glyphicon.glyphicon-option-horizontal(style="font-size:32px")
+		ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse
+			il
+				button#loginbtn.btn.btn-primary.btn-lg(onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=1048399691842414&redirect_uri=https://egyquotes.appspot.com/FBUser/&scope=email&state=index';") Login via Facebook
+.container-fluid
+	.row
+		.col-sm-offset-2.col-sm-7
+			.panel.panel-default
+				.panel-heading
+					h1.panel-title
+					input#vidURL.form-control(type="text",placeholder="Youtube URL",size="18",onkeypress="video.loadURL($(this).val());",onchange="video.loadURL($(this).val());")
+				.panel-body
+					#video
+					canvas#TimeLine(style="display:none;")
+					canvas#TimeLinePointer(style="display:none;position:absolue;")
+					#quotes
+					#prg_video.progress(style="display:none;")
+						progress-bar.progress-bar-info(style="width:100%")
+					button#btn_vidIO.col-xs-9.btn.btn-lg.btn-default(onclick="video.IOClick()")
+						span.glyphicon.glyphicon-plus
+						span.glyphicon.glyphicon-comment
+					button.col-xs-3.btn.btn-lg.btn-success(data-toggle="modal",data-target="#modal",onclick="data.load();")
+						span.glyphicon.glyphicon-transfer
+					.row.col-xs-12
+						button.col-xs-3.col-sm-2.col-md-2.btn.btn-lg.btn-default(data-toggle="modal",data-target="#chlModal",onclick="channelEvents.modal()")
+							span.glyphicon.glyphicon-plus(style="color:black")
+							span.glyphicon.glyphicon-blackboard(style="color:black")
+		.col-sm-3
+			.panel
+				.panel-body#fbprv(style="display:none;")
+	.row(style="display:none;")
+		.col-md-3.col-md-offset-2.col-lg-2
+			.panel.panel-primary
+				.panel-body
+					.row
+						.col-xs-10.col-md-9
+							.thumbnail
+								img#vidThumbnail(data-src="holder.js/300x300")
+								.caption#vidCaption
+						.btn-group-vertical.col-xs-2.col-sm-1.col-md-3.col-lg-2
+							button.btn.btn-default
+								span.glyphicon.glyphicon-plus
+							button.btn.btn-default
+								span.glyphicon.glyphicon-minus
+				.panel-footer
+					span.badge
+						span.glyphicon.glyphicon-eye-open
+					span.badge
+						span.glyphicon.glyphicon-share-alt
+		.col-md-5.col-lg-8
+			.panel.panel-primary
+				.panel-heading
+					h1.panel-title Quotes
+				.panel-body
+					table.table.table-hover
+						thead
+							tr
+								td
+						tbody#prvPanel
+
+#modal.modal.fade(aria-hidden="true",tabindex="-1",role="dialog")
+	.modal-dialog
+		.modal-content
+			.modal-header
+			.modal-body
+				textarea#data.form-control(rows=32)
+			.modal-footer
+				button.col-md-6.btn.btn-success(onclick="data.transfer()")
+					span.glyphicon.glyphicon-transfer
+				button.btn.btn-default(data-dismiss="modal") Close
+
+#chlModal.modal.fade(aria-hidden="true",tabindex="-1",role="dialog")
+	.modal-dialog
+		.modal-content
+			.modal-header
+				h1.panel-title Trust this channel?
+			.modal-body
+				.thumbnail
+					img#chlModalThumbnail(data-src="holder.js/300x300")
+					.caption#chlModalCaption
+			.modal-footer
+				button.col-xs-6.btn.btn-lg.btn-success(onclick="channelEvents.insert()")
+					span.glyphicon.glyphicon-ok
+				button.col-xs-5.btn.btn-lg.btn-danger(data-dismiss="modal")
+					span.glyphicon.glyphicon-remove
+
+#error.modal.fade(aria-hidden="true",tabindex="-1",role="dialog")
+	.modal-dialog
+		.modal-content
+			.modal-header
+				h1.panel-title
+					span.glyphicon.glyphicon-alert
+			.modal-body
+			.modal-footer
+				button.col-xs-12.btn.btn-lg(data-dismiss="modal")
+					span.glyphicon.glyphicon-remove
+
+.row
+	.col-xs-8.col-xs-offset-2
+	.panel.panel-default
+		.panel-heading
+			Trusted channels:
+		.panel-body
+			#prvChannels
+
+
+canvas#tutorial
+</script>
+<script>
+var tutorial={
+		canvas:{},
+		play:function(){
+			$('#tutorial').css('position','absolute');
+			$('#tutorial').css('left','0px');
+			$('#tutorial').css('top','0px');
+			$('#tutorial').css('display','none');
+			tutorial.canvas=$('#tutorial')[0];
+			tutorial.canvas.width=$('body').width();
+			tutorial.canvas.height=$('body').height();
+			
+			ctx=tutorial.canvas.getContext('2d');
+			ctx.fillStyle="rgba(0,0,0,0.6)";
+			ctx.fillRect(0,0,$('body').width(),$('body').height());
+			$('#tutorial').fadeIn();
+		}
+};
+var YTPlayer;
+function error(jqXHR,textStatus,errorThrown){
+	$('#error').find('.modal-body').text(jqXHR.responseText.substring(jqXHR.responseText.indexOf('<title>')+7,jqXHR.responseText.indexOf('</title>')));
+	$('#error').modal({show:true});
+}
+function message(txt){
+	$('#error').find('.modal-body').text(txt);
+	$('#error').modal({show:true});
+}
+var video={
+			player:null,
+			videoId:'',
+			clips:[],
+			lastT:-1,
+			isYTAPIReady:false,
+			load:function(videoId){
+			if(!video.isYTAPIReady)
+			{
+				setTimeout(function(){
+					video.load(videoId);
+				},1000);  
+				return;
+			}
+		    video.videoId=videoId;
+		    $(document).keyup(video.keydown);
+		    $('input[type=text]').keyup(function(e){
+		    		if(e.keyCode==73 || e.keyCode==105|| e.keyCode==79 || e.keyCode==111)
+		    			{
+			    			e.preventDefault();
+			    			return false;
+		    			}
+		    });
+		    data.load();
+
+		    if(video.player==null)
+		    video.player=new YT.Player('video', {
+		       // height: '390',
+		        width: $('#video').parent().width(),//'640',
+		        videoId: videoId,
+		        playerVars: { 'autoplay': 1,'origin':'https://egyquotes.appspot.com'},
+		        events: {
+		          'onReady': function(event){
+		        	  	YTPlayer=event.target;
+		        	  		video.player=event.target;
+		        	  	  video.player.setPlaybackQuality('small');
+				       video.updateProgress();
+				       data.load();
+				       TimeLine.load(video.videoId,event.target);
+				       
+				       video.player.seekTo( (location.href.indexOf('s=')>-1) ? 
+		        					parseInt(
+	        							location.href.substring(
+										location.href.indexOf('s=')+2,
+										location.href.indexOf('v=')) ) :0
+								,true);
+		          },
+		          'onStateChange': function(event){
+		        	  	 var player=event.target;
+		        	  	 if(event.data==YT.PlayerState.PLAYING)
+		        	  		 TimeLine.setPointer(player);
+		          }
+		        }
+		    });
+		    
+		  },
+		  keydown:function(e){
+		    if(video.player==null) return;
+		    if(e.keyCode==73 || e.keyCode==105)
+		      video.setIN();
+		    else if(e.keyCode==79 || e.keyCode==111)
+		        video.setOUT();
+		  },
+		  setIN:function(){
+			video.lastT=video.player.getCurrentTime();
+		    $('#btn_vidIO').removeClass('btn-default');
+		    $('#btn_vidIO').addClass('btn-danger');
+		    $('#btn_vidIO').html(jade.render('span.glyphicon.glyphicon-stop'));
+		    
+		  },
+		  setOUT:function(){
+		    if(video.lastT>-1)
+		    {
+		      $('#btn_vidIO').removeClass('btn-danger');
+		      $('#btn_vidIO').addClass('btn-default');
+		      $('#btn_vidIO').html(jade.render('span.glyphicon.glyphicon-plus\nspan.glyphicon.glyphicon-comment'));
+		      var i,clips=video.clips;
+				var nclips=[],st=video.lastT,ed=video.player.getCurrentTime();
+				for(i=0;i<clips.length;i++)
+					if(
+						!(st<=clips[i][0] && clips[i][0]<=ed)
+						&&
+						!(st<=clips[i][1] && clips[i][1]<=ed)
+						&&
+						!(clips[i][0]<=st && st<=clips[i][1])
+						&&
+						!(clips[i][0]<=ed && ed<=clips[i][1])
+						)
+						nclips.push(video.clips[i]);
+				nclips.push([st,ed]);
+				nclips.sort(function(a,b){
+					if(a[0]<b[0]) return -1;
+					if(a[0]>b[0]) return 1;
+					return 0;
+				});
+		      video.clips.push([video.lastT,video.player.getCurrentTime()]);
+		      video.lastT=-1;
+		      video.updateProgress();
+		      data.store();
+		    }
+		  },
+		  IOClick:function(){
+			  if(video.lastT>-1)
+				  video.setOUT();
+			  else
+				  video.setIN();
+		  },
+		  updateProgress:function(){
+			  if(video.player==null || video.player==undefined)	return;
+		    var txt='';
+		    var quotes='';
+		    var a,b,lastB=0;
+		    for(var i=0;i<video.clips.length;i++)
+		    {
+		      a=video.clips[i][0]*100/video.player.getDuration();
+		      b=video.clips[i][1]*100/video.player.getDuration();
+		      txt+=video.getGapBar(a-lastB);
+		      txt+=video.getClipBar(b-a,i);
+		      //quotes+=video.getQuoteField(i);
+		      quotes+=quote.getField(i);
+		      lastB=b;
+		    }
+		    txt+=video.getGapBar(100-lastB);
+		    $('#prg_video').html(txt);
+		    $('#quotes').html(quotes);
+		    quote.AuthorDDL.setListeners();
+		  },
+		  getClipBar:function(width,i){
+		    return jade.render('.progress-bar.progress-bar-primary(style="width:'+width+'%",onclick="video.onClipBarClick($(this),'+i+')")');
+		  },
+		  getGapBar:function(width){
+			  return jade.render('.progress-bar.progress-bar-info(style="width:'+width+'%")');
+		  },
+		  onClipBarClick:function(prg,i){
+			  video.player.loadVideoById({'videoId': video.videoId, 'startSeconds': video.clips[i][0], 'endSeconds': video.clips[i][1]});
+		  },
+		  getQuoteField:function(i){
+				return jade.render(
+					'.input-group\n'+
+						'\tspan.input-group-btn\n'+
+							'\t\tbutton.btn.btn-default.dropdown-toggle(data-toggle="dropdown") Author\n'+
+								'\t\t\tspan.caret\n'+
+							'\t\tul.dropdown-menu\n'+
+								'\t\t\tli\n'+
+									'\t\t\t\ta(href="#") p\n'
+						
+						+'\tinput.quote.col-md-5.form-control(onchange="data.store()",placeholder="Quote @ '+Math.floor(video.clips[i][0])+'s")'
+						+'\tdiv.inner-addon.right-addon\n'
+						+'\t\ti.glyphicon.glyphicon-comment\n'
+						+'\t\tspan.input-group-btn\n'
+						+'\t\t\tbutton.btn.btn-primary.shareQuote\n'
+						+'\t\t\t\tspan.glyphicon.glyphicon-glyphicon-share-alt'
+					);
+		  },
+		  loadURL:function(url){
+			var videoid = url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
+			if(videoid == null) return;
+			
+			if(!video.isYTAPIReady)
+			{
+				setTimeout(function(){
+					video.loadURL(url);
+				},500);
+			}
+			else
+			{
+				$('#vidURL')[0].disabled=true;
+		       video.videoId=videoid[1];
+		       video.load(video.videoId);
+			}
+		  }
+		};
+		
+		
+var data={
+		store:function(){
+			var d=[];
+			if(localStorage.getItem("clips")!=undefined)
+				d=JSON.parse(localStorage.getItem("clips"));
+			var i,quotes=$('.quote');
+			for(i=0;i<d.length;i++)
+				if(d[i].videoId==video.videoId)
+				{
+					d.splice(i, 1);
+					i--;
+				}
+			for(i=0;i<video.clips.length;i++)
+				d.push({
+					quote:$(quotes[i]).val(),
+					start:video.clips[i][0],
+					end:video.clips[i][1],
+					videoId:video.videoId
+				});
+			localStorage.setItem("clips",JSON.stringify(d));
+			$('#data').val(JSON.stringify(d));
+		},
+		transfer:function(txt){
+			localStorage.setItem("clips",$('#data').val());
+			$('#modal').modal('hide');
+		},
+		load:function(){
+			var d=[];
+			if(localStorage.getItem("clips")!=undefined)
+			{
+				d=JSON.parse(localStorage.getItem("clips"));
+				if(d!=undefined)
+				{
+					video.clips=[];
+					for(var i=0;i<d.length;i++)
+						if(d[i].videoId==video.videoId)
+							video.clips.push([d[i].start,d[i].end]);
+					console.log(d);
+					video.updateProgress();
+					var p=0;
+					for(var i=0;i<d.length;i++)
+						if(d[i].videoId==video.videoId)
+							$($('.quote')[p++]).val(d[i].quote);
+				}
+				$('#data').val(JSON.stringify(d));
+			}
+			prvPanel.loadQuotes(d);
+		}
+};
+
+var prvPanel={
+		quotes:[],
+		load:function(quote){
+			
+			YTSvc.getData(quote.videoId,function(data){
+				$('#vidThumbnail').attr('src',data.thumbnail);
+				$('#vidCaption').text(data.channel.title+"<br>"+data.title);
+			});
+			
+		},
+		loadQuotes:function(d){
+			prvPanel.quotes=d;
+			var html='';
+			for(var i=0;i<d.length;i++)
+					html+='tr\n'
+							+'\ttd '+d[i].quote+'\n';
+			$('#prvPanel').html(jade.render(html));
+			prvPanel.setListeners();
+		},
+		setListeners:function(){
+			$('#prvPanel tr').click(function(){
+				$('#prvPanel tr').removeClass('success');
+				$(this).addClass('success');
+				prvPanel.load(prvPanel.quotes[$('#prvPanel tr').index(this)]);
+			});
+		}
+};
+
+		
+var PersonSvc={
+		cached:[],
+		insert:function(name,success){
+			$.ajax({
+						url:'/person?access_token='+localStorage.getItem('access_token'),
+						type:'POST',
+						data:'name='+name,
+						success:success
+					});
+		},
+		get:function(id,success){
+			success({key:{id:1},properties:{name:'name'}});/*
+			
+			$.ajax({
+				url:'/person?id='+id,
+				type:'GET',
+				success:success
+			});
+			//*/
+		},
+		list:function(offset,limit,success){
+			
+			//success([{key:{id:1},properties:{name:'name'}},{key:{id:2},properties:{name:'name2'}}]); /*
+
+			if(PersonSvc.cached.length==0)
+				$.ajax({
+					url:'/people?offset='+offset+'&limit='+limit,
+					type:'GET',
+					success:success
+				});
+			else
+				success(PersonSvc.cached);
+			//*/
+		}
+	};
+var QuoteSvc={
+		/*
+		$.ajax({
+	url:'/Quote?access_token='+localStorage.getItem('access_token'),
+	type:'POST',
+	headers: {
+		'Accept': 'application/json',
+		'Content-Type': 'application/json' 
+	},
+	dataType:'json',
+	data:JSON.stringify({
+			videoId:'',
+			personId:,
+			quote:'',
+			start:'',
+			end:''}),
+	success: success
+});
+		*/
+		insert:function(personId,quote,start,end,success){
+			$.ajax({
+				url:'/Quote?access_token='+localStorage.getItem('access_token'),
+				type:'POST',
+				data:
+					'videoId='+video.videoId
+					+'&personId='+personId
+					+'&quote='+quote
+					+'&start='+start
+					+'&end='+end,
+/* 					JSON.stringify({
+					videoId:video.videoId,
+					personId:personId,
+					quote:quote,
+					start:start,
+					end:end}), */
+				success: success,
+				error:error
+			});
+		}
+};
+
+var ChannelSvc={
+		insert:function(id,success){
+			$.ajax({
+				url:'/channel/insert?id='+id+'&access_token='+localStorage.getItem('access_token'),
+				type:'GET',
+				success: success
+			});
+		},
+		list:function(offset,limit,success){
+			
+			//success([{"key":{"name":"CHANNEL-ID",},"properties":{"videos":null}}]); /*
+			
+			$.ajax({
+				url:'/channel/list?offset='+offset+'&limit='+limit,
+				type:'GET',
+				success: success
+			});//*/
+		},
+};
+
+
+
+var YTSvc={
+		key:"AIzaSyBNWNnIBvHyBaREu7ikXf7jqW_865D4CD0",
+        data:{channel:{title:'',thumbnail:'',id:-1},id:-1,thumbnail:'',title:''},
+        callBackFn:function(d){},
+		getData:function(videoId,callBackFn){
+            YTSvc.data={channel:{title:'',thumbnail:'',id:-1},id:-1,thumbnail:'',title:''};
+            YTSvc.callBackFn=callBackFn;
+			$.ajax({
+				url:"https://www.googleapis.com/youtube/v3/videos?id="+videoId+"&key="+YTSvc.key
+                    +"&part=snippet",
+                type:'GET',
+                success:function(data){
+                        YTSvc.data.title=data.items[0].snippet.title;
+                        YTSvc.data.thumbnail=data.items[0].snippet.thumbnails.default.url;
+                        YTSvc.data.id=data.items[0].id;
+                        var channelId=data.items[0].snippet.channelId;
+	                	$.ajax({
+	                		url:'https://www.googleapis.com/youtube/v3/channels?part=snippet&id='+channelId+'&key='+YTSvc.key,
+	                		type:'GET',
+                            success:function(data){
+	                			YTSvc.data.channel.title=data.items[0].snippet.title;
+                                YTSvc.data.channel.thumbnail=data.items[0].snippet.thumbnails.default.url;
+                                YTSvc.data.channel.id=data.items[0].id;
+                                YTSvc.callBackFn(YTSvc.data);
+	                		}
+	                	});
+                }
+			});
+		},
+		getChannelData: function(channelId,callback){
+			$.ajax({
+	        		url:'https://www.googleapis.com/youtube/v3/channels?part=snippet&id='+channelId+'&key='+YTSvc.key,
+	        		type:'GET',
+	                success:function(data){
+	                		callback({
+	                    		id: data.items[0].id,
+	                    		title: data.items[0].snippet.title,
+	                    		thumbnail: data.items[0].snippet.thumbnails.default.url
+	                    });
+	        		}
+        		});
+		}
+};
+var VideoSvc={
+		findById:function(videoId,success){
+			//success({"videoId":"abc","start":[1],"end":[3],"quoteId":[1555996451351371]});/*
+			$.ajax({
+	        		url:'/video?id='+videoId,
+	        		type:'GET',
+	            success:success
+        		});//*/
+		}
+};
+
+var TimeLine={
+		load:function(videoId,player){
+			$('#TimeLine').css('display','');
+			var canvas=$('#TimeLine')[0];
+			canvas.width=$('#TimeLine').parent().width();
+			canvas.height=20;
+			var ctx=canvas.getContext('2d');
+			ctx.fillStyle = "#5bc0de";
+			ctx.fillRect(0,0,canvas.width,canvas.height);
+			$('#TimeLinePointer').css('display','');
+			$('#TimeLinePointer').css('position','absolute');
+			
+			VideoSvc.findById(videoId,function(response){
+				var sortedSeg=[];
+				for(var i=0;i<response.start.length;i++)
+					sortedSeg.push({start:response.start[i],end:response.end[i],quoteId:response.quoteId});
+				sortedSeg.sort(function(a,b){
+					if(a.start<b.start)	return -1;
+					if(a.start>b.start)	return 1;
+					if(a.end<b.end)	return -1;
+					if(a.end>b.end)	return 1;
+					return 0;
+				});
+				
+				ctx.fillStyle = "red";
+				for(var i=0;i<sortedSeg.length;i++)
+				{
+					var o=(sortedSeg[i].start/player.getDuration())*canvas.width;
+					var w=(sortedSeg[i].end/player.getDuration())*canvas.width-o;
+					ctx.fillRect(o,0,w,canvas.height);
+				}
+				fbprv.loadPosts(response.quoteId);
+			});
+		},
+		setPointer:function(player){
+			var canvas=$('#TimeLinePointer');
+			canvas.css('left',$('#TimeLine').position().left);
+			canvas.css('top',$('#TimeLine').position().top);
+			
+			canvas=canvas[0];
+			canvas.width=canvas.style.width=$('#TimeLine').width();
+			canvas.height=canvas.style.height=$('#TimeLine').height();
+			
+			var ctx=canvas.getContext('2d');
+			
+			var w=player.getCurrentTime()/player.getDuration()*canvas.width;
+			
+			ctx.clearRect(0,0,w,1<<10);
+			ctx.fillStyle = "green";
+			ctx.fillRect(0,0,w,1<<10);
+
+			setTimeout(function(){
+				if(video.player.getPlayerState()==YT.PlayerState.PLAYING)
+					TimeLine.setPointer(player);
+			},600);
+		}
+};
+
+var fbprv={
+		loadPosts:function(quoteIds){
+			var html='<div id="fb-root"'+'><'+'/div><'+'script'+
+			'>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElement(s); js.id = id;  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";  fjs.parentNode.insertBefore(js, fjs);}(document, \'script\', \'facebook-jssdk\'));<'+'/script>';
+			
+			for(var i=0;i<quoteIds.length;i++)
+				html+='<div class="fb-post" data-href="https://www.facebook.com/EgyQuotes/posts/"'+quoteIds[i]+' data-width="350">';
+			$('#fbprv').html(html);
+			$('#fbprv').css('display','');
+		}
+};
+
+var channelEvents={
+		channelId:-1,
+		modal:function(){
+			YTSvc.getData(video.videoId,function(data){
+				$('#chlModalThumbnail').attr('src',data.channel.thumbnail);
+				$('#chlModalCaption').text(data.channel.title);
+				channelEvents.channelId=data.channel.id;
+			});
+		},
+		insert:function(){
+			ChannelSvc.insert(channelEvents.channelId,function(){
+				$('#chlModal').modal('hide');
+			});
+		},
+		load:function(){
+			ChannelSvc.list(0,100,function(channels){
+				for(var i=0;i<channels.length;i++)
+					YTSvc.getChannelData(channels[i].key.name,function(channelData){
+						var d=$('<div>');
+						d.addClass('thumbnail');
+						d.addClass('col-sm-2 col-md-2 col-lg-1');
+						d.html(jade.render('img(data-src="holder.js/300x300",src="'+channelData.thumbnail+'")\n.caption '+channelData.title));
+						d.click(function(){
+							location.href="http://youtube.com/channel/"+channelData.id;
+						});
+						d.appendTo($('#prvChannels'));
+					});
+			});
+		}
+};
+
+
+var debug={};
+var quote={
+		getField:function(i){
+			return jade.render(
+					'.input-group\n'+
+						'\t.ddl_authors.input-group-btn\n'+
+							'\t\tbutton.author.btn.btn-default.dropdown-toggle(data-toggle="dropdown") Author\n'+
+								'\t\t\tspan.caret\n'+
+							'\t\tul.dropdown-menu\n'+
+/* 						'\tdiv.inner-addon.right-addon\n'+
+						'\t\ti.glyphicon.glyphicon-comment\n'+ */
+						'\tinput.quote.col-md-5.form-control(onchange="data.store()",placeholder="Quote @ '+Math.floor(video.clips[i][0])+'s")\n'+
+						
+						'\tdiv.inner-addon.right-addon\n'+
+						'\t\ti.glyphicon.glyphicon-comment\n'+
+						'\tspan.input-group-btn\n'+
+						'\t\tbutton.btn.btn-primary.shareQuote\n'+
+						'\t\t\tspan.glyphicon.glyphicon-share-alt'
+						
+//						'\tinput.quote.col-md-5.form-control(onchange="data.store()",placeholder="Quote @ '+video.clips[i][0]+'s")'
+				);
+		},
+		AuthorDDL:{
+			searchField:'',
+			setAuthor:function(obj,name,value){
+				$(obj)
+					.closest('.ddl_authors')
+					.find('button.author')
+					.html(name+jade.render('span.caret'));
+				$(obj)
+					.closest('.ddl_authors')
+					.find('button.author')
+					.attr('value',value);
+			},
+			searchAuthor:function(searchField){
+				quote.AuthorDDL.searchField=searchField.value;
+				
+				PersonSvc.list(0,100,function(response){
+					
+					//remove results
+					$(searchField)
+						.parent()
+						.parent()
+						.find('a')
+						.each(function(i,o){
+							$(o).parent().remove();
+						});
+					
+					var notfound=true;
+					for(var i=0;i<response.length;i++)
+						if(response[i].properties.name.indexOf(searchField.value)>=0)
+						{
+							var li=$('<li></li>');
+								var a=$('<a></a>');
+									a.attr('href','#');
+									a.attr('value',response[i].key.name);
+									a.text(response[i].properties.name);
+								a.appendTo(li);
+							li.appendTo($(searchField).parent().parent());
+							notfound=false;
+						}
+					// $(obj).parent().parent().html(jade.render(jtxt));
+					if(notfound)
+						quote.AuthorDDL.setAuthor(searchField,searchField.value,-1);
+					
+					quote.AuthorDDL.setListeners();
+				});
+			},
+			setListeners:function(){
+				
+				$('.ddl_authors button').click(function(){
+					var jtxt='li\n'+
+								'\tinput.form-control(type="text",placeholder="search",value="'+quote.AuthorDDL.searchField+'")\n'+
+								'\t.inner-addon.right-addon\n'+
+								'\t\ti.glyphicon.glyphicon-search';
+					// for(var i=0;i<quote.people.length;i++)
+					// 	jtxt+='li\n\ta(href="#") '+quote.people[i].name+'\n';
+					$(this).parent().find('.dropdown-menu').html(jade.render(jtxt));
+					//quote.AuthorDDL.setListeners();
+					$('.ddl_authors input').click(function(e){
+			    			e.preventDefault();
+			    			return false;
+		    			});
+					$('.ddl_authors input').keyup(function(e){
+						if(e.keyCode==13)//return button
+							quote.AuthorDDL.searchAuthor(this);
+		    			});
+					$('input').keyup(function(e){
+			    			if(e.keyCode==73 || e.keyCode==105|| e.keyCode==79 || e.keyCode==111)
+			    			{
+				    			e.preventDefault();
+				    			return false;
+			    			}
+		    			});
+				});
+				$('.ddl_authors a').click(function(){
+					quote.AuthorDDL.setAuthor(this,$(this).text(),$(this).attr('value'));
+	    			});
+				$('button.shareQuote').each(function(index,button){
+					button=$(button);
+					button.off();
+					
+					button.click(function(){
+						var parent=$(button).closest('.input-group');
+						var personId=parent.find('.author').attr('value');
+						var quote=parent.find('.quote').val();
+						var index=parent.find('.quote').index('.quote');
+						console.log($(this).closest('.input-group')[0]);
+						console.log(index);
+						var start=video.clips[index][0];
+						var end=video.clips[index][1];
+						
+						if(parent.find('.ddl_authors').find('button').attr('value')==undefined
+								|| parent.find('.ddl_authors').find('button').attr('value')==null
+								)
+							{
+								message("Must login & select an Author before sharing");
+								return;
+							}
+						button[0].disabled=true;
+						if(parent.find('.ddl_authors').find('button').attr('value')=='-1')
+						{
+							PersonSvc.insert(parent.find('.ddl_authors').find('button').text(),function(person){
+								QuoteSvc.insert(person.key,quote,start,end,function(){
+									button.addClass('btn-success');
+									button.removeClass('btn-primary');
+									button.html(jade.render('span.glyphicon.glyphicon-ok'));
+									button[0].disabled=true;
+								});
+							});
+						}
+						else
+							QuoteSvc.insert(personId,quote,start,end,function(){
+								button.addClass('btn-success');
+								button.removeClass('btn-primary');
+								button.html(jade.render('span.glyphicon.glyphicon-ok'));
+								button[0].disabled=true;
+							});
+					});
+				});
+				
+				/*.click(function(e){
+					var button=$(e.target);
+					var parent=$(e.target).closest('.input-group');
+					var personId=parent.find('.author').attr('value');
+					var quote=parent.find('.quote').val();
+					var index=parent.find('.quote').index('.quote');
+					console.log($(this).closest('.input-group')[0]);
+					console.log(index);
+					var start=video.clips[index][0];
+					var end=video.clips[index][1];
+					QuoteSvc.insert(personId,quote,start,end,function(){
+						button.addClass('btn-success');
+						button.removeClass('btn-primary');
+						button.html(jade.render('span.glyphicon.glyphicon-ok'));
+						button[0].disabled=true;
+					});
+	    			});//*/
+			}
+		}
+};
+
+
+$(function(){
+	
+	$("body").html(
+		    jade.render($('#jade').html(), {})
+		  );
+	channelEvents.load();
+	
+	if(location.href.indexOf('v=')>-1)
+		video.loadURL('youtu.be/'+location.href.substring(location.href.indexOf('v=')+2,location.href.length));
+	
+	if(location.href.indexOf('access_token')>-1)
+		localStorage.setItem('access_token',
+				location.href.substring(location.href.indexOf('access_token=')+13,location.href.length));
+	
+	if(localStorage.getItem('access_token')!=null
+			&& localStorage.getItem('access_token')!=undefined)
+		$.ajax({
+			url:'https://graph.facebook.com/me?access_token='+localStorage.getItem('access_token'),
+			type:'GET',
+			success:function(response){
+				$('#loginbtn').text(response.name);
+				$('#loginbtn').removeClass('btn-primary');
+				$('#loginbtn').addClass('btn-default');
+				$('#loginbtn').click(function(){
+					localStorage.setItem('access_token','');
+					$(this).text('Logged out');
+				});
+				$('#loginbtn').mouseover(function(){
+					$(this).text('Log out');
+				});
+				$('#loginbtn').mouseup(function(){
+					$(this).text(response.name);
+				});
+		    }
+		});
+});
+
+
+
+		function onYouTubeIframeAPIReady() {
+			console.log('YT Ready');
+			video.isYTAPIReady=true;
+		  }
+</script>
+<script src="https://www.youtube.com/iframe_api?enablejsapi=1"></script>
+  </body>
+  </html>
