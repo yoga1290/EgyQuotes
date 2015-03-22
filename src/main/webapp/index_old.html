@@ -45,7 +45,7 @@
 .right-addon input { padding-right: 30px; }
 		
 body{
-	padding-top: 70px;
+	padding: 70px;
 }
 		</style>
 	</head>
@@ -53,40 +53,28 @@ body{
 <script type="jade" id="jade">
 .navbar.navbar-default.navbar-fixed-top
 	.container-fluid
-		ul.nav.navbar-nav.navbar-left.col-xs-12
-			li.dropdown.col-xs-offset-0.col-md-offset-5.col-md-2
-				a#MainMenuTitle.dropdown-toggle(href="#",data-toggle="dropdown") egy
-					span.glyphicon.glyphicon-comment
-					span.caret
-				ul.dropdown-menu.col-xs-12
-					li
-						a(href="#vidURL")
-							span.glyphicon.glyphicon-play  Player
-					li
-						a(href="#dataTable_quote",onclick="dataTable_quote.init('#dataTable_quote')")
-							span.glyphicon.glyphicon-comment  Quotes
-					li.divider
-					li
-						a(onclick="alert('coming soon!')",href="#") My added quotes
-					li
-						a(href="https://www.facebook.com/dialog/oauth?client_id=1048399691842414&redirect_uri=https://egyquotes.appspot.com/FBUser/&scope=email&state=index") re/log in
-					li#MainMenuLogOutButton(style="display:none")
-						a(onclick="localStorage.setItem('access_token','');",href="https://egyquotes.appspot.com") Log out
-
-
+		.navbar-brand EgyQuotes
+		button.navbar-toggle.col-xs-3(data-toggle="collapse",data-target=".navbar-collapse")
+			span.glyphicon.glyphicon-option-horizontal(style="font-size:32px")
+		ul.nav.navbar-nav.navbar-left.collapse.navbar-collapse
+			li
+				a(href="#vidURL") Player
+			li
+				a(href="#dataTable_quote",onclick="dataTable_quote.init('#dataTable_quote')") Quotes
+		ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse
+			li
+				button#loginbtn.btn.btn-primary.btn-lg(onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=1048399691842414&redirect_uri=https://egyquotes.appspot.com/FBUser/&scope=email&state=index';") Login via Facebook
 .container-fluid
 	.row
-		.col-md-7(style="padding-right:0px;padding-left:0px;")
+		.col-sm-7
 			.panel.panel-default
 				.panel-heading
 					h1.panel-title
 					input#vidURL.form-control(type="text",placeholder="Youtube URL",size="18",onkeypress="video.loadURL($(this).val());",onchange="video.loadURL($(this).val());")
 				.panel-body
 					#video
-					br
 					canvas#TimeLine(style="display:none;")
-					a(href="#video")
-						canvas#TimeLinePointer(style="display:none;position:absolue;")
+					canvas#TimeLinePointer(style="display:none;position:absolue;")
 					#quotes
 					#prg_video.progress(style="display:none;")
 						progress-bar.progress-bar-info(style="width:100%")
@@ -367,7 +355,7 @@ var video={
 		  onClipBarClick:function(prg,i){
 			  video.player.loadVideoById({'videoId': video.videoId, 'startSeconds': video.clips[i][0], 'endSeconds': video.clips[i][1]});
 		  },
-		  /* getQuoteField:function(i){
+		  getQuoteField:function(i){
 				return jade.render(
 					'.input-group\n'+
 						'\tspan.input-group-btn\n'+
@@ -385,7 +373,7 @@ var video={
 						+'\t\t\tbutton.btn.btn-primary.shareQuote\n'
 						+'\t\t\t\tspan.glyphicon.glyphicon-glyphicon-share-alt'
 					);
-		  }, */
+		  },
 		  loadURL:function(url){
 			var videoid = url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
 			if(videoid == null) return;
@@ -696,11 +684,6 @@ var TimeLine={
 					var w=(sortedSeg[i].end/player.getDuration())*canvas.width-o;
 					ctx.fillRect(o,0,w,canvas.height);
 				}
-				
-				$('#TimeLinePointer').click(function(e){
-				  video.player.seekTo( e.offsetX/$('#TimeLine').width()*video.player.getDuration());
-				});
-				
 				fbprv.loadPosts(response.quoteId);
 			});
 		},
@@ -719,7 +702,7 @@ var TimeLine={
 			
 			ctx.clearRect(0,0,w,1<<10);
 			ctx.fillStyle = "green";
-			ctx.fillRect(w,0,5,1<<10);
+			ctx.fillRect(0,0,w,1<<10);
 
 			setTimeout(function(){
 				if(video.player.getPlayerState()==YT.PlayerState.PLAYING)
@@ -791,6 +774,7 @@ var quote={
 						'\tspan.input-group-btn\n'+
 						'\t\tbutton.btn.btn-info.playQuote\n'+
 						'\t\t\tspan.glyphicon.glyphicon-step-backward\n'+
+						'\tspan.input-group-btn\n'+
 						'\t\tbutton.btn.btn-primary.shareQuote\n'+
 						'\t\t\tspan.glyphicon.glyphicon-share-alt'
 						
@@ -812,7 +796,6 @@ var quote={
 			searchAuthor:function(searchField){
 				quote.AuthorDDL.searchField=searchField.value;
 				
-				//todo
 				PersonSvc.list(0,100,function(response){
 					
 					//remove results
@@ -855,54 +838,30 @@ var quote={
 					// 	jtxt+='li\n\ta(href="#") '+quote.people[i].name+'\n';
 					$(this).parent().find('.dropdown-menu').html(jade.render(jtxt));
 					//quote.AuthorDDL.setListeners();
-					
-//					$('.ddl_authors input').off();
 					$('.ddl_authors input').click(function(e){
-						e.stopPropagation();
 			    			e.preventDefault();
 			    			return false;
 		    			});
-//					$('.ddl_authors input').off();
 					$('.ddl_authors input').keyup(function(e){
 						if(e.keyCode==13)//return button
 							quote.AuthorDDL.searchAuthor(this);
 		    			});
-//					$('input').off();
 					$('input').keyup(function(e){
 			    			if(e.keyCode==73 || e.keyCode==105|| e.keyCode==79 || e.keyCode==111)
 			    			{
-			    				e.stopPropagation();
 				    			e.preventDefault();
 				    			return false;
 			    			}
 		    			});
-					
-//					$('button.playQuote').off();
-					$('button.playQuote').each(function(index,button){
-						$(button).click(function(){
-							video.player.seekTo(video.clips[index][0]);
-						});
-					});
-					
-					
 				});
-				
-				$('.ddl_authors input').keyup(function(e){
-					if(e.keyCode==13)//return button
-						quote.AuthorDDL.searchAuthor(this);
-	    			});
-				
-//				$('.ddl_authors a').off();
 				$('.ddl_authors a').click(function(){
 					quote.AuthorDDL.setAuthor(this,$(this).text(),$(this).attr('value'));
 	    			});
-//				$('button.playQuote').off();
 				$('button.playQuote').each(function(index,button){
 					$(button).click(function(){
 						video.player.seekTo(video.clips[index][0]);
 					});
 				});
-//				$('button.shareQuote').off();
 				$('button.shareQuote').each(function(index,button){
 					button=$(button);
 					button.off();
@@ -988,8 +947,19 @@ $(function(){
 			url:'https://graph.facebook.com/me?access_token='+localStorage.getItem('access_token'),
 			type:'GET',
 			success:function(response){
-				$('#MainMenuTitle').html(jade.render('| '+response.name+'\nspan.caret'));
-				$('#MainMenuLogOutButton').css('display','');
+				$('#loginbtn').text(response.name);
+				$('#loginbtn').removeClass('btn-primary');
+				$('#loginbtn').addClass('btn-default');
+				$('#loginbtn').click(function(){
+					localStorage.setItem('access_token','');
+					$(this).text('Logged out');
+				});
+				$('#loginbtn').mouseover(function(){
+					$(this).text('Log out');
+				});
+				$('#loginbtn').mouseup(function(){
+					$(this).text(response.name);
+				});
 		    }
 		});
 });
