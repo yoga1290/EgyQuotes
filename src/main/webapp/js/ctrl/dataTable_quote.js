@@ -21,7 +21,8 @@ var dataTable_quote={
 					if(row==undefined || row==null) return;
 					
 					var videoId=row.properties.videoId;
-					$(td).html('<a target="_blank" href="http://youtu.be/'+videoId+'?t='+Math.floor(row.properties.start)+'s"><img src="'+dataTable_quote.thumbnailURL[videoId]+'" /></a>');
+					//$(td).html('<a target="_blank" href="http://youtu.be/'+videoId+'?t='+Math.floor(row.properties.start)+'s"><img src="'+dataTable_quote.thumbnailURL[videoId]+'" /></a>');
+					$(td).html('<a href="#video" onclick="video.load(\''+videoId+'\','+Math.floor(row.properties.start)+');"><img src="'+dataTable_quote.thumbnailURL[videoId]+'" /></a>');
 				});
 			}
 		},
@@ -72,6 +73,14 @@ var dataTable_quote={
 					});
 					
 					
+					$(dataTable_quote.table).find('td.quote').each(function(i,td){
+						var row=dataTable_quote.api.row($(td).parent()).data();
+						if(row==undefined || row==null) return;
+						
+						var videoId=row.properties.videoId;
+						//$(td).html('<a target="_blank" href="http://youtu.be/'+videoId+'?t='+Math.floor(row.properties.start)+'s"><img src="'+dataTable_quote.thumbnailURL[videoId]+'" /></a>');
+						$(td).html('<a href="#video" onclick="video.load(\''+videoId+'\','+Math.floor(row.properties.start)+');">'+row.properties.quote+'</a>');
+					});
 					
 					$(dataTable_quote.table).find('td.videoId').each(function(i,td){
 						var row=dataTable_quote.api.row($(td).parent()).data();
@@ -108,8 +117,8 @@ var dataTable_quote={
 		                "defaultContent": "Delete"
 		                },
 		                //*/
-		                {data:'properties.personId',title:'صاحب المقولة',class:'search'},
-		                {data: "properties.quote", title:"المقولة"},
+		                {data:'properties.personId',title:'صاحب المقولة',className:'search'},
+		                {data: "properties.quote", title:"المقولة",className:'quote'},
 		                {data: "properties.videoId", title:"فيديو المصدر",className:'videoId'}
 		                /*,
 						{data: "properties.videoId", title:"videoId"},
