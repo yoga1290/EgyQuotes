@@ -28,7 +28,7 @@ var YTSvc={
 			});
 		},
 		getChannelData: function(channelId,callback){
-			$.ajax({
+			$.ajax({ 
 	        		url:'https://www.googleapis.com/youtube/v3/channels?part=snippet&id='+channelId+'&key='+YTSvc.key,
 	        		type:'GET',
 	                success:function(data){
