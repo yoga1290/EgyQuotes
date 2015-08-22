@@ -32,11 +32,12 @@ var YTSvc={
 	        		url:'https://www.googleapis.com/youtube/v3/channels?part=snippet&id='+channelId+'&key='+YTSvc.key,
 	        		type:'GET',
 	                success:function(data){
+                                    if(data.items[0]!=undefined)
 	                		callback({
-	                    		id: data.items[0].id,
-	                    		title: data.items[0].snippet.title,
-	                    		thumbnail: data.items[0].snippet.thumbnails.default.url
-	                    });
+                                            id: data.items[0].id,
+                                            title: data.items[0].snippet.title,
+                                            thumbnail: data.items[0].snippet.thumbnails.default.url
+                                        });
 	        		}
         		});
 		}

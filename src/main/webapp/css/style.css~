@@ -1,0 +1,64 @@
+/* enable absolute positioning */
+.inner-addon {
+  position: relative;
+  z-index: 10;
+}
+
+/* style glyph */
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+
+/* align glyph */
+.left-addon .glyphicon  { left:  0px;}
+.right-addon .glyphicon { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+		
+body{
+	padding-top: 70px;
+	background-color: #282828;
+}
+
+.panel-default>.panel-heading
+{
+	color: #cccccc;
+	background-color: #646464;
+	border-color: #cccccc;
+}
+.panel-default
+{
+	background-color: #747474;
+	color: #cccccc;
+	border-color:#999999;
+}
+
+
+.navbar-default
+{
+	color: #cccccc;
+	background-color: #999999;
+	border-color: #cccccc;
+}
+.navbar-default .navbar-nav>li>a
+{
+	color:	#282828;
+}
+.navbar-default .navbar-nav>li>a:hover
+{
+	color:	#cccccc;
+}
+.clickable
+{
+	cursor:pointer;
+	color: #cccccc;
+}
+.clickable:hover
+{
+	cursor:pointer;
+	color: #999999;
+}

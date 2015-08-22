@@ -8,7 +8,7 @@ var video={
 			if(!video.isYTAPIReady)
 			{
 				setTimeout(function(){
-					video.load(videoId);
+					video.load(videoId,start);
 				},1000);  
 				return;
 			}
@@ -50,7 +50,10 @@ var video={
 						       video.player.seekTo(s,true);
 					    	   }
 					       else if(start!=null && start!=undefined)
+					    	   {
 					    	   		video.player.seekTo(start,true);
+					    	   		$('#vidURL').val('https://EgyQuotes.appspot.com/#s='+Math.floor(start)+'v='+video.videoId);
+					    	   }
 					       else
 						    	   $('#vidURL').val('https://EgyQuotes.appspot.com/#v='+video.videoId);
 					       TimeLine.load(video.videoId,event.target);
@@ -189,3 +192,12 @@ var video={
 			}
 		  }
 		};
+                
+                
+if(location.href.indexOf('#s=')>-1)
+{
+    video.load(
+            location.href.substring(location.href.indexOf('v=')+2,location.href.length),
+            location.href.substring(location.href.indexOf('s=')+2,location.href.indexOf('v='))
+    );
+}

@@ -14,6 +14,7 @@ var dataTable_quote={
 					dataTable_quote.thumbnailURL[response.id]=response.channel.thumbnail;
 					dataTable_quote.curThumbnail++;
 					dataTable_quote.updateChannelThumbnail();
+					//TODO:
 				});
 			}else{
 				$(dataTable_quote.table).find('td.videoId').each(function(i,td){
@@ -28,8 +29,9 @@ var dataTable_quote={
 		},
 		init:function(table){
 			dataTable_quote.table=$(table);
-			dataTable_quote.table.html('');
 			dataTable_quote.api.destroy();
+			dataTable_quote.table.html('');
+			
 			dataTable_quote.api=$(table).DataTable({
 				processing:true,
 				serverSide:true,
@@ -82,6 +84,7 @@ var dataTable_quote={
 						$(td).html('<a href="#video" onclick="video.load(\''+videoId+'\','+Math.floor(row.properties.start)+');">'+row.properties.quote+'</a>');
 					});
 					
+					dataTable_quote.videoId=[];
 					$(dataTable_quote.table).find('td.videoId').each(function(i,td){
 						var row=dataTable_quote.api.row($(td).parent()).data();
 						dataTable_quote.videoId.push(row.properties.videoId);
@@ -117,9 +120,9 @@ var dataTable_quote={
 		                "defaultContent": "Delete"
 		                },
 		                //*/
-		                {data:'properties.personId',title:'صاحب المقولة',className:'search'},
+		                {data:'properties.personId',title:'صاحب المقولة',"orderable":true, className:'search'},
 		                {data: "properties.quote", title:"المقولة",className:'quote'},
-		                {data: "properties.videoId", title:"فيديو المصدر",className:'videoId'}
+		                {data: "properties.videoId","orderable":      false, title:"فيديو المصدر",className:'videoId'}
 		                /*,
 						{data: "properties.videoId", title:"videoId"},
 						{data: "properties.quote", title:"quote"},

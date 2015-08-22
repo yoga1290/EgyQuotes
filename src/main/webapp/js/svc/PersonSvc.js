@@ -31,5 +31,12 @@ var PersonSvc={
 			else
 				success(PersonSvc.cached);
 			//*/
+		},
+		findByName:function(name,success){
+			$.ajax({
+					url:'/person/find?name='+name,
+					type:'GET',
+					success:success
+				});
 		}
 	};

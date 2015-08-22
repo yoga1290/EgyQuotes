@@ -6,8 +6,8 @@
 	<packaging>war</packaging>
 	<version>1</version>
 
-	<groupId>egyquotes.Application</groupId>
-	<artifactId>EgyQuotes</artifactId>
+	<groupId>videoquotes.Application</groupId>
+	<artifactId>VideoQuotes</artifactId>
 
 	<pluginRepositories>
 		<pluginRepository>
@@ -23,6 +23,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>4.0.0.RELEASE</spring.version>
 		<jackson.version>2.2.3</jackson.version>
+
+		<java.version>1.7</java.version>
+	    <spring.version>4.1.1.RELEASE</spring.version>
+	    <jstl.version>1.2</jstl.version>
+	    <junit.version>4.11</junit.version>
+	    <logback.version>1.0.13</logback.version>
+	    <jcl-over-slf4j.version>1.7.5</jcl-over-slf4j.version>
 	</properties>
 
 	<repositories>
@@ -182,6 +189,13 @@
 			<artifactId>guice-multibindings</artifactId>
 			<version>3.0</version>
 		</dependency>
+		
+		<!-- JSON -->
+	    <dependency>
+	      <groupId>org.json</groupId>
+	      <artifactId>json</artifactId>
+	      <version>20141113</version>
+	    </dependency>
 
 		<!-- Spring Dependencies -->
 
@@ -276,6 +290,33 @@
 			<artifactId>datanucleus-jodatime</artifactId>
 			<version>3.2.1</version>
 		</dependency>
+
+		<dependency>
+	      <groupId>org.slf4j</groupId>
+	      <artifactId>jcl-over-slf4j</artifactId>
+	      <version>${jcl-over-slf4j.version}</version>
+	    </dependency>
+	 
+	    <dependency>
+	      <groupId>ch.qos.logback</groupId>
+	      <artifactId>logback-classic</artifactId>
+	      <version>${logback.version}</version>
+	    </dependency>
+
+	    <dependency>
+	      <groupId>mysql</groupId>
+	      <artifactId>mysql-connector-java</artifactId>
+	      <version>5.1.25</version>
+	      <type>jar</type>
+	      <scope>compile</scope>
+	    </dependency>
+
+	    <!-- JSON -->
+	    <dependency>
+	      <groupId>org.json</groupId>
+	      <artifactId>json</artifactId>
+	      <version>20141113</version>
+	    </dependency>
 	</dependencies>
 
 	<build>
@@ -340,7 +381,7 @@
 
 				<configuration>
 					<fork>false</fork>
-					<mappingIncludes>/egyquotes/repository/*.class</mappingIncludes>
+					<mappingIncludes>/videoquotes/repository/*.class</mappingIncludes>
 					<verbose>true</verbose>
 					<enhancerName>ASM</enhancerName>
 					<api>JDO</api>
@@ -368,6 +409,7 @@
 
 		<pluginManagement>
 			<plugins>
+				<!--
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -397,6 +439,22 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
+			-->
+
+
+			<!-- Eclipse project -->
+		      <plugin>
+		      <groupId>org.apache.maven.plugins</groupId>
+		      <artifactId>maven-eclipse-plugin</artifactId>
+		      <version>2.9</version>
+		      <configuration>
+		              <!-- Always download and attach dependencies source code -->
+		        <downloadSources>true</downloadSources>
+		        <downloadJavadocs>false</downloadJavadocs>
+		        <!-- Avoid type mvn eclipse:eclipse -Dwtpversion=2.0 -->
+		        <wtpversion>2.0</wtpversion>
+		      </configuration>
+		      </plugin>
 			</plugins>
 		</pluginManagement>
 	</build>

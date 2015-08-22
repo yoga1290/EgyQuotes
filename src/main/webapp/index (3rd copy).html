@@ -1,0 +1,424 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/jade/1.3.1/jade.min.js"></script>
+<meta charset="utf-8">
+<script type="jade" id="jade">
+html(lang="en")
+	head
+		meta(charset="utf-8")
+		meta(http-equiv="X-UA-Compatible",content="IE=edge")
+		meta(name="viewport",content="width=device-width, initial-scale=1, maximum-scale=1")
+		title EgyQuotes
+		script(src="//code.jquery.com/jquery.js")
+		link(rel="stylesheet",href="/glyphicons/glyphicons.css")
+		link(rel="stylesheet",href="/css/animate.css")
+		
+		link(rel="stylesheet",href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css")
+		link(rel="stylesheet",href="/css/style.css")
+		
+		script(src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js")
+		
+		
+		link(rel="stylesheet" href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css")
+		script(src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js")
+		
+		link(rel="stylesheet" href="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css")
+		script(src="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js")
+		
+		
+		script(src="/js/lib/jquery.noty.packaged.min.js")
+		
+		script(src="js/ctrl/dataTable_quote.js")
+		script(src="js/ctrl/dataTable_myQuote.js")
+		
+		script(src="js/ctrl/video.js")
+		script(src="js/ctrl/quote.js")
+		script(src="js/ctrl/TimeLine.js")
+		
+		script(src="js/svc/YTSvc.js")
+		script(src="js/svc/VideoSvc.js")
+		script(src="js/svc/PersonSvc.js")
+		script(src="js/svc/QuoteSvc.js")
+		script(src="js/svc/ChannelSvc.js")
+		
+	body(align="center",ng-app="app")
+		script(src="https://www.youtube.com/iframe_api?enablejsapi=1")
+		.navbar.navbar-default.navbar-fixed-top
+			.container-fluid
+				ul.nav.navbar-nav.navbar-left.col-xs-12
+					li.dropdown.col-xs-offset-0.col-md-offset-5.col-md-3
+						a#MainMenuTitle.dropdown-toggle(href="#",data-toggle="dropdown") egy
+							span.glyphicon.glyphicon-comment
+							span.caret
+						ul.dropdown-menu.col-xs-12
+							li
+								a(href="#vidURL")
+									span.glyphicon.glyphicon-play	Player
+							li
+								a(href="#dataTable_quote",onclick="dataTable_quote.init('#dataTable_quote')")
+									span.glyphicon.glyphicon-comment
+									|	 Quotes
+							li
+								a(href="#prvChannels",onclick="channelEvents.load()")
+									span.glyphicons.glyphicons-display
+									|	 Trusted Channels
+							li.divider
+							li
+								a(onclick="alert('coming soon!')",href="#") My added quotes
+							li
+								a(href="https://www.facebook.com/dialog/oauth?client_id=1048399691842414&redirect_uri=https://egyquotes.appspot.com/FBUser/&scope=email&state=index") re/log in
+							li#MainMenuLogOutButton(style="display:none")
+								a(onclick="localStorage.setItem('access_token','');",href="https://egyquotes.appspot.com") Log out
+
+
+		.container-fluid
+			.row
+				.col-xs-12.col-md-5.col-md-offset-1(style="padding-right:0px;padding-left:0px;")
+					.panel.panel-default(ng-controller="videoPlayerCtrl")
+						.panel-heading.col-xs-12
+							h1.panel-title {{test}}
+							.col-xs-12.col-md-11
+								input#vidURL.form-control(type="text",ng-model="url",placeholder="Youtube URL {{test}}",size="18",onkeypress="video.loadURL($(this).val());",onchange="video.loadURL($(this).val());")
+							span.visible-md.visible-lg.col-md-1.clickable.glyphicons.glyphicons-resize-full(onclick="$(this).toggleClass('glyphicons-resize-full').toggleClass('glyphicons-resize-small');$(this).closest('.panel').parent().toggleClass('col-md-5').toggleClass('col-md-10');TimeLine.resize();")
+						.panel-body
+							.embed-responsive.embed-responsive-16by9
+								#video
+							br
+							canvas#TimeLine(style="display:none;")
+							a(href="#")
+								canvas#TimeLinePointer(style="display:none;position:absolue;z-index:5000")
+							#quotes
+							#prg_video.progress(style="display:none;")
+								progress-bar.progress-bar-info(style="width:100%")
+							button#btn_vidIO.col-xs-12.btn.btn-lg.btn-default(onclick="video.IOClick()")
+								span.glyphicon.glyphicon-plus
+								span.glyphicon.glyphicon-comment
+				.col-xs-12.col-md-offset-1.col-md-5(style="padding-right:0px;padding-left:0px;")
+					.panel.panel-default
+						.panel-heading.col-xs-12
+							h3.panel-title.col-xs-9 مقولات
+							.dropdown.col-xs-3(style="display:none;")
+								button.btn.btn-default.dropdown-toggle(data-toggle="dropdown",style="color:#74747474")
+									span.glyphicons.glyphicons-book-open
+									span.caret
+								ul.dropdown-menu(role="menu")
+									li.presentation
+										a(role="menuitem",href="#dataTable_myQuote",onclick="dataTable_myQuote.init('#dataTable_myQuote');$('#dataTable_myQuote').show();$('#dataTable_quote').hide();")
+											span.glyphicons.glyphicons-user
+											| Quotes added by me
+									li.presentation
+										a(role="menuitem",href="#dataTable_quote",onclick="dataTable_quote.init('#dataTable_quote');$('#dataTable_myQuote').hide();$('#dataTable_quote').show();")
+											span.glyphicons.glyphicons-book-open
+											| All Quotes
+						.panel-body
+							table.table.hover#dataTable_quote
+							table.table.hover#dataTable_myQuote
+							
+
+			.row(style="display:none;")
+				.col-md-3.col-md-offset-2.col-lg-2
+					.panel.panel-primary
+						.panel-body
+							.row
+								.col-xs-10.col-md-9
+									.thumbnail
+										img#vidThumbnail(data-src="holder.js/300x300")
+										.caption#vidCaption
+								.btn-group-vertical.col-xs-2.col-sm-1.col-md-3.col-lg-2
+									button.btn.btn-default
+										span.glyphicon.glyphicon-plus
+									button.btn.btn-default
+										span.glyphicon.glyphicon-minus
+						.panel-footer
+							span.badge
+								span.glyphicon.glyphicon-eye-open
+							span.badge
+								span.glyphicon.glyphicon-share-alt
+				.col-md-5.col-lg-8
+					.panel.panel-primary
+						.panel-heading
+							h1.panel-title Quotes
+						.panel-body
+							table.table.table-hover
+								thead
+									tr
+										td
+								tbody#prvPanel
+
+		#modal.modal.fade(aria-hidden="true",tabindex="-1",role="dialog")
+			.modal-dialog
+				.modal-content
+					.modal-header
+					.modal-body
+						textarea#data.form-control(rows=32)
+					.modal-footer
+						button.col-md-6.btn.btn-success(onclick="data.transfer()")
+							span.glyphicon.glyphicon-transfer
+						button.btn.btn-default(data-dismiss="modal") Close
+
+		#chlModal.modal.fade(aria-hidden="true",tabindex="-1",role="dialog")
+			.modal-dialog
+				.modal-content
+					.modal-header
+						h1.panel-title Trust this channel?
+					.modal-body
+						.thumbnail
+							img#chlModalThumbnail(data-src="holder.js/300x300")
+							.caption#chlModalCaption
+					.modal-footer
+						button.col-xs-6.btn.btn-lg.btn-success(onclick="channelEvents.insert()")
+							span.glyphicon.glyphicon-ok
+						button.col-xs-5.btn.btn-lg.btn-danger(data-dismiss="modal")
+							span.glyphicon.glyphicon-remove
+
+		#error.modal.fade(aria-hidden="true",tabindex="-1",role="dialog")
+			.modal-dialog
+				.modal-content
+					.modal-header
+						h1.panel-title
+							span.glyphicon.glyphicon-alert
+					.modal-body
+					.modal-footer
+						button.col-xs-12.btn.btn-lg(data-dismiss="modal")
+							span.glyphicon.glyphicon-remove
+
+		.row
+			.col-xs-8.col-xs-offset-2
+			.panel.panel-default(style="display:none;")
+				.panel-heading Trusted channels:
+				#prvChannels.panel-body(style="overflow-y: scroll;max-height: 250px;")
+
+		#fbprv(style="display:none;")
+		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js")
+		script(src="app.js")
+		script.
+
+			var YTPlayer;
+			function error(jqXHR,textStatus,errorThrown){
+				$('#error').find('.modal-body').text(jqXHR.responseText.substring(jqXHR.responseText.indexOf('<title>')+7,jqXHR.responseText.indexOf('</title>')));
+				$('#error').modal({show:true});
+			}
+			function message(txt){
+				$('#error').find('.modal-body').html(txt);
+				$('#error').modal({show:true});
+			}
+
+
+
+
+					
+					
+			var data={
+					store:function(){
+						var d=[];
+						if(localStorage.getItem("clips")!=undefined)
+							d=JSON.parse(localStorage.getItem("clips"));
+						var i,quotes=$('.quote');
+						for(i=0;i<d.length;i++)
+							if(d[i].videoId==video.videoId)
+							{
+								d.splice(i, 1);
+								i--;
+							}
+						for(i=0;i<video.clips.length;i++)
+							d.push({
+								quote:$(quotes[i]).val(),
+								start:video.clips[i][0],
+								end:video.clips[i][1],
+								videoId:video.videoId
+							});
+						localStorage.setItem("clips",JSON.stringify(d));
+						$('#data').val(JSON.stringify(d));
+					},
+					transfer:function(txt){
+						localStorage.setItem("clips",$('#data').val());
+						$('#modal').modal('hide');
+					},
+					load:function(){
+						var d=[];
+						if(localStorage.getItem("clips")!=undefined)
+						{
+							d=JSON.parse(localStorage.getItem("clips"));
+							if(d!=undefined)
+							{
+								video.clips=[];
+								for(var i=0;i<d.length;i++)
+									if(d[i].videoId==video.videoId)
+										video.clips.push([d[i].start,d[i].end]);
+								console.log(d);
+								video.updateProgress();
+								var p=0;
+								for(var i=0;i<d.length;i++)
+									if(d[i].videoId==video.videoId)
+										$($('.quote')[p++]).val(d[i].quote);
+							}
+							$('#data').val(JSON.stringify(d));
+						}
+						prvPanel.loadQuotes(d);
+					}
+			};
+
+			var prvPanel={
+					quotes:[],
+					load:function(quote){
+						
+						YTSvc.getData(quote.videoId,function(data){
+							$('#vidThumbnail').attr('src',data.thumbnail);
+							$('#vidCaption').text(data.channel.title+"<br>"+data.title);
+						});
+					},
+					loadQuotes:function(d){
+						prvPanel.quotes=d;
+						var html='';
+						for(var i=0;i<d.length;i++)
+								html+='tr\n'
+										+'\ttd '+d[i].quote+'\n';
+						$('#prvPanel').html(jade.render(html));
+						prvPanel.setListeners();
+					},
+					setListeners:function(){
+						$('#prvPanel tr').click(function(){
+							$('#prvPanel tr').removeClass('success');
+							$(this).addClass('success');
+							prvPanel.load(prvPanel.quotes[$('#prvPanel tr').index(this)]);
+						});
+					}
+			};
+
+
+
+			var fbprv={
+					loadPosts:function(quoteIds){
+						var html='<div id="fb-root"'+'><'+'/div><'+'script'+
+						'>(function(d, s, id) {	var js, fjs = d.getElementsByTagName(s)[0];	if (d.getElementById(id)) return;	js = d.createElement(s); js.id = id;	js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";	fjs.parentNode.insertBefore(js, fjs);}(document, \'script\', \'facebook-jssdk\'));<'+'/script>';
+						
+						for(var i=0;i<quoteIds.length;i++)
+							html+='<div class="fb-post" style="display:none;position:absolute;" data-href="https://www.facebook.com/EgyQuotes/posts/'+quoteIds[i]+'" data-width="350"></div>';
+						$('#fbprv').html(html);
+						$('#fbprv').css('display','');
+						if(FB!=undefined && FB!=null)
+							FB.init({ xfbml			: true,
+											version		: 'v2.1'});
+					},
+					showPost:function(quoteId){
+						var post=$('.fb-post[data-href*='+quoteId+']');
+						if(post.css('display')=='') return;
+						
+						post.noty({text:''});
+						// post.appendTo('body');
+						// post.css('position','absolute');
+						// post.css('left',($('#video').position().left+($('#video').width()>>1)-(post.width()>>1))+'px');
+						// post.css('top',($('#video').position().top+$('#video').height()-post.height())+'px');
+						// post.css('display','').hide().fadeIn();
+					},
+					hidePost:function(quoteId){
+						var post=$('.fb-post[data-href*='+quoteId+']');
+						post.fadeOut(2000).hide().css('display','none');
+					}
+			};
+
+
+			var channelEvents={
+					channelId:-1,
+					modal:function(){
+						YTSvc.getData(video.videoId,function(data){
+							$('#chlModalThumbnail').attr('src',data.channel.thumbnail);
+							$('#chlModalCaption').text(data.channel.title);
+							channelEvents.channelId=data.channel.id;
+						});
+					},
+					insert:function(){
+						ChannelSvc.insert(channelEvents.channelId,function(){
+							$('#chlModal').modal('hide');
+						});
+					},
+					load:function(){
+						ChannelSvc.list(0,100,function(channels){
+							$('#prvChannels').closest('.panel').css('display','');
+							for(var i=0;i<channels.length;i++)
+								YTSvc.getChannelData(channels[i].key.name,function(channelData){
+									var d=$('<div>');
+									d.addClass('thumbnail');
+									d.addClass('col-sm-2 col-md-2 col-lg-1');
+									d.html(jade.render('img(data-src="holder.js/300x300",src="'+channelData.thumbnail+'")\n.caption '+channelData.title));
+									d.click(function(){
+										location.href="http://youtube.com/channel/"+channelData.id;
+									});
+									d.appendTo($('#prvChannels'));
+								});
+						});
+					}
+			};
+			$(function(){
+				dataTable_quote.init('#dataTable_quote');
+				if(location.href.indexOf('v=')>-1)
+					video.loadURL('youtu.be/'+location.href.substring(location.href.indexOf('v=')+2,location.href.length));
+				
+				if(location.href.indexOf('access_token')>-1)
+					localStorage.setItem('access_token',
+							location.href.substring(location.href.indexOf('access_token=')+13,location.href.length));
+				
+				if(localStorage.getItem('access_token')!=null
+						&& localStorage.getItem('access_token')!=undefined)
+					$.ajax({
+						url:'https://graph.facebook.com/me?access_token='+localStorage.getItem('access_token'),
+						type:'GET',
+						success:function(response){
+							$('#MainMenuTitle').html(jade.render('| '+response.name+'\nspan.caret'));
+							$('#MainMenuLogOutButton').css('display','');
+							}
+					});
+
+
+
+			$.noty.defaults = {
+					layout: 'topRight',//'top',
+					theme: 'relax',//'defaultTheme', // or 'relax'
+					type: 'alert',
+					text: '', // can be html or string
+					dismissQueue: true, // If you want to use queue feature set this true
+					template: 
+					'<div class="bootstrap panel-body" style="color:red; font-size: 24px"><div class="bootstrap col-xs-6 col-sm-9"><div class="noty_message"><span class="noty_text"></span><div class="noty_close"></div></div></div>',
+					//'<div class="noty_message"><span class="noty_text"></span><div class="noty_close"></div></div>',
+					animation: {
+							open: 'animated bounceInRight',//{height: 'toggle'}, // or Animate.css class names like: 'animated bounceInLeft'
+							close: 'animated bounceOutLeft',//{height: 'toggle'}, // or Animate.css class names like: 'animated bounceOutLeft'
+							easing: 'swing',
+							speed: 500 // opening & closing animation speed
+					},
+					timeout: 2000, // delay for closing event. Set false for sticky notifications
+					force: false, // adds notification to the beginning of queue when set to true
+					modal: false,
+					maxVisible: 3, // you can set max visible notification for dismissQueue true option,
+					killer: false, // for close all notifications before show
+					closeWith: ['click'], // ['click', 'button', 'hover', 'backdrop'] // backdrop click will close all notifications
+					callback: {
+							onShow: function() {},
+							afterShow: function() {},
+							onClose: function() {},
+							afterClose: function() {},
+							onCloseClick: function() {},
+					},
+					buttons: false // an array of buttons
+			};//end of noty config
+
+
+			}); //end of document ready
+
+
+
+					function onYouTubeIframeAPIReady() {
+						console.log('YT Ready');
+						video.isYTAPIReady=true;
+						}
+</script>
+<script>
+window.onload=function(){
+	document.write(
+		jade.render(
+			document.getElementById('jade').innerHTML,
+			{pretty:'\t'}
+		)
+	);
+	//AngularJS DOES NOT WORK W/OUT THIS:
+	document.close();
+};
+</script>
