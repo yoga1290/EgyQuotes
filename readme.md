@@ -2,7 +2,8 @@
 
 
 ## Download MAVEN & set environment path:
-́́́
+
+́́́Shell
 	wget http://mirror.nexcess.net/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.zip;
 	unzip apache-maven*.zip;
 	rm apache-maven*.zip;
