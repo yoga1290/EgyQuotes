@@ -133,10 +133,12 @@ _utf8_decode : function (utftext) {
 },
 
 //yoga1290:
-downloadText:function(Text){
-    var iCal=Base64.encode(Text);
-    var dataURI="data:application/txt;charset=utf-16le;base64,"+iCal;
-    location.href=dataURI;
+download:function(Text,filename){
+    var dataURI="data:application/txt;charset=utf-16le;base64,"+Base64.encode(Text);
+    var link = document.createElement('a');
+        link.download = filename;
+        link.href = dataURI;
+        link.click();
 }
 
 };

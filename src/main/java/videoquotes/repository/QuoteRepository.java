@@ -41,6 +41,7 @@ public Collection<Quote> findByVideoId(String videoId){
 /**
  * @author yoga1290
  */
+/*
 @SuppressWarnings("unchecked")
 public Collection<Quote> find(String access_token,String startWith,String selCol,boolean isAsc,int offset,int limit){
 	
@@ -69,7 +70,7 @@ public Collection<Quote> find(String access_token,String startWith,String selCol
 	}
 	 PreparedQuery pq = datastore.prepare(q);
 	return (List) pq.asList(FetchOptions.Builder.withOffset(offset).limit(limit));
-}
+}//*/
 
 @SuppressWarnings("unchecked")
 public Collection<Quote> findByPersonId(long personId){

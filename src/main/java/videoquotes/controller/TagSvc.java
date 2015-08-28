@@ -1,5 +1,6 @@
 package videoquotes.controller;
 
+import videoquotes.repository.Tag;
 import videoquotes.repository.*;
 
 import java.util.Collection;
@@ -17,29 +18,30 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
+@RequestMapping(value = "/tag",produces="application/json;charset=UTF-8")
 public class TagSvc
 {
 	@Autowired
 	private TagRepository tags;
 
-	@RequestMapping(value="/tags/all",produces="application/json", method=RequestMethod.GET)
+	@RequestMapping(value="/all",produces="application/json", method=RequestMethod.GET)
 	public @ResponseBody Collection<Tag> getTagList(){
 		return com.google.appengine.repackaged.com.google.common.collect.Lists.newArrayList(tags.findAll());
 	}
 
 
-	@RequestMapping(value="/tag/list",produces="application/json", method=RequestMethod.GET)
+	@RequestMapping(value="/list",produces="application/json", method=RequestMethod.GET)
 	public @ResponseBody Collection<Tag> list(@RequestParam int offset,@RequestParam int limit){
 		return tags.findAll(offset,limit);
 	}
 
-	@RequestMapping(value="/tag",produces="application/json", method=RequestMethod.GET)
+	@RequestMapping(value="/",produces="application/json", method=RequestMethod.GET)
 	public @ResponseBody Tag findOne(@RequestParam Long id)
 	{
 		return tags.findOne(id);
 	}
 
-	@RequestMapping(value="/tag/insert",produces="application/json", method=RequestMethod.POST)
+	@RequestMapping(value="/insert",produces="application/json", method=RequestMethod.POST)
 	public @ResponseBody Tag insert(
 					//@RequestBody Tag otag)
 			@RequestParam String tag,		 
@@ -48,13 +50,13 @@ public class TagSvc
 		Tag ntag=new Tag(tag,quoteId);
 		return tags.save(ntag);
 	}
-	@RequestMapping(value="/tag/find",produces="application/json;charset=UTF-8" , method=RequestMethod.GET)
+	@RequestMapping(value="/find",produces="application/json;charset=UTF-8" , method=RequestMethod.GET)
 	public @ResponseBody Collection<Tag> findByName(@RequestParam String tag)
 	{
 		return tags.find(tag,"tag",true,0,100);
 	}
 
-	@RequestMapping(value="/tag/update/{id}",produces="application/json", method=RequestMethod.POST)
+	@RequestMapping(value="/update/{id}",produces="application/json", method=RequestMethod.POST)
 	public @ResponseBody Tag update(
 					 
 			@PathVariable(value="id") long id,
@@ -67,7 +69,7 @@ public class TagSvc
 		return tags.update(tag);
 	}
 
-	@RequestMapping(value="/tag/DataTable",produces="application/json", method=RequestMethod.POST)
+	@RequestMapping(value="/DataTable",produces="application/json", method=RequestMethod.POST)
 	public @ResponseBody dataTableResponse datatable(
 		HttpServletResponse									response,
 

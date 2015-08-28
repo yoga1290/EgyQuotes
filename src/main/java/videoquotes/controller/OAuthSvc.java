@@ -1,5 +1,6 @@
 package videoquotes.controller;
 
+import videoquotes.repository.FBUser;
 import videoquotes.*;
 import videoquotes.repository.*;
 

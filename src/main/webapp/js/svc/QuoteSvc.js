@@ -1,6 +1,13 @@
 var QuoteSvc={
 
-
+                list:function(offset,limit,success,error){
+                    $.ajax({
+				url:'/Quote/list?offset='+offset+'&limit='+limit,
+				type:'GET',
+				success: success,
+				error:error
+			});
+                },
 		findById:function(id,success,error){
 			$.ajax({
 				url:'/Quote?id='+id,

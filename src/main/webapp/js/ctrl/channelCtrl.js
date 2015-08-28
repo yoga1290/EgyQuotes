@@ -7,29 +7,22 @@ app
 
 
                 sp.init=function(){
+                    var tmp=[];
                     ChannelSvc.list(0,100,function(response){
-                        
-                        
-                        var temp=[];
-                        var loop=function(i){
-                            
-                                    YTSvc.getChannelData(response[i].key.name,function(data){
-                                        temp.push({
-                                                logo:data.thumbnail
-                                            });
-                                        if(i+1<response.length)
-                                                loop(i+1);
-                                        else to(function(){
-                                            sp.channels=temp;
-                                            console.log(sp.channels);
-                                        },10);
+                            $(response).each(function(i,channel){
+                                    console.log(channel);
+                                    YTSvc.getChannelData(channel.key.name,function(data){
                                         
-                                        
-                                     });
-                          
-                        };
-                            
-                        loop(0);
+                                        tmp.push({
+                                            logo:data.thumbnail
+                                        }); 
+                                    });
+                                    if(i===response.length-1)
+                                        to(function(){
+                                            sp.channels=tmp;
+                                        });
+                            });
+
                     });
                 };
                 sp.init();

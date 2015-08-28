@@ -95,8 +95,9 @@ public class QuoteSvc
 		return txt;
 	}
 
-	@RequestMapping(value="/Quotes", method=RequestMethod.GET)
+	@RequestMapping(value="/Quote/list",produces="application/json;charset=UTF-8", method=RequestMethod.GET)
 	public @ResponseBody Collection<Quote> getQuoteList(@RequestParam int offset,@RequestParam int limit){
+                if(limit>200)   return null;
 		return Quotes.findAll(offset,limit);
 	}
 	
@@ -196,7 +197,7 @@ public class QuoteSvc
 				+"&message="+URLEncoder.encode("\u201D"+quote+"\u201C"+"\n\n "+"\u2015"+" #"+personId, "UTF-8")
 				+"&name="+URLEncoder.encode(person.getName()+":", "UTF-8")
 				+"&description="+URLEncoder.encode("\u201D"+quote+"\u201C", "UTF-8")
-				+"&link="+URLEncoder.encode("https://videoquotes.appspot.com/#s="+new Double(start).intValue()+"v="+videoId, "UTF-8")
+				+"&link="+URLEncoder.encode(Credential.BASE_URL+"/#s="+new Double(start).intValue()+"v="+videoId, "UTF-8")
 				;
 			postId="https://graph.facebook.com/"+Credential.facebook.PAGE_ID+"/feed";
 			postId=sendPost(postId,q);
@@ -411,6 +412,7 @@ public class QuoteSvc
 				return null;
 			}
 		}
+        /*
 	@RequestMapping(value="/Quote/DataTable/me",produces="application/json", method=RequestMethod.POST)
 	public @ResponseBody dataTableResponse myQuotes(
 			HttpServletResponse									response,
@@ -433,7 +435,7 @@ public class QuoteSvc
 				response.sendError(500, e.getLocalizedMessage()+"");
 				return null;
 			}
-		}
+		}//*/
 	
 	
 	
