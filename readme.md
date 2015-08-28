@@ -22,7 +22,7 @@ source ~/.bash_profile;
 
 #clone this repository:
 git clone https://github.com/yoga1290/VideoQuotes.git;
-cd Video-Quotes;
+cd VideoQuotes;
 #Use Maven to clean,compile, export to eclipse (optionally) & deploy to Google AppEngine
 mvn install clean compile eclipse:clean eclipse:eclipse appengine:update;
 ```
