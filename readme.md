@@ -6,12 +6,11 @@ Sharing video scenes and quotes from officially verified Youtube channels; this 
 
 
 #Outline
--------
 
 + [Motivation](#Motivation)
-+ [Framework & tools](#framework-tools)
++ [Framework & tools](#framework--tools)
 +  [Configurations](#configurations)
-+ [Install & Deploy](#install-deploy)
++ [Install & Deploy](#install--deploy)
 + Implementation
 	+ Backend
 	+ Frontend
@@ -25,12 +24,13 @@ Sharing video scenes and quotes from officially verified Youtube channels; this 
 ## Framework & tools
 
 + Frontend
-	+ [AngularJS](https://angularjs.org)
-	+ [JADE](http://jade-lang.com) (using [CDN](http://cdnjs.com/libraries/jade))
-	+ [Bootstrap](http://getbootstrap.com)
+	+ [AngularJS](https://angularjs.org) (via [CDN](https://developers.google.com/speed/libraries/#angularjs) )
+	+ [JADE](http://jade-lang.com) (via [CDN](http://cdnjs.com/libraries/jade))
+	+ [jQuery](http://jquery.com) (via [CDN](http://jquery.com/download/#using-jquery-with-a-cdn))
+	+ [Bootstrap](http://getbootstrap.com) (via [CDN](http://getbootstrap.com/getting-started/#download-cdn) )
 	+ [Animate.css](https://daneden.github.io/animate.css/)
-	+ [Youtube iFrame API](https://developers.google.com/youtube/iframe_api_reference)
-	+ [Google Material Design Font](https://www.google.com/design/icons/)
+	+ [Youtube iFrame API](https://developers.google.com/youtube/iframe_api_reference) (via [CDN](https://developers.google.com/youtube/iframe_api_reference#Getting_Started) )
+	+ [Google Material Design Font](https://www.google.com/design/icons/) (via [CDN](http://google.github.io/material-design-icons/#setup-method-1-using-via-google-web-fonts) )
 + Backend
 	+ [Spring Framework](http://projects.spring.io/spring-framework/) running on [Google AppEngine](https://cloud.google.com/appengine/) & managed by [Apache Maven](https://cloud.google.com/appengine/docs/java/tools/maven)
 
