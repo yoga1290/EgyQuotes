@@ -18,6 +18,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import java.util.Map;
 
 
 @PersistenceCapable
@@ -25,44 +26,65 @@ public class User {
 
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private long id;
+    private String id;
+
+	@Persistent
+	private Map<String,String> accountId;
 	
 	@Persistent
-	private long quotes[];
+	private String name;
 	
 	@Persistent
-	private String facebook;
+	private String picture;
 	
 	@Persistent
-	private String google;
+	private String quoteId[];
 	
-	
-	
-	public String getFacebook() {
-		return facebook;
-	}
-	public void setFacebook(String facebook) {
-		this.facebook = facebook;
-	}
-	public String getGoogle() {
-		return google;
-	}
-	public void setGoogle(String google) {
-		this.google = google;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
-	public long getId() {
+
+
+	public String getId() {
 		return this.id;
 	}
+	public void setId(String id) {
+		this.id = id;
+	}
 
-	public long[] getQuotes() {
-		return quotes;
-	}
-	public void setQuotes(long[] quotes) {
-		this.quotes = quotes;
-	}
+    public Map<String, String> getAccountId() {
+	return accountId;
+    }
+
+    public String getName() {
+	return name;
+    }
+
+    public String getPicture() {
+	return picture;
+    }
+
+    public String[] getQuoteId() {
+	return quoteId;
+    }
+    
+    
+
+    public void setAccountId(Map<String, String> accountId) {
+	this.accountId = accountId;
+    }
+
+    public void setName(String name) {
+	this.name = name;
+    }
+
+    public void setPicture(String picture) {
+	this.picture = picture;
+    }
+
+    public void setQuoteId(String[] quoteId) {
+	this.quoteId = quoteId;
+    }
+    
+    
+    
 	
 	
 		
@@ -70,7 +92,7 @@ public class User {
 
 	}
 	
-	public User(long id){
+	public User(String id){
 		this.id = id;
 	}
 }

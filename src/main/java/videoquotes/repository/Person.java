@@ -22,15 +22,6 @@ public class Person {
 	public void setKey(String key) {
 		this.key = key;
 	}
-	/*
-    private Key key;
-	public void setKey(Key key) {
-		this.key = key;
-	}
-	public void setKey(String key) {
-		this.key = KeyFactory.createKey(this.getClass().getSimpleName(), key);
-	}
-	//*/
 
 	public Person(){
 
@@ -50,8 +41,6 @@ public class Person {
 
 		@Persistent
 		private String name;
-//		@Persistent
-//		private long quotes[];
 
 
 	
@@ -61,12 +50,6 @@ public class Person {
 	public void setName(String name) {
 			this.name = name;
 		}
-//	public long[] getQuotes() {
-//		return this.quotes;
-//	}
-//public void setQuotes(long quotes[]) {
-//		this.quotes = quotes;
-//	}
 
 }
 		

@@ -24,6 +24,8 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.apphosting.api.DatastorePb.DatastoreService;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * This class provides a minimal interface to mimic a subset
@@ -121,14 +123,49 @@ public class JDOCrudRepository<T,ID extends Serializable> {
 	 * @author yoga1290
 	 */
 	@SuppressWarnings("unchecked")
-	public List<T> findAll(int offset,int limit){
+	public Collection<T> findAll(int offset,int limit){
+	    Query query = PMF.get().getPersistenceManager().newQuery(type_);
+	    query.setRange(offset, offset+limit);
+	    Object rslt = query.execute();
+	    return (Collection<T>)rslt;
+	    /*
 		 com.google.appengine.api.datastore.DatastoreService 
 		 		datastore = DatastoreServiceFactory.getDatastoreService();
 		 com.google.appengine.api.datastore.Query 
 		 		q = new com.google.appengine.api.datastore.Query(type_.getSimpleName());
 		 PreparedQuery pq = datastore.prepare(q);
 		return (List<T>) pq.asList(FetchOptions.Builder.withOffset(offset).limit(limit));
+		//*/
 	}
+        /**
+	 * @author yoga1290
+	 */
+	/* // trNgGrid 
+	public List<T> query(SearchObj query) {
+		// TODO Auto-generated method stub
+		com.google.appengine.api.datastore.DatastoreService 
+ 		datastore = DatastoreServiceFactory.getDatastoreService();
+		com.google.appengine.api.datastore.Query 
+ 		q = new com.google.appengine.api.datastore.Query(type_.getSimpleName());
+ 
+                if(query.getOrderBy()!=null && query.getOrderBy().length()>0)
+                    q=q.addSort(query.getOrderBy(), query.isOrderByReverse() ? SortDirection.ASCENDING:SortDirection.DESCENDING);
+                Map<String,String> map=query.getFilterByFields();
+                List<Filter> filters=new LinkedList<Filter>();
+                for (Map.Entry<String, String> entry : map.entrySet())
+                {
+                        Filter startWithFilter1=new FilterPredicate(entry.getKey(), FilterOperator.GREATER_THAN_OR_EQUAL, entry.getValue());
+                        Filter startWithFilter2=new FilterPredicate(entry.getKey(), FilterOperator.LESS_THAN, entry.getValue()+ "\ufffd");
+                        filters.add(CompositeFilterOperator.and(startWithFilter1,startWithFilter2));
+                }
+                if(filters.size()==1)
+                    q.setFilter(filters.get(0));
+                else if(filters.size()>1)
+                    q.setFilter(CompositeFilterOperator.or(filters));
+		PreparedQuery pq = datastore.prepare(q);
+		return (List<T>) pq.asList(FetchOptions.Builder.withOffset(query.getCurrentPage()).limit(query.getPageItems()));
+	}
+	//*/
 	/**
 	 * @author yoga1290
 	 */
@@ -201,7 +238,8 @@ public class JDOCrudRepository<T,ID extends Serializable> {
 	 * @param entity
 	 */
 	public void delete(T entity){
-		PMF.get().getPersistenceManager().deletePersistent(entity);
+		JDOHelper.getPersistenceManager(entity).deletePersistent(entity);
+//		PMF.get().getPersistenceManager().deletePersistent(entity);
 	}
 
 }

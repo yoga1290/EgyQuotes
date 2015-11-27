@@ -1,0 +1,110 @@
+<jade>
+script(src="https://www.youtube.com/iframe_api?enablejsapi=1&playsinline=1")
+div(ng-class="{'hidden':!show}",style="z-index:5;background-color:rgba(0,0,0,0.6);top:0px;left:0px;position:absolute;width:100%;height:1000%",ng-click="overlayClick()")
+	.col-xs-12.col-md-6.embed-responsive.embed-responsive-16by9(ng-click="click()")
+		#video
+
+
+
+
+	.col-xs-12.col-md-6(ng-show="newQuote.show",ng-click="click()")
+		#new-quote-panel.panel.panel-default.col-xs-12(ng-click="click()")
+			.panel-body
+				button.col-xs-12.btn(ng-click="newQuote.record();",ng-class="{'btn-danger':newQuote.isRecording,'btn-default':!newQuote.isRecording}")
+					i.material-icons.rotate180 format_quote
+					i.material-icons(style="color:red") add_circle
+					i.material-icons format_quote
+
+				div(ng-show="newQuote.isRecording")
+					.clickable.col-xs-5(style="font-size:45px",ng-click="playQuoteStart(quote)")
+						| {{parseInt(newQuote.recordingStartTime/60)}}:{{to2Digit(newQuote.recordingStartTime%60)}}
+					i.material-icons.col-xs-2(style="font-size:42px") settings_ethernet
+					.clickable.col-xs-5(style="font-size:45px",ng-click="playQuoteEnd(quote)")
+						| {{parseInt(newQuote.recordingEndTime/60)}}:{{to2Digit(newQuote.recordingEndTime%60)}}
+
+					.dropdown.col-xs-4
+						button.bt.btn-lg.btn-default.dropdown-toggle(data-toggle="dropdown")
+							i.material-icons face
+							label(ng-show="newQuote.selectedAuthor") {{newQuote.selectedAuthor.properties.name}}
+							label(ng-hide="newQuote.selectedAuthor")
+								| Author
+								span.caret
+						ul.dropdown-menu.col-xs-12(style="overflow:scroll;width:300%")
+							li
+								i.material-icons.right-addon search
+								input.form-control(type="text",ng-model="newQuote.authorName",ng-keypress="newQuote.findByAuthorName($event)",ng-click="stopPropagation($event)")
+							li(ng-repeat="author in newQuote.authors track by $index")
+								a(ng-click="newQuote.selectedAuthor=author") {{author.properties.name}}
+
+					.dropdown.col-xs-8
+						button.bt.btn-lg.btn-default.dropdown-toggle(data-toggle="dropdown")
+							i.material-icons local_offer
+							span.caret
+						ul.dropdown-menu.col-xs-12(style="overflow:scroll;width:110%")
+							li
+								i.material-icons.right-addon search
+								input.form-control(type="text",ng-model="newQuote.tagNameQuery",ng-keypress="newQuote.findByTagName($event)",ng-click="stopPropagation($event)")
+							li(ng-repeat="tag in newQuote.tagNames track by $index",ng-click="newQuote.selectTag(tag)")
+								a
+									i.material-icons(ng-show="newQuote.selectedTags[tag.key.name]!=true") label_outline
+									i.material-icons(ng-show="newQuote.selectedTags[tag.key.name]==true") label
+									|	{{tag.key.name}}
+
+					textarea.col-xs-12(style="border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; border: none; margin-bottom: 15px; height: 144px;font-size: 32px; color:black;background-color: #cccccc; ",ng-model="newQuote.text")
+					i.material-icons.quote.right(style="position: absolute;margin-top: 145px;margin-left: -45px;") format_quote
+					i.material-icons.quote.left(style="margin-top: -58px;") format_quote
+
+
+
+				.col-md-5.col-sm-6.col-xs-12(ng-repeat="quote in newQuote.quotes")
+					.quote.panel.panel-default
+						i.material-icons.quote.right format_quote
+						.panel-body
+							| {{quote.quote}}
+							i.btn-circle.material-icons(style="right:0px;position: absolute;",ng-click="newQuote.save(quote)") cloud_upload
+						i.material-icons.quote.left format_quote
+						.panel-footer
+							span.label.label-default(style="font-size:18px") {{quote.personId}}
+
+
+
+
+
+
+
+
+	div(ng-repeat="quote in video.playlist track by $index",ng-click="click()")
+		.col-md-5.col-sm-6.col-xs-12
+			.quote.panel.panel-default
+				i.material-icons.quote.right format_quote
+				.panel-body
+					| {{quote.quote}}
+				i.material-icons.quote.left format_quote
+				.panel-footer
+					span.label.label-default(style="font-size:18px") {{quote.personId}}
+		.col-md-5.col-sm-6.col-xs-12
+			i.btn-circle.material-icons(style="font-size:62px; border-radius: 35px; border: solid green 5px; background: #cccccc; margin: 15px;",ng-click="newQuote.edit(quote)") create
+			i.btn-circle.material-icons(style="font-size:62px; border-radius: 35px; border: solid orange 5px; background: #cccccc; margin: 15px;",ng-hide="favourites.isFavourite(quote)",ng-click="favourites.add(quote)") star_border
+			i.btn-circle.material-icons(style="font-size:62px;color: orange; border-radius: 35px; border: solid orange 5px; background: #cccccc; margin: 15px;",ng-show="favourites.isFavourite(quote)",ng-click="favourites.remove(quote)") star
+			i.btn-circle.material-icons(style="font-size:62px; border-radius: 35px; border: solid blue 5px; background: #cccccc; margin: 15px;") share
+			#tagger.dropdown.col-xs-2
+				i.btn-circle.material-icons.dropdown-toggle(data-toggle="dropdown",style="font-size:62px; border-radius: 35px; border: solid green 5px; background: #cccccc; margin: 15px;") local_offer
+				i.material-icons.dropdown-toggle(data-toggle="dropdown",style="font-size:32px; color: white; position:absolute;top:35px;left:50px;") add_circle
+				ul.dropdown-menu.col-xs-12(style="overflow:hidden;width:600%")
+							li
+								i.material-icons.right-addon search
+								input.form-control(type="text",ng-model="tagger.tagNameQuery",ng-keypress="tagger.findByTagName($event)",ng-click="stopPropagation($event)")
+							li(ng-repeat="tag in tagger.tagNames track by $index",ng-click="tagger.selectTag(tag)")
+								a
+									i.material-icons(ng-show="tagger.selectedTags[tag.key.name]!=true") label_outline
+									i.material-icons(ng-show="tagger.selectedTags[tag.key.name]==true") label
+									|	{{tag.key.name}}
+
+
+
+
+
+
+
+
+</jade>

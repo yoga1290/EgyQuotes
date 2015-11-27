@@ -53,6 +53,7 @@ import videoquotes.repository.FBUserRepository;
 
 
 @Controller
+@RequestMapping("/channel")
 public class ChannelSvc
 {
 	@Autowired
@@ -60,7 +61,7 @@ public class ChannelSvc
 	@Autowired
 	private FBUserRepository users;
 	
-	@RequestMapping(value="/channel/insert", method=RequestMethod.GET)
+	@RequestMapping(value="/insert", method=RequestMethod.GET)
 	public @ResponseBody Channel insert(@RequestParam String id,@RequestParam String access_token,HttpServletResponse response) throws Exception
 	{
 		FBUser user=null;
@@ -76,10 +77,22 @@ public class ChannelSvc
 		return channels.save(new Channel(id));
 	}
 	
-	@RequestMapping(value="/channel/list",produces="application/json", method=RequestMethod.GET)
+	@RequestMapping(value="/list",produces="application/json", method=RequestMethod.GET)
 	public @ResponseBody Collection<Channel> list(@RequestParam int offset,@RequestParam int limit,HttpServletResponse response) throws Exception
 	{
 		return channels.findAll(offset, limit);
+	}
+	
+	@RequestMapping(value="/isTrusted", method=RequestMethod.GET)
+	public @ResponseBody boolean isTrusted(@RequestParam String channelId){
+	    try{
+		    Channel chl=channels.findOne(channelId);
+		    if(chl!=null)
+			return true;
+	    }catch(Exception e){
+		return false;
+	    }
+	    return false;
 	}
 		
 }

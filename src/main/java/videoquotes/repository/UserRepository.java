@@ -13,9 +13,10 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
+import videoquotes.util.FacebookUtil;
 
 @Service
-public class UserRepository extends JDOCrudRepository<User, Long>{
+public class UserRepository extends JDOCrudRepository<User, String>{
 
 	public UserRepository() {
 		super(User.class);
@@ -24,35 +25,9 @@ public class UserRepository extends JDOCrudRepository<User, Long>{
 	
 	@SuppressWarnings("unchecked")
 	public Collection<User> findById(String id){
-		Query query = PMF.get().getPersistenceManager().newQuery(FBUser.class);
+		Query query = PMF.get().getPersistenceManager().newQuery(User.class);
 		query.setFilter("id == n");
 		query.declareParameters("String n");
 		return (List<User>)query.execute(id);
-	}
-	
-	public User findByFacebookAccessToken(String access_token) {
-		String facebookId=readText("https://graph.facebook.com/me?access_token="+access_token);
-		facebookId=facebookId.substring(facebookId.indexOf("\"id\":\"")+6,facebookId.indexOf("\","));
-		Query query = PMF.get().getPersistenceManager().newQuery(FBUser.class);
-		query.setFilter("facebook == n");
-		query.declareParameters("String n");
-		return ((List<User>)query.execute(facebookId)).get(0);
-	}
-	
-	private String readText(String uri)
-	{
-		String res="";
-		try{
-			URL url = new URL(uri);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			InputStream in=connection.getInputStream();
-			byte buff[]=new byte[200];
-			int ch;
-			while((ch=in.read(buff))!=-1)
-					res+=new String(buff,0,ch);
-			in.close();
-			
-			return res;
-		}catch(Exception e){return  e.getLocalizedMessage();}
 	}
 }

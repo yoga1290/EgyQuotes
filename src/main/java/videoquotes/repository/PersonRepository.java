@@ -1,4 +1,8 @@
 package videoquotes.repository;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.KeyFactory;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,6 +27,13 @@ public Collection<Person> findByName(String name){
 	query.declareParameters("String n");
 //	query.declareParameters("String n2");
 	return (List<Person>)query.execute(name);//,name+"\ufffd");
+}
+
+@SuppressWarnings("unchecked")
+public Entity findById(String personId) throws EntityNotFoundException{
+	com.google.appengine.api.datastore.DatastoreService 
+		 		datastore = DatastoreServiceFactory.getDatastoreService();
+	return datastore.get(KeyFactory.createKey("Person", personId));
 }
 
 }

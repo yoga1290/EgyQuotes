@@ -27,15 +27,15 @@ public class FBUser {
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private String id;
 	
-	@Persistent
-	private long quotes[];
+//	@Persistent
+//	private long quotes[];
 	
-	public long[] getQuotes() {
-		return quotes;
-	}
-	public void setQuotes(long[] quotes) {
-		this.quotes = quotes;
-	}
+//	public long[] getQuotes() {
+//		return quotes;
+//	}
+//	public void setQuotes(long[] quotes) {
+//		this.quotes = quotes;
+//	}
 	public String getId() {
 		return this.id;
 	}

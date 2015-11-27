@@ -33,8 +33,19 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.google.api.client.http.HttpResponse;
+import com.google.appengine.api.datastore.Entity;
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import videoquotes.controller.dataTableResponse;
+import videoquotes.errorMessages.AccessExpired;
+import videoquotes.errorMessages.AuthorNotFound;
+import videoquotes.errorMessages.ChannelNotFound;
+import videoquotes.errorMessages.UserNotFound;
+import videoquotes.errorMessages.VideoIntervalIntersect;
 import videoquotes.repository.Channel;
 import videoquotes.repository.ChannelRepository;
 import videoquotes.repository.FBUser;
@@ -45,14 +56,20 @@ import videoquotes.repository.Quote;
 import videoquotes.repository.QuoteOwner;
 import videoquotes.repository.QuoteOwnerRepository;
 import videoquotes.repository.QuoteRepository;
+import videoquotes.controller.requestBody.SearchObj;
+import videoquotes.errorMessages.FacebookSharingFailed;
+import videoquotes.repository.FacebookPostQueue;
+import videoquotes.repository.FacebookPostQueueRepository;
 import videoquotes.repository.Video;
 import videoquotes.repository.VideoRepository;
 import videoquotes.repository.pageAC;
 import videoquotes.repository.pageACRepository;
+import videoquotes.util.FacebookUtil;
 import videoquotes.util.YoutubeUtil;
 
 
 @Controller
+@RequestMapping(produces="application/json;charset=UTF-8")
 public class QuoteSvc
 {
 	@Autowired
@@ -72,6 +89,11 @@ public class QuoteSvc
 	
         @Autowired
         private YoutubeUtil youtube;
+	@Autowired
+        private FacebookUtil facebook;
+	
+	@Autowired
+	private FacebookPostQueueRepository postQueue;
         
         
 	@RequestMapping(value="/videoquotes.json",produces="application/json;charset=UTF-8", method=RequestMethod.GET)
@@ -102,7 +124,7 @@ public class QuoteSvc
 	}
 	
 	@RequestMapping(value="/Quote",produces="application/json;charset=UTF-8", method=RequestMethod.GET)
-	public @ResponseBody Quote findOne(@RequestParam long id)
+	public @ResponseBody Quote findOne(@RequestParam String id)
 	{
 		return Quotes.findOne(id);
 	}
@@ -117,26 +139,16 @@ public class QuoteSvc
  * @throws Exception 
  */
 	@RequestMapping(value="/Quote", method=RequestMethod.POST)
-	public @ResponseBody String insert(
-									@RequestParam String videoId,
-									@RequestParam String personId,
-									@RequestParam String quote,
-									@RequestParam String start,
-									@RequestParam String end,
-									@RequestParam String access_token,
+	public @ResponseBody String insert(@RequestBody videoquotes.controller.requestBody.Quote quote,
 									HttpServletResponse response) 
 			throws Exception
 	{		
 		
 		FBUser user=null;
 		try{
-			user=users.findByAccessToken(access_token);
+			user=users.findByAccessToken(quote.getAccess_token());
 		}catch(Exception ew){
-	//		response.sendError(404, "User not found");
-			try{
-				response.sendError(404, ew.getLocalizedMessage()+"; User not found");
-			}catch(Exception eww){}
-			return ew.getLocalizedMessage()+" ac="+access_token;
+		    throw new AccessExpired();
 		}
 		
 //		Check Channel:
@@ -145,129 +157,54 @@ public class QuoteSvc
 		String channelId="";
 		try{
 //			channelId=readText("http://jojo90.net84.net/YT.php?videoId="+videoId).split("\n")[0];
-                        channelId=youtube.getChannelId(videoId);
+                        channelId=youtube.getChannelId(quote.getVideoId());
                         if(channelId!="")
         			channel=Channels.findOne(channelId);
                         else
                             throw new Exception();
 		}catch(Exception ew){
-		//	response.sendError(404, "Untrusted Channel");
-			try{
-				response.sendError(404, "Untrusted Channel "+channelId);
-				return "ChannelId:"+channelId;
-			}catch(Exception eww){}
-			return ew.getLocalizedMessage();
+		    throw new Exception(channelId);
 		}
-		//Update Channel:
-		///////////////////
-//		try
-//		{
-//			String videos[]=channel.getVideos();
-//			String nVideo[]=Arrays.copyOf(videos, videos.length+1);
-//			nVideo[nVideo.length-1]=videoId;
-//			Channels.update(channel);
-//		}catch(Exception ew){
-//			try{
-//				response.sendError(404, "cant update Channel:"+channelId);
-//			}catch(Exception eww){}
-//			return ew.getLocalizedMessage();
-//		}
-		///////////////
 		
 		
 		
 		//Check Person:
-		long quotes[],nQuotes[];
+		String quotes[];
+		String nQuotes[];
 		Person person=null;
 		try{
-			person=People.findOne(personId);
+			person=People.findOne(quote.getPersonId());
 		}catch(Exception ew){
-//			
-			try{
-				response.sendError(404, ew.getLocalizedMessage()+"; Author not found");
-			}catch(Exception eww){}
-			return ew.getLocalizedMessage()+"; Author not found";
+		    throw new AuthorNotFound();
 		}
 		
 		//POST to Facebook & save Quote:
-		Quote res,nQuote=new Quote(videoId,personId,quote,start,end);
+		Quote res,nQuote=new Quote(quote.getVideoId(),quote.getPersonId(),quote.getQuote(),quote.getStart(),quote.getEnd());
 		String postId="",q="";
 		try{
-			q="access_token="+pageACRepo.findOne(Credential.facebook.PAGE_ID).getAc()
-				+"&message="+URLEncoder.encode("\u201D"+quote+"\u201C"+"\n\n "+"\u2015"+" #"+personId, "UTF-8")
-				+"&name="+URLEncoder.encode(person.getName()+":", "UTF-8")
-				+"&description="+URLEncoder.encode("\u201D"+quote+"\u201C", "UTF-8")
-				+"&link="+URLEncoder.encode(Credential.BASE_URL+"/#s="+new Double(start).intValue()+"v="+videoId, "UTF-8")
-				;
-			postId="https://graph.facebook.com/"+Credential.facebook.PAGE_ID+"/feed";
-			postId=sendPost(postId,q);
-			postId=postId.substring(postId.indexOf('_')+1,postId.lastIndexOf('"'));
-			nQuote.setKey(new Long(postId));
-
-			// response.sendError(404, postId+"> cant post >"+q.substring(q.indexOf('&')) );
-			// return null;
-		}catch(Exception ew){
-			try{
-				response.sendError(404, ew.getLocalizedMessage()+"; cant post ");
-			}catch(Exception eww){}
-		}
-		try{
-			res=Quotes.save(nQuote);
+			res=nQuote=Quotes.save(nQuote);
+			postQueue.save(new FacebookPostQueue(nQuote.getKey(), new Date().getTime()));
 		}catch(Exception ew){
 			try{
 				response.sendError(404, ew.getLocalizedMessage()+"; cant save quote");
 			}catch(Exception eww){}
 			return ew.getLocalizedMessage()+"; cant save quote";
-		}	
-				
-//			response.getWriter().println("Person found..");
-		/////////////////
-//		try{
-//			quotes=person.getQuotes();
-//			nQuotes=Arrays.copyOf(quotes, quotes.length+1);
-//			nQuotes[nQuotes.length-1]=res.getKey();
-//		}catch(Exception ew){
-//			try{
-//				nQuotes=new long[]{res.getKey()};
-//			}catch(Exception e){
-//				try{
-//					response.sendError(404, e.getLocalizedMessage()+";cant update person "+res.getKey());
-//				}catch(Exception eww){}				
-//			}
-//			return ew.getLocalizedMessage();
-//		}
-//		
-//		try{
-//			//TODO:
-//			person.setQuotes(nQuotes);
-//			person=People.update(person);
-//		}catch(Exception e){
-//			try{
-//				response.sendError(404, e.getLocalizedMessage()+";cant update entity");
-//			}catch(Exception eww){}
-//		}
-		///////////////////
+		}
 
 		
 		
 		//update Video:
-		
-		int s=new Double(start).intValue(),e=new Double(end).intValue();
+		int s=new Double(quote.getStart()).intValue(),e=new Double(quote.getEnd()).intValue();
 		try{
-//			Video.Segment nSegments[];
-			Video video=Videos.findOne(videoId);
-			
-			
-//			Video.Segment segments[]=video.getSegments();
+			Video video=Videos.findOne(quote.getVideoId());
 			int segStart[]=video.getStart();
 			int segEnd[]=video.getEnd();
-			long quoteId[]=video.getQuoteId();
+			String quoteId[]=video.getQuoteId();
 			if(segStart==null)
 			{
 				segStart=new int[]{s};
 				segEnd=new int[]{e};
-				quoteId=new long[]{new Long(postId)};
-//				nSegments=new Video.Segment[]{new Video.Segment(	new Long(postId),s,e)};
+				quoteId=new String[]{(postId)};
 			}
 			else
 			{
@@ -281,35 +218,27 @@ public class QuoteSvc
 						||
 						(segStart[i]<=e && e<=segEnd[i])
 						)
-					{
-						response.sendError(404, "Interval intersect!");
-						return "Interval intersect!";
-					}
+						throw new VideoIntervalIntersect();
 				
 				segStart=Arrays.copyOf(segStart, segStart.length+1);
 				segStart[segStart.length-1]=s;
 				segEnd=Arrays.copyOf(segEnd, segEnd.length+1);
 				segEnd[segEnd.length-1]=e;
 				quoteId=Arrays.copyOf(quoteId, quoteId.length+1);
-				quoteId[quoteId.length-1]=new Long(postId);
+				quoteId[quoteId.length-1]=(postId);
 				
 			}
 			video.setStart(segStart);
 			video.setEnd(segEnd);
 			video.setQuoteId(quoteId);
-//			video.setSegments(nSegments);
 			video=Videos.update(video);
 		}catch(Exception we){
 			try
 			{
 				int segStart[]=new int[]{s};
 				int segEnd[]=new int[]{e};
-				long quoteId[]=new long[]{new Long(postId)};
-				Videos.save(new Video(	videoId,quoteId,segStart,segEnd) );
-//				Videos.save(new Video(	videoId,new Video.Segment[]{new Video.Segment(	new Long(postId),
-//						new Double(start).intValue(),new Double(end).intValue())})
-//				);
-//				return "Video saved!! OK?";
+				String quoteId[]=new String[]{(postId)};
+				Videos.save(new Video(	quote.getVideoId(),quoteId,segStart,segEnd) );
 			}catch(Exception eww){
 				try{
 					response.sendError(404, eww.getLocalizedMessage()+";cant save video");
@@ -323,17 +252,6 @@ public class QuoteSvc
 		
 		//update User:
 		try{
-			quotes=user.getQuotes();
-			if(quotes==null)
-				nQuotes=new long[]{new Long(postId)};
-			else
-			{
-				nQuotes=Arrays.copyOf(quotes, quotes.length+1);
-				nQuotes[nQuotes.length-1]=new Long(postId);
-			}
-			user.setQuotes(nQuotes);
-			user=users.update(user);
-			
 			QuoteOwners.save(new QuoteOwner(postId,user.getId()));
 		}catch(Exception ew){
 			try{
@@ -352,19 +270,19 @@ public class QuoteSvc
 	@RequestMapping(value="/fb/", method=RequestMethod.GET)
 	public @ResponseBody String testfb(@RequestParam String code)//@RequestParam String videoId)
 	{
-		return readText("https://graph.facebook.com/oauth/access_token?client_id="+Credential.facebook.APP_ID+"&redirect_uri=https://videoquotes.appspot.com/fb/&client_secret="+Credential.facebook.APP_SECRET+"&code="+code);
+		return readText("https://graph.facebook.com/oauth/access_token?client_id="+Credential.facebook.APP_ID+"&redirect_uri="+Credential.BASE_URL+"/fb/&client_secret="+Credential.facebook.APP_SECRET+"&code="+code);
 	}
 	
 	
 	
 	//check expire date @ https://graph.facebook.com/1547808782170138?access_token=
 	
-	//https://www.facebook.com/dialog/oauth?client_id=&redirect_uri=https://videoquotes.appspot.com/pageac/callback/&scope=manage_pages&state=SOME_ARBITRARY_BUT_UNIQUE_STRING
+	//https://www.facebook.com/dialog/oauth?client_id=&redirect_uri=https://egyquotes.appspot.com/pageac/callback/&scope=manage_pages,&state=SOME_ARBITRARY_BUT_UNIQUE_STRING
 	@RequestMapping(value="/pageac/callback/", method=RequestMethod.GET)
 	public @ResponseBody String pageac(@RequestParam String code )//@RequestParam String videoId)
 	{
-		
-		String access_token=readText("https://graph.facebook.com/oauth/access_token?client_id="+Credential.facebook.APP_ID+"&redirect_uri=https://videoquotes.appspot.com/pageac/callback/&client_secret="+Credential.facebook.APP_SECRET+"&code="+code);
+		//TODO
+		String access_token=readText("https://graph.facebook.com/oauth/access_token?client_id="+Credential.facebook.APP_ID+"&redirect_uri="+Credential.BASE_URL+"/pageac/callback/&client_secret="+Credential.facebook.APP_SECRET+"&code="+code);
 		access_token=access_token.substring(access_token.indexOf("access_token=")+13,access_token.length());
 		
 
@@ -380,16 +298,30 @@ public class QuoteSvc
 		
 		
 		pageACRepo.save(new pageAC(Credential.facebook.PAGE_ID, pageAccessToken));
-		return access_token+"\n<br>\n"+pageAccessToken;
+		return "";//access_token+"\n<br>\n"+pageAccessToken;
 	}
 	
 	@RequestMapping(value="/pageac/", method=RequestMethod.GET)
 	public @ResponseBody void pageACRefresh(HttpServletResponse response) throws Exception//@RequestParam String videoId)
 	{
-		response.sendRedirect("https://www.facebook.com/dialog/oauth?client_id="+Credential.facebook.APP_ID+"&redirect_uri=https://videoquotes.appspot.com/pageac/callback/&scope=manage_pages,publish_actions&state=SOME_ARBITRARY_BUT_UNIQUE_STRING");
+		response.sendRedirect("https://www.facebook.com/dialog/oauth?client_id="+Credential.facebook.APP_ID+"&redirect_uri="+Credential.BASE_URL+"/pageac/callback/&scope=manage_pages,publish_actions,publish_pages&state=SOME_ARBITRARY_BUT_UNIQUE_STRING");
 	}
 	
 	
+	@RequestMapping(value="/Quote/grid",produces="application/json;charset=UTF-8", method=RequestMethod.POST)
+	public @ResponseBody List<Quote> grid(
+			HttpServletResponse									response,
+			@RequestBody SearchObj gridObj) throws Exception
+		{
+			try{
+				return Quotes.findByTags(gridObj.getTags(),gridObj.getPersonIds(),gridObj.getOffset(),gridObj.getLimit());
+			}catch(Exception e){
+				response.sendError(500, e.getLocalizedMessage()+"");
+				return null;
+			}
+		}
+	
+        
 	@RequestMapping(value="/Quote/DataTable",produces="application/json;charset=UTF-8", method=RequestMethod.POST)
 	public @ResponseBody dataTableResponse datatable(
 			HttpServletResponse									response,

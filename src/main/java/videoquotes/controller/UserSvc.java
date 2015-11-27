@@ -51,6 +51,7 @@ import com.google.gson.JsonObject;
 
 import videoquotes.repository.FBUser;
 import videoquotes.repository.FBUserRepository;
+import videoquotes.util.FacebookUtil;
 
 
 @Controller
@@ -90,10 +91,8 @@ public class UserSvc
 		@RequestMapping(value="/FBUser/", method=RequestMethod.GET)
 		public @ResponseBody void insert(@RequestParam String code,@RequestParam String state,HttpServletResponse response) throws IOException//@RequestParam String videoId)
 		{
-			String access_token=readText("https://graph.facebook.com/oauth/access_token?client_id="+Credential.facebook.APP_ID+"&redirect_uri="+Credential.facebook.REDIRECT_URI+"&client_secret="+Credential.facebook.APP_SECRET+"&code="+code);
-			access_token=access_token.substring(access_token.indexOf('=')+1);
-			String facebookId=readText("https://graph.facebook.com/me?access_token="+access_token);
-			facebookId=facebookId.substring(facebookId.indexOf("\"id\":\"")+6,facebookId.indexOf("\","));
+			String access_token=FacebookUtil.getAccessToken(code);
+			String facebookId=FacebookUtil.getFacebookId(access_token);
 			
 			if(!users.exists(facebookId))
 				users.save(new FBUser(facebookId));

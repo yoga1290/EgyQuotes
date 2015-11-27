@@ -1,0 +1,321 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jade/1.3.1/jade.min.js"></script>
+	</head>
+	<body>
+<script type="jade" id="jade">
+html
+	head
+		meta(charset="utf-8")
+		meta(http-equiv="X-UA-Compatible",content="IE=edge")
+		meta(name="viewport",content="width=device-width, initial-scale=1, maximum-scale=1")
+		title EgyQuotes
+		script(src="//code.jquery.com/jquery.js")
+		link(rel="stylesheet",href="https://fonts.googleapis.com/icon?family=Material+Icons")
+		link(rel="stylesheet",href="/glyphicons/glyphicons.css")
+		link(rel="stylesheet",href="/css/animate.css")
+		link(rel="stylesheet",href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css")
+		link(rel="stylesheet",href="/css/style.css")
+
+		script(src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js")
+		link(rel="stylesheet" href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css")
+		script(src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js")
+		link(rel="stylesheet" href="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css")
+		script(src="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js")
+		
+		
+		script(src="/js/lib/jquery.noty.packaged.min.js")
+
+		script(src="/js/lib/tokenizer.min.js")
+		link(rel="stylesheet" href="/css/tokenizer.css")
+
+
+		script(src="js/config.js")
+
+		script(src="js/svc/YTSvc.js")
+		script(src="js/svc/VideoSvc.js")
+		script(src="js/svc/PersonSvc.js")
+		script(src="js/svc/QuoteSvc.js")
+		script(src="js/svc/ChannelSvc.js")
+		script(src="js/svc/TagSvc.js")
+		
+		script(src="js/ctrl/dataTable_quote.js")
+		script(src="js/ctrl/dataTable_myQuote.js")
+		script(src="js/ctrl/dataTable_tag.js")
+		
+		script(src="js/ctrl/video.js")
+		script(src="js/ctrl/quote.js")
+		script(src="js/ctrl/TimeLine.js")
+		
+		
+	body.col-xs-12(align="center",ng-app="app",ng-controller="globalCtrl",ng-class="cssClass")
+		.container-fluid
+			.row
+				.col-md-1.col-xs-12(style="position:fixed")
+					.panel.panel-default(ng-class="cssClass")
+						.panel-body
+							i.material-icons.clickable(style="font-size:32px",onclick="location.href=config.OAuth.facebook.login;",ng-class="cssClass") input
+							i.material-icons.clickable(style="font-size:32px",ng-click="toggleStyle()",ng-class="cssClass") brightness_medium
+							i.material-icons.clickable(style="font-size:32px",ng-click="export(0)",ng-class="cssClass") archive
+							i.material-icons.clickable(style="font-size:32px;display:none;",onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=1048399691842414&redirect_uri=https://egyquotes.appspot.com/OAuth/facebook/&scope=email,manage_pages&state=/index';") account_circle
+							i.material-icons.clickable(style="font-size:32px;display:none;",onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=1048399691842414&redirect_uri=https://egyquotes.appspot.com/OAuth/facebook/&scope=email,manage_pages&state=/index';") dashboard
+							i.material-icons.clickable(style="font-size:32px;display:none;",onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=1048399691842414&redirect_uri=https://egyquotes.appspot.com/OAuth/facebook/&scope=email,manage_pages&state=/index';") chat
+							i.material-icons.clickable(style="font-size:32px;display:none;",onclick="location.href='https://www.facebook.com/dialog/oauth?client_id=1048399691842414&redirect_uri=https://egyquotes.appspot.com/OAuth/facebook/&scope=email,manage_pages&state=/index';") exit_to_app
+				#video-panel.col-md-11(ng-controller="videoPlayerCtrl",style="padding-top:70px")
+					.col-xs-12(style="padding-right:0px;padding-left:0px;",ng-class="{'col-md-8 col-md-offset-2':isFullScreen,'col-md-5':!isFullScreen}")
+						.panel.panel-default(ng-class="cssClass")
+							.panel-heading.col-xs-12
+								h1.panel-title {{test}}
+								.col-xs-12.col-md-11
+									input#vidURL.form-control(type="text",ng-model="url",ng-keypress="onURLChange()",placeholder="Youtube URL",size="18",style="font-size:24px")
+								i.material-icons.visible-md.visible-lg.col-md-1.clickable(style="font-size:32px;",ng-click="isFullScreen=!isFullScreen",onclick="TimeLine.resize();")
+									| {{(isFullScreen ? 'fullscreen_exit':'fullscreen')}}
+							.panel-body
+								div(ng-show="videoId")
+									.embed-responsive.embed-responsive-16by9
+										#video
+									br
+									canvas#TimeLine(ng-show="videoId",style="display:none;")
+									a(href="#")
+										canvas#TimeLinePointer(ng-show="videoId",style="display:none;position:absolue;z-index:5000")
+									br
+									#currentFBQuote
+					.col-md-5.col-sm-offset-1.col-xs-12(style="padding-right:0px;padding-left:0px;")
+						div(ng-show="videoId",style="min-height:500px;")
+							.panel.panel-default(ng-class="cssClass")
+								.panel-body
+									.media(ng-repeat="quote in quotes track by $index",ng-mouseover="quoteHover=$index",ng-class="{'active':(quoteHover==$index)}")
+										.media-left
+										.media-body
+											h4.media-heading(style="font-size:45px")
+												.dropdown.col-xs-12(style="float:left")
+													button.btn.btn-lg.btn-default.dropdown-toggle(data-toggle="dropdown")
+														i.material-icons face
+														label(ng-show="quote.author") {{quote.author}}
+														label(ng-hide="quote.author") Author
+														span.caret
+													ul.dropdown-menu.col-xs-12(style="overflow:scroll;max-height: 200px;font-size: 24px;text-align: center;")
+														li
+															i.material-icons.right-addon search
+															input.form-control(ng-model="$parent.author",ng-keypress="searchAuthor($event,quote)",ng-click="preventEvent($event)",type="text")
+														li.clickable(ng-repeat="author in authors track by $index")
+															a(ng-click="quote.author=author.key.name")
+																| {{author.properties.name}}
+												.clickable.col-xs-5(style="font-size:45px",ng-click="playQuoteStart(quote)")
+													| {{parseInt(quote.start/60)}}:{{to2Digit(quote.start%60)}}
+												i.material-icons.col-xs-2(style="font-size:42px") settings_ethernet
+												.clickable.col-xs-5(style="font-size:45px",ng-click="playQuoteEnd(quote)")
+													| {{parseInt(quote.end/60)}}:{{to2Digit(quote.end%60)}}
+												i.col-xs-6.material-icons.clickable(style="font-size:45px",ng-click="removeQuote($index)") delete
+												i.col-xs-6.material-icons.clickable(style="font-size:45px",ng-click="insertQuote($index)") cloud_upload
+											textarea.form-control(style="font-size:30px",ng-model="quote.text")
+											i.material-icons.leftQuotation format_quote
+											i.material-icons.rightQuotation format_quote
+
+											input.tags(multiple="multiple",type="text")
+											i.material-icons.quote-tag label
+									button#btn_vidIO.col-xs-12.btn.btn-lg(ng-show="isLoggedIn",ng-click="toggleIO()",ng-class="{'btn-danger':isRecording,'btn-default':!isRecording}")
+										i.material-icons.rotate180 format_quote
+										i.material-icons add_circle
+										i.material-icons format_quote
+									button.col-xs-12.btn.btn-lg.btn-primary(ng-hide="isLoggedIn",onclick="location.href=config.OAuth.facebook.login;") Login via facebook
+				.col-xs-12.col-md-offset-1.col-md-5(style="padding-right:0px;padding-left:0px;",ng-controller="quoteCtrl")
+					.panel.panel-default(ng-class="cssClass")
+						.panel-heading.col-xs-12(ng-click="show=!show")
+							h3.panel-title.col-xs-9 مقولات
+							.dropdown.col-xs-3(style="display:none;")
+								button.btn.btn-default.dropdown-toggle(data-toggle="dropdown",style="color:#74747474")
+									span.glyphicons.glyphicons-book-open
+									span.caret
+								ul.dropdown-menu(role="menu")
+									li.presentation
+										a(role="menuitem",href="#dataTable_myQuote",onclick="dataTable_myQuote.init('#dataTable_myQuote');$('#dataTable_myQuote').show();$('#dataTable_quote').hide();")
+											span.glyphicons.glyphicons-user
+											| Quotes added by me
+									li.presentation
+										a(role="menuitem",href="#dataTable_quote",onclick="dataTable_quote.init('#dataTable_quote');$('#dataTable_myQuote').hide();$('#dataTable_quote').show();")
+											span.glyphicons.glyphicons-book-open
+											| All Quotes
+						.panel-body(style="overflow:scroll")
+							table.table.hover#dataTable_quote
+
+				.col-xs-12.col-md-offset-1.col-md-4(style="padding-right:0px;padding-left:0px;",ng-controller="tagCtrl")
+					.panel.panel-default(ng-class="cssClass")
+						.panel-heading.col-xs-12(ng-click="show=!show")
+							h3.panel-title.col-xs-9 #Tags
+						.panel-body(style="overflow:scroll")
+							table.table.hover#dataTable_tag
+
+		#error.modal.fade(aria-hidden="true",tabindex="-1",role="dialog")
+			.modal-dialog
+				.modal-content
+					.modal-header
+						h1.panel-title
+							span.glyphicon.glyphicon-alert
+					.modal-body
+					.modal-footer
+						button.col-xs-12.btn.btn-lg(data-dismiss="modal")
+							span.glyphicon.glyphicon-remove
+
+		.row
+			.panel.panel-default(ng-controller="channelCtrl",ng-show="channels",ng-class="cssClass")
+				.panel-heading {{channels.length}} Trusted channels:
+				.panel-body
+					img.img-circle(ng-repeat="channel in channels track by $index",src="{{channel.logo}}")
+
+		#fbprv(style="display:none;")
+		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js")
+		script(src="app.js")
+		script(src="js/ctrl/videoPlayerCtrl.js")
+		script(src="js/ctrl/quoteCtrl.js")
+		script(src="js/ctrl/tagCtrl.js")
+		script(src="js/ctrl/channelCtrl.js")
+		script(src="js/lib/Base64.js")
+		script(src="js/ctrl/globalCtrl.js")
+		script.
+
+			var YTPlayer;
+			function error(jqXHR,textStatus,errorThrown){
+				$('#error').find('.modal-body').text(jqXHR.responseText.substring(jqXHR.responseText.indexOf('<title>')+7,jqXHR.responseText.indexOf('</title>')));
+				$('#error').modal({show:true});
+			}
+			function message(txt){
+				$('#error').find('.modal-body').html(txt);
+				$('#error').modal({show:true});
+			}
+
+			var prvPanel={
+					quotes:[],
+					load:function(quote){
+						
+						YTSvc.getData(quote.videoId,function(data){
+							$('#vidThumbnail').attr('src',data.thumbnail);
+							$('#vidCaption').text(data.channel.title+"<br>"+data.title);
+						});
+					},
+					loadQuotes:function(d){
+						prvPanel.quotes=d;
+						var html='';
+						for(var i=0;i<d.length;i++)
+								html+='tr\n'
+										+'\ttd '+d[i].quote+'\n';
+						$('#prvPanel').html(jade.render(html));
+						prvPanel.setListeners();
+					},
+					setListeners:function(){
+						$('#prvPanel tr').click(function(){
+							$('#prvPanel tr').removeClass('success');
+							$(this).addClass('success');
+							prvPanel.load(prvPanel.quotes[$('#prvPanel tr').index(this)]);
+						});
+					}
+			};
+
+
+
+			var fbprv={
+					loadPosts:function(quoteIds){
+						var html='<div id="fb-root"'+'><'+'/div><'+'script'+
+						'>(function(d, s, id) {	var js, fjs = d.getElementsByTagName(s)[0];	if (d.getElementById(id)) return;	js = d.createElement(s); js.id = id;	js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";	fjs.parentNode.insertBefore(js, fjs);}(document, \'script\', \'facebook-jssdk\'));<'+'/script>';
+						
+						for(var i=0;i<quoteIds.length;i++)
+							html+='<div class="fb-post" style="display:none;position:absolute;" data-href="https://www.facebook.com/EgyQuotes/posts/'+quoteIds[i]+'" data-width="350"></div>';
+						$('#fbprv').html(html);
+						$('#fbprv').css('display','');
+						if(FB!=undefined && FB!=null)
+							FB.init({ xfbml			: true,
+											version		: 'v2.1'});
+					},
+					showPost:function(quoteId){
+						var post=$('.fb-post[data-href*='+quoteId+']');
+						// if(post.css('display')=='') return;
+						
+						//noty({text:post.html()});
+						$('#currentFBQuote').hide().html(post.find('iframe').html()).fadeIn();
+						// post.appendTo('body');
+						// post.css('position','absolute');
+						// post.css('left',($('#video').position().left+($('#video').width()>>1)-(post.width()>>1))+'px');
+						// post.css('top',($('#video').position().top+$('#video').height()-post.height())+'px');
+						// post.css('display','').hide().fadeIn();
+					},
+					hidePost:function(quoteId){
+						var post=$('.fb-post[data-href*='+quoteId+']');
+						post.fadeOut(2000).hide().css('display','none');
+					}
+			};
+			
+			$(function(){
+
+				dataTable_quote.init('#dataTable_quote');
+				dataTable_tag.init('#dataTable_tag');
+				
+				if(location.href.indexOf('access_token')>-1)
+					localStorage.setItem('access_token',
+							location.href.substring(location.href.indexOf('access_token=')+13,location.href.length));
+				
+				if(localStorage.getItem('access_token')!=null
+						&& localStorage.getItem('access_token')!=undefined)
+					$.ajax({
+						url:'https://graph.facebook.com/me?access_token='+localStorage.getItem('access_token'),
+						type:'GET',
+						success:function(response){
+							$('#MainMenuTitle').html(jade.render('| '+response.name+'\nspan.caret'));
+							$('#MainMenuLogOutButton').css('display','');
+							}
+					});
+
+
+
+			$.noty.defaults = {
+					layout: 'topRight',//'top',
+					theme: 'relax',//'defaultTheme', // or 'relax'
+					type: 'alert',
+					text: '', // can be html or string
+					dismissQueue: true, // If you want to use queue feature set this true
+					template: 
+					'<div class="panel-body" style="color:red; font-size: 24px"><div class="col-xs-6 col-sm-9"><div class="noty_message"><span class="noty_text"></span><div class="noty_close"></div></div></div>',
+					//'<div class="noty_message"><span class="noty_text"></span><div class="noty_close"></div></div>',
+					animation: {
+							open: 'animated bounceInRight',//{height: 'toggle'}, // or Animate.css class names like: 'animated bounceInLeft'
+							close: 'animated bounceOutLeft',//{height: 'toggle'}, // or Animate.css class names like: 'animated bounceOutLeft'
+							easing: 'swing',
+							speed: 500 // opening & closing animation speed
+					},
+					timeout: 5000, // delay for closing event. Set false for sticky notifications
+					force: false, // adds notification to the beginning of queue when set to true
+					modal: false,
+					maxVisible: 3, // you can set max visible notification for dismissQueue true option,
+					killer: false, // for close all notifications before show
+					closeWith: ['click'], // ['click', 'button', 'hover', 'backdrop'] // backdrop click will close all notifications
+					callback: {
+							onShow: function() {},
+							afterShow: function() {},
+							onClose: function() {},
+							afterClose: function() {},
+							onCloseClick: function() {},
+					},
+					buttons: false // an array of buttons
+			};//end of noty config
+
+
+			}); //end of document ready
+
+		script(src="https://www.youtube.com/iframe_api?enablejsapi=1")
+</script>
+<script>
+window.onload=function(){
+
+		document.write(
+			jade.render(
+				document.getElementById('jade').innerHTML,
+				{pretty:'\t'}
+			)
+		);
+		//AngularJS DOES NOT WORK W/OUT THIS:
+		document.close();
+};
+</script>
+
+
+</body></html>

@@ -38,7 +38,7 @@ public class Video {
 
 	}
 	
-		public Video(String videoId,long[] quoteId,int start[],int end[]){
+		public Video(String videoId,String[] quoteId,int start[],int end[]){
 		this.videoId = videoId;
 		this.quoteId=quoteId;
 		this.start=start;
@@ -51,7 +51,7 @@ public class Video {
 		@Persistent
 		private int end[];
 		@Persistent
-		private long quoteId[];
+		private String quoteId[];
 		
 
 		
@@ -118,11 +118,11 @@ public class Video {
 			this.end = end;
 		}
 
-		public long[] getQuoteId() {
+		public String[] getQuoteId() {
 			return quoteId;
 		}
 
-		public void setQuoteId(long[] quoteId) {
+		public void setQuoteId(String[] quoteId) {
 			this.quoteId = quoteId;
 		}
 

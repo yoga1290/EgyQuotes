@@ -16,11 +16,11 @@ public class Quote {
 
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private long key;
-	public long getKey() {
+	private String key;
+	public String getKey() {
 		return this.key;
 	}
-	public void setKey(long key) {
+	public void setKey(String key) {
 		this.key = key;
 	}
 	/*
@@ -37,7 +37,7 @@ public class Quote {
 
 	}
 	
-		public Quote(String videoId,String personId,String quote,String start,String end){
+		public Quote(String videoId,String personId,String quote,double start,double end){
 		this.videoId = videoId;
 		this.personId = personId;
 		this.quote = quote;
@@ -55,10 +55,16 @@ private String personId;
 private String quote;
 
 @Persistent
-private String start;
+private double start;
 
 @Persistent
-private String end;
+private double end;
+
+@Persistent
+private long likes;
+
+@Persistent
+private long shares;
 
 
 
@@ -81,18 +87,39 @@ public String getQuote() {
 public void setQuote(String quote) {
 		this.quote = quote;
 	}
-public String getStart() {
-		return this.start;
-	}
-public void setStart(String start) {
-		this.start = start;
-	}
-public String getEnd() {
-		return this.end;
-	}
-public void setEnd(String end) {
-		this.end = end;
-	}
+
+    public double getStart() {
+	return start;
+    }
+
+    public double getEnd() {
+	return end;
+    }
+
+    public void setStart(double start) {
+	this.start = start;
+    }
+
+    public void setEnd(double end) {
+	this.end = end;
+    }
+
+    public long getLikes() {
+	return likes;
+    }
+
+    public long getShares() {
+	return shares;
+    }
+
+    public void setLikes(long likes) {
+	this.likes = likes;
+    }
+
+    public void setShares(long shares) {
+	this.shares = shares;
+    }
+
 
 }
 		

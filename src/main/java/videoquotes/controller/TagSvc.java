@@ -23,6 +23,8 @@ public class TagSvc
 {
 	@Autowired
 	private TagRepository tags;
+	@Autowired
+	private TagNameRepository tagNames;
 
 	@RequestMapping(value="/all",produces="application/json", method=RequestMethod.GET)
 	public @ResponseBody Collection<Tag> getTagList(){
@@ -41,19 +43,34 @@ public class TagSvc
 		return tags.findOne(id);
 	}
 
+	//TODO: used for manully inserting
+	/*
+	@RequestMapping(value="/tagName",produces="application/json", method=RequestMethod.POST)
+	public @ResponseBody TagName testNameTag(
+			@RequestParam String tag)
+	{
+		return tagNames.save(new TagName(tag));
+	}//*/
 	@RequestMapping(value="/insert",produces="application/json", method=RequestMethod.POST)
 	public @ResponseBody Tag insert(
 					//@RequestBody Tag otag)
 			@RequestParam String tag,		 
 			@RequestParam String quoteId)
 	{
+		//TODO: fix tag
+		tagNames.save(new TagName(tag));
 		Tag ntag=new Tag(tag,quoteId);
 		return tags.save(ntag);
 	}
 	@RequestMapping(value="/find",produces="application/json;charset=UTF-8" , method=RequestMethod.GET)
-	public @ResponseBody Collection<Tag> findByName(@RequestParam String tag)
+	public @ResponseBody List findByName(@RequestParam String tag)
 	{
-		return tags.find(tag,"tag",true,0,100);
+		return tagNames.searchByTag(tag,0,50);
+	}
+	@RequestMapping(value="/findByQuoteId",produces="application/json;charset=UTF-8" , method=RequestMethod.GET)
+	public @ResponseBody Collection<Tag> findByQuoteId(@RequestParam String quoteId)
+	{
+		return tags.findByQuoteId(quoteId);
 	}
 
 	@RequestMapping(value="/update/{id}",produces="application/json", method=RequestMethod.POST)

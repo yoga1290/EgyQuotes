@@ -66,10 +66,10 @@ import videoquotes.util.*;
 public class OAuthSvc
 {
 	@Autowired
-	private FBUserRepository facebookUsers;
+	private FBUserRepository users;
 
 	@Autowired
-	private GUserRepository googleUsers;
+	private UserRepository googleUsers;
         
         @Autowired
 	private URLUtil util;
@@ -80,15 +80,13 @@ public class OAuthSvc
 	@RequestMapping(value=Credential.OAuth.facebook.REDIRECT_URI, method=RequestMethod.GET)
 	public @ResponseBody void facebook(@RequestParam String code,@RequestParam String state,HttpServletResponse response) throws IOException//@RequestParam String videoId)
 	{
-		String access_token=util.readText("https://graph.facebook.com/oauth/access_token?client_id="+Credential.facebook.APP_ID+"&redirect_uri="+Credential.OAuth.facebook.REDIRECT_URL+"&client_secret="+Credential.OAuth.facebook.APP_SECRET+"&code="+code);
-		access_token=access_token.substring(access_token.indexOf('=')+1);
-		String facebookId=util.readText("https://graph.facebook.com/me?access_token="+access_token);
-		facebookId=facebookId.substring(facebookId.indexOf("\"id\":\"")+6,facebookId.indexOf("\","));
-		
-		if(!facebookUsers.exists(facebookId))
-			facebookUsers.save(new FBUser(facebookId));
-		//TODO: redirect
-		response.sendRedirect(Credential.BASE_URL+state+".html?access_token="+access_token);
+	    String access_token=FacebookUtil.getAccessToken(code);
+	    String facebookId=FacebookUtil.getFacebookId(access_token);
+
+	    if(!users.exists(facebookId))
+		    users.save(new FBUser(facebookId));
+	    
+	    response.sendRedirect(Credential.BASE_URL+state+".html?access_token="+access_token);
 	}
 
 	// https://accounts.google.com/o/oauth2/auth?redirect_uri=https://beta.videoquotes.appspot.com/OAuth/google/&response_type=code&client_id=730812089934-7dprqgn1ggh6gkvhp7n63d1qktbmo89b.apps.googleusercontent.com&approval_prompt=auto&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&access_type=offline
@@ -194,7 +192,7 @@ public class OAuthSvc
 ////			if(!users.exists(facebookId))
 ////				users.save(new User(facebookId));
 //			//TODO: redirect
-//			response.sendRedirect("https://videoquotes.appspot.com/"+state+".html?access_token="+access_token);
+//			response.sendRedirect("https://.appspot.com/"+state+".html?access_token="+access_token);
 ////			return access_token;
 //		}
 //		
