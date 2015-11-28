@@ -1,6 +1,14 @@
 /target
 /build
-/src/main/java/videoquotes/Credential.java
-/src/main/webapp/js/config.js
-/src/main/webapp/WEB-INF/appengine-web.xml
 
+src/main/webapp/WEB-INF/appengine-web.xml
+
+src/main/java/videoquotes/oauth/WebSecCnfg.java
+
+src/main/java/videoquotes/oauth/ResourceServer.java
+
+src/main/java/videoquotes/oauth/AuthorizationServer.java
+
+src/main/java/videoquotes/Credential.java
+
+src/main/webapp/js/config.js
