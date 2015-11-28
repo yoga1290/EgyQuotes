@@ -1,0 +1,10 @@
+<jade>
+#quoteLoader.col-md-3.col-sm-6.col-xs-12.clickable(ng-repeat="quote in quotes track by $index")
+	.quote.panel.panel-default(ng-click="onQuoteClick(quote)")
+		i.material-icons.quote.right format_quote
+		.panel-body
+			| {{quote.properties.quote}}
+		i.material-icons.quote.left format_quote
+		.panel-footer
+			span.label.label-default(style="font-size:18px") {{quote.properties.personId}}
+</jade>
