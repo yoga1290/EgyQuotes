@@ -36,6 +36,10 @@ app.config(function($routeProvider,$httpProvider){
 	    .when('/v=:v', {
 		templateUrl: 'video.html',
 		controller: 'videoCtrl'
+	    })
+	    .when('/new/:videoId', {
+		templateUrl: 'video.html',
+		controller: 'videoCtrl'
 	    });
     $httpProvider.interceptors.push(function($q){
 	var self={};
