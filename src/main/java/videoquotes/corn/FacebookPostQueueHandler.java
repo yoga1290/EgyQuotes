@@ -41,8 +41,8 @@ public class FacebookPostQueueHandler {
     private PersonRepository People;
     @Autowired
     private FacebookPostRepository posts;
-    @RequestMapping(value = "/corn/fbqueue")
-    private void facebookPostQueue(){
+    @RequestMapping(value = "/cron/fbqueue")
+    private void facebookPostQueue() {
 	Collection<FacebookPostQueue> queuedQuotes= postQueue.findByTimeOrder(0, 1);
 	Iterator<FacebookPostQueue> queuedQuotesIt= queuedQuotes.iterator();
 	while(queuedQuotesIt.hasNext())
