@@ -59,7 +59,7 @@ public Collection<FacebookPost> findByShares(Long shares){
 @SuppressWarnings("unchecked")
 public Collection<FacebookPost> findByNeedSync(int offset,int limit){
     Query query = PMF.get().getPersistenceManager().newQuery(FacebookPost.class);
-	query.setOrdering("lastSync desc");
+	query.setOrdering("lastSync asc");
 	query.setRange(offset, offset+limit);
     return (List<FacebookPost>)query.execute();
 }
