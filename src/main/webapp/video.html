@@ -25,7 +25,7 @@ div(ng-class="{'hidden':!show}",style="z-index:5;background-color:rgba(0,0,0,0.6
 					.dropdown.col-xs-4
 						button.bt.btn-lg.btn-default.dropdown-toggle(data-toggle="dropdown")
 							i.material-icons face
-							label(ng-show="newQuote.selectedAuthor") {{newQuote.selectedAuthor.properties.name}}
+							label(ng-show="newQuote.selectedAuthor") {{newQuote.selectedAuthor.key.name}}
 							label(ng-hide="newQuote.selectedAuthor")
 								| Author
 								span.caret
@@ -43,7 +43,7 @@ div(ng-class="{'hidden':!show}",style="z-index:5;background-color:rgba(0,0,0,0.6
 						ul.dropdown-menu.col-xs-12(style="overflow:scroll;width:110%")
 							li
 								i.material-icons.right-addon search
-								input.form-control(type="text",ng-model="newQuote.tagNameQuery",ng-keypress="newQuote.findByTagName($event)",ng-click="stopPropagation($event)")
+								input.form-control(type="text",ng-model="newQuote.tagNameQuery",ng-keydown="newQuote.findByTagName($event)",ng-click="stopPropagation($event)")
 							li(ng-repeat="tag in newQuote.tagNames track by $index",ng-click="newQuote.selectTag(tag)")
 								a
 									i.material-icons(ng-show="newQuote.selectedTags[tag.key.name]!=true") label_outline

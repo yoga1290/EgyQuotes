@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import videoquotes.Credential;
 import videoquotes.errorMessages.FacebookSharingFailed;
 import videoquotes.repository.Quote;
+import videoquotes.repository.pageAC;
 import videoquotes.repository.pageACRepository;
 
 /**
@@ -68,7 +69,7 @@ public class FacebookUtil {
 	return facebookId.substring(facebookId.indexOf("\"id\":\"")+6,facebookId.indexOf("\","));
     }
     
-    public String postQuote(Quote quote,String personId,String personName,String channelId)
+    public String postQuote(Quote quote,String personId,String personName,String channelId) //throws Exception
     {
 	String q="";
 	String access_token="";
@@ -94,6 +95,14 @@ public class FacebookUtil {
 	}catch(Exception e){
 	    throw new FacebookSharingFailed();
 	}
+    }
+    
+    public void refreshPageToken(){
+	String access_token=pageACRepo.findOne(Credential.facebook.PAGE_ID).getAc();
+	access_token=url.readText("https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&fb_exchange_token="+access_token
+				+"&client_secret="+Credential.facebook.APP_SECRET+"&client_id="+Credential.facebook.APP_ID);
+	access_token=access_token.substring(access_token.indexOf("access_token=")+13,access_token.length());
+	pageACRepo.save(new pageAC(Credential.facebook.PAGE_ID, access_token));
     }
     
 }

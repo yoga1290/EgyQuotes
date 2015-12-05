@@ -34,7 +34,7 @@ public class QuoteAnalyticsSvc
 
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public @ResponseBody QuoteAnalytics findOne(@RequestParam 
-String
+Long
  id)
 	{
 		return QuoteAnalyticss.findOne(id);
@@ -42,7 +42,7 @@ String
 
 	@RequestMapping(value="/insert", method=RequestMethod.POST)
 	public @ResponseBody QuoteAnalytics insert(
-@RequestParam String quoteId,
+@RequestParam Long quoteId,
 @RequestParam Long likes,
 @RequestParam Long shares,
 @RequestParam Long lastSync
@@ -59,7 +59,7 @@ String
 	@RequestMapping(value="/update/{id}", method=RequestMethod.POST)
 	public @ResponseBody QuoteAnalytics update(
 					
-@PathVariable(value="id") String quoteId,
+@PathVariable(value="id") Long quoteId,
 
 @RequestParam Long likes,
 

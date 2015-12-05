@@ -16,11 +16,11 @@ public class Quote {
 
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private String key;
-	public String getKey() {
+	private Long key;
+	public Long getKey() {
 		return this.key;
 	}
-	public void setKey(String key) {
+	public void setKey(Long key) {
 		this.key = key;
 	}
 	/*

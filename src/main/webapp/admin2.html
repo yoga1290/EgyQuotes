@@ -18,45 +18,38 @@ html
 		link(rel="stylesheet",href="/css/style.css")
 
 		script(src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js")
-		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js")
-		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js")
+		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js")
 		script(src="/js/lib/stickingEffect.js")
 		script(src="/js/config.js")
 		
-		style.
-				#search:focus{
-					background-color: white !important;
-				}
-				body{
-					padding: 0px;
-					margin: 0px;
-					padding-top: 70px;
-				}
-		
-	body(align="center",ng-app="app",ng-controller="gridCtrl")
-		.col-xs-12(ng-controller="dashCtrl")
-			.col-sm-offset-1.col-sm-3.col-xs-12.panel.panel-default
-				.panel-body(style="text-align: left;")
-					i.material-icons.btn-circle(ng-hide="isAuthenticated") account_circle
-					button.btn.btn-primary.btn-lg(ng-hide="isAuthenticated",ng-click="login()") Login via Facebook
-					img.img-circle(style="width:62px;",ng-show="isAuthenticated",src="{{picture}}")
-					input.form-control(placeholder="Video URL for new Quote",type="text",ng-model="videoURL",ng-keypress="onVideoURLChange()",ng-show="isAuthenticated")
-			.col-sm-offset-1.col-sm-6.col-xs-12.panel.panel-default
-				.panel-body(style="text-align: right;")
-					i.material-icons.btn-circle(style="float:left;") tv
-					span(ng-repeat="channel in channels")
-						img.img-circle(src="{{channel}}",style="width:62px;")
-		ng-include(src="'search.html'")
-		ng-include(src="'grid.html'")
+	body(align="center",ng-app="app",ng-controller="SettingsCtrl")
+		button.btn.btn-lg.btn-default(ng-click="export()") export
 		#loader
 			div(style="background-color:rgba(0,0,0,0.6);top:0px;left:0px;position:fixed;width:100%;height:100%;z-index:6;")
 			i.animated.material-icons.loader(style="position:fixed;z-index:6;top:30%;height:100%;left:0px;width:100%;alignment-baseline: central;color:white;") wifi
-		ng-view
+		ng-include(src="'settings.html'")
+		script(src="js/lib/Base64.js")
 		script(src="js/ctrl/new.js")
 		script(src="js/svc.js")
-		script(src="js/ctrl.js")
-
-			
+		script.
+			var exported=[];
+			app
+			.controller('SettingsCtrl',function($scope,QuoteSvc,TagSvc){
+				$scope.downloaded=0;
+				$scope.export=function(){
+					QuoteSvc.list(0,200).success(function(response){
+						angular.forEach(response,function(quote,i){
+							TagSvc.findByQuoteId(quote.key.name).success(function(tags){
+								quote.tags=tags;
+								exported.push(quote);
+								if(i==response.length-1)
+									Base64.download(JSON.stringify(exported),'quotes.json');
+							});							
+						});
+						
+					});
+				};
+			});
 </script>
 <script>
 window.onload=function(){

@@ -6,7 +6,7 @@ import javax.jdo.Query;
 import org.springframework.stereotype.Service;
 
 @Service
-public class QuoteOwnerRepository extends JDOCrudRepository<QuoteOwner, String>{
+public class QuoteOwnerRepository extends JDOCrudRepository<QuoteOwner, Long>{
 
 	public QuoteOwnerRepository() {
 		super(QuoteOwner.class);

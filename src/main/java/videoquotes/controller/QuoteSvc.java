@@ -58,6 +58,7 @@ import videoquotes.repository.QuoteOwnerRepository;
 import videoquotes.repository.QuoteRepository;
 import videoquotes.controller.requestBody.SearchObj;
 import videoquotes.errorMessages.FacebookSharingFailed;
+import videoquotes.errorMessages.UpdateVideoFailed;
 import videoquotes.repository.FacebookPostQueue;
 import videoquotes.repository.FacebookPostQueueRepository;
 import videoquotes.repository.Video;
@@ -124,7 +125,7 @@ public class QuoteSvc
 	}
 	
 	@RequestMapping(value="/Quote",produces="application/json;charset=UTF-8", method=RequestMethod.GET)
-	public @ResponseBody Quote findOne(@RequestParam String id)
+	public @ResponseBody Quote findOne(@RequestParam Long id)
 	{
 		return Quotes.findOne(id);
 	}
@@ -132,9 +133,8 @@ public class QuoteSvc
 	
 	
 /**
- * 
- * @param oQuote
- * @param access_token
+     * @param quote
+     * @param response
  * @return
  * @throws Exception 
  */
@@ -145,26 +145,26 @@ public class QuoteSvc
 	{		
 		
 		FBUser user=null;
-		try{
+//		try{
 			user=users.findByAccessToken(quote.getAccess_token());
-		}catch(Exception ew){
-		    throw new AccessExpired();
-		}
+//		}catch(Exception ew){
+//		    throw new AccessExpired();
+//		}
 		
 //		Check Channel:
 		
 		Channel channel=null;
 		String channelId="";
-		try{
+//		try{
 //			channelId=readText("http://jojo90.net84.net/YT.php?videoId="+videoId).split("\n")[0];
                         channelId=youtube.getChannelId(quote.getVideoId());
                         if(channelId!="")
         			channel=Channels.findOne(channelId);
                         else
                             throw new Exception();
-		}catch(Exception ew){
-		    throw new Exception(channelId);
-		}
+//		}catch(Exception ew){
+//		    throw new Exception(channelId);
+//		}
 		
 		
 		
@@ -172,11 +172,11 @@ public class QuoteSvc
 		String quotes[];
 		String nQuotes[];
 		Person person=null;
-		try{
+//		try{
 			person=People.findOne(quote.getPersonId());
-		}catch(Exception ew){
-		    throw new AuthorNotFound();
-		}
+//		}catch(Exception ew){
+//		    throw new AuthorNotFound();
+//		}
 		
 		//POST to Facebook & save Quote:
 		Quote res,nQuote=new Quote(quote.getVideoId(),quote.getPersonId(),quote.getQuote(),quote.getStart(),quote.getEnd());
@@ -233,18 +233,15 @@ public class QuoteSvc
 			video.setQuoteId(quoteId);
 			video=Videos.update(video);
 		}catch(Exception we){
-			try
-			{
+//			try
+//			{
 				int segStart[]=new int[]{s};
 				int segEnd[]=new int[]{e};
 				String quoteId[]=new String[]{(postId)};
 				Videos.save(new Video(	quote.getVideoId(),quoteId,segStart,segEnd) );
-			}catch(Exception eww){
-				try{
-					response.sendError(404, eww.getLocalizedMessage()+";cant save video");
-					return eww.getLocalizedMessage()+";cant update video";
-				}catch(Exception ewww){}
-			}
+//			}catch(Exception eww){
+//				throw new UpdateVideoFailed();
+//			}
 			
 			
 		}
@@ -252,7 +249,7 @@ public class QuoteSvc
 		
 		//update User:
 		try{
-			QuoteOwners.save(new QuoteOwner(postId,user.getId()));
+			QuoteOwners.save(new QuoteOwner(res.getKey(),user.getId()));
 		}catch(Exception ew){
 			try{
 				response.sendError(404, ew.getLocalizedMessage()+"; cant update user");
@@ -417,4 +414,8 @@ public class QuoteSvc
 		in.close();
 		return response.toString();
 	}
+
+    private void UpdateVideoFailed() {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

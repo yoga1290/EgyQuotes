@@ -100,7 +100,7 @@ app
 	};
 	this.getChannelId=function(videoId){
 	    var chain=
-		    $http.get('https://www.googleapis.com/youtube/v3/videos?key='+YTKey+'&id='+videoId);
+		    $http.get('https://www.googleapis.com/youtube/v3/videos?part=snippet&key='+YTKey+'&id='+videoId);
 	    return chain;
 	};
     })
@@ -108,6 +108,11 @@ app
 	this.list=function(offset,limit){
 	    var chain=
 		    $http.get('/channel/list',{params:{offset:offset,limit:limit}});
+	    return chain;
+	};
+	this.isVerified=function(channelId){
+	    var chain=
+		    $http.get('/channel/isTrusted',{params:{channelId:channelId}});
 	    return chain;
 	};
     })

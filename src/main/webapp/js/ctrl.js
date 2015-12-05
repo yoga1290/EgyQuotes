@@ -46,7 +46,7 @@ app
 	
 	$scope.videoURL='';
 	$scope.onVideoURLChange=function(){
-	    var videoid = self.videoURL.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
+	    var videoid = $scope.videoURL.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
 	    if(videoid == null) return;
 		location.href="#/new/"+videoid[1];
 	};
@@ -95,7 +95,7 @@ app
 		    }(sp));
 		    
 		    sp.onQuoteClick=function(quote){
-			location.href='#/quote/'+quote.key.name;
+			location.href='#/quote/'+quote.key.id;
 		    };
 		    
 		    sp.search=(function(sp){
@@ -272,8 +272,9 @@ app
 							    });//*/
 							    
 							});
-							self.offset+=self.page;
+							
 						    });
+					self.offset+=self.page;
 				    }
 			    };
 		    }());
@@ -317,8 +318,8 @@ app
 
 	app
 		.controller('videoCtrl',
-			['$scope','QuoteSvc','TagSvc','PersonSvc','VideoSvc','$timeout','$routeParams',
-			function(sp,QuoteSvc,TagSvc,PersonSvc,VideoSvc,to,$routeParams){
+			['$scope','QuoteSvc','TagSvc','PersonSvc','VideoSvc','ChannelSvc','$timeout','$routeParams',
+			function(sp,QuoteSvc,TagSvc,PersonSvc,VideoSvc,ChannelSvc,to,$routeParams){
 				
 				
 				sp.vidProgress=(function(){
@@ -501,6 +502,7 @@ app
 				{
 					video.player.stopVideo();
 					sp.newQuote.destroy();
+					window.location.href="#/";
 				}
 			};
 			sp.click=function(){
@@ -525,7 +527,7 @@ app
 						if(response.length>0)
 						    self.authors=response;
 						else
-						    self.selectedAuthor={properties:{name:self.authorName}};
+						    self.selectedAuthor={key:{name:self.authorName}};
 					    });
 					event.preventDefault();
 					event.stopPropagation();
@@ -575,7 +577,7 @@ app
 					    videoId: video.player.getVideoData().video_id,
 					    start: self.recordingStartTime,
 					    quote: self.text,
-					    personId: self.selectedAuthor.properties.name,
+					    personId: self.selectedAuthor.key.name,
 					    end: video.player.getCurrentTime()
 					};
 					if(self.quoteId!==null)
@@ -611,14 +613,12 @@ app
 					&&
 					self.selectedAuthor!==undefined
 					&&
-					self.selectedAuthor.key!==undefined
-					&&
-					self.selectedAuthor.key.name!==undefined){
+					self.selectedAuthor.key!==undefined){
 					    quote.personId=self.selectedAuthor.key.name;
 					    QuoteSvc.insert(quote).success(insertTags);
 					}
 					else
-					    PersonSvc.insert(self.selectedAuthor.properties.name)
+					    PersonSvc.insert(self.selectedAuthor.name)
 						.success(function(response){
 						    self.selectedAuthor=response;
 						    quote.personId=response.key;
@@ -657,17 +657,22 @@ app
 				tagNameQuery:'',
 				tagName:[],
 				selectedTags:{},
+				lastReq:{abort:function(){}},
 				findByTagName:function(tagName){
-				    TagSvc.find(self.tagNameQuery)
-					.success(function(response){
-					    self.tagNames=response;
-					});
+				    self.lastReq.abort();
+				    self.lastReq=
+					TagSvc.find(self.tagNameQuery)
+					    .success(function(response){
+						self.tagNames=response;
+						if(response.length==0)
+						    self.tagNames=[{key:{name:self.tagNameQuery}}];
+					    });
 				},
 				selectTag:function(tag){
 //				    if(self.selectedTags[tag.key.name]!==true)
 //				    {
 //					self.selectedTags[tag.key.name]=true;
-					TagSvc.insert(tag.key.name,sp.video.playlist[0].key.name);
+					TagSvc.insert(tag.key.name,sp.video.playlist[0].key);
 //				    }
 				    //TODO: remove tag
 //				    else if(self.selectedTags[tag.key.name]!==undefined)
@@ -708,10 +713,18 @@ app
 //				    });
 				});
 			else if($routeParams.videoId!==undefined)
-			    video.execAfterReady(function(){
-				sp.newQuote.show=true;
-				sp.show=true;
-				sp.video.playlist=[];
-				video.load($routeParams.videoId);
-			    });
+			    VideoSvc.getChannelId($routeParams.videoId)
+				.success(function(response){
+				    
+				    ChannelSvc.isVerified(response.items[0].snippet.channelId)
+				    .success(function(){
+					video.execAfterReady(function(){
+					    sp.newQuote.show=true;
+					    sp.show=true;
+					    sp.video.playlist=[];
+					    video.load($routeParams.videoId);
+					}); 
+				    });
+				    
+				});
 			}]);

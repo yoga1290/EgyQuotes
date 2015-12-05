@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class QuoteAnalyticsRepository extends JDOCrudRepository<QuoteAnalytics, String>{
+public class QuoteAnalyticsRepository extends JDOCrudRepository<QuoteAnalytics, Long>{
 
 	public QuoteAnalyticsRepository() {
 		super(QuoteAnalytics.class);

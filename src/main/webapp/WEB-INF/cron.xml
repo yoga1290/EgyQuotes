@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
   <cron>
-    <url>/corn/updatePostAnalytics</url>
+    <url>/cron/updatePostAnalytics</url>
     <description>update likes/shares count</description>
     <schedule>every 5  minutes</schedule>
     <!--<target>2</target>-->
   </cron>
   <cron>
-    <url>/corn/fbqueue</url>
+    <url>/cron/fbqueue</url>
     <description>Clean up data</description>
     <schedule>every 2 minutes</schedule>
+  </cron>
+  <cron>
+    <url>/cron/updatePageAccessToken</url>
+    <description>Clean up data</description>
+    <schedule>every 2 hours</schedule>
   </cron>
 </cronentries>

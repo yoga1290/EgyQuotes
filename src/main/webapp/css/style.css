@@ -141,6 +141,11 @@ input#search{
     -webkit-box-shadow: 0 0 15px #b2b2b2;
     box-shadow: 0 0 15px #b2b2b2;
 }
+input#search:focus{
+    position: fixed;
+    top:0px;
+    left:0px;
+}
 .btn-circle{
     font-size:62px;
     border-radius: 35px;

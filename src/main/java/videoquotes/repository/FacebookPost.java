@@ -21,7 +21,7 @@ public class FacebookPost {
         public FacebookPost(
 String fbid,
 
-String quoteId
+Long quoteId
 ){
             
 this.fbid=fbid;
@@ -38,7 +38,7 @@ this.shares=0L;
 
 	
 @Persistent
-private String quoteId;
+private Long quoteId;
 
 @Persistent
 private Long lastSync;
@@ -59,7 +59,7 @@ private String fbid;
         return this.fbid;
     }
 
-    public String getQuoteId(){
+    public Long getQuoteId(){
         return this.quoteId;
     }
 
@@ -80,7 +80,7 @@ private String fbid;
         this.fbid=fbid;
     }
 
-    public void setQuoteId(String quoteId){
+    public void setQuoteId(Long quoteId){
         this.quoteId=quoteId;
     }
 

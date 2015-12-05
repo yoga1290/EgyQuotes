@@ -18,7 +18,7 @@ public class QuoteAnalytics {
 	}
 
         public QuoteAnalytics(
-String quoteId,
+Long quoteId,
 
 Long likes,
 
@@ -40,7 +40,7 @@ this.lastSync=lastSync;
 	
 @PrimaryKey
 @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-private String quoteId;
+private Long quoteId;
 
 @Persistent
 private Long likes;
@@ -53,7 +53,7 @@ private Long lastSync;
 
 
         
-    public String getQuoteId(){
+    public Long getQuoteId(){
         return this.quoteId;
     }
 
@@ -70,7 +70,7 @@ private Long lastSync;
     }
 
         
-    public void setQuoteId(String quoteId){
+    public void setQuoteId(Long quoteId){
         this.quoteId=quoteId;
     }
 

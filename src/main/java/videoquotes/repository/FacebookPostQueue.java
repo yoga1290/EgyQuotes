@@ -30,7 +30,7 @@ public class FacebookPostQueue {
 
         public FacebookPostQueue(
 
-String quoteId,
+Long quoteId,
 
 Long createdTime
 ){
@@ -43,7 +43,7 @@ this.createdTime=createdTime;
 
 	
 @Persistent
-private String quoteId;
+private Long quoteId;
 
 @Persistent
 private Long createdTime;
@@ -58,7 +58,7 @@ private Long id;
         return this.id;
     }
 
-    public String getQuoteId(){
+    public long getQuoteId(){
         return this.quoteId;
     }
 
@@ -71,7 +71,7 @@ private Long id;
         this.id=id;
     }
 
-    public void setQuoteId(String quoteId){
+    public void setQuoteId(long quoteId){
         this.quoteId=quoteId;
     }
 

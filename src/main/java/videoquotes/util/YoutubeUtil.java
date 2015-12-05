@@ -28,7 +28,7 @@ public class YoutubeUtil {
     	int st=txt.indexOf("\"channelId\":");
     	if(st>-1)
     	{
-	    	txt=txt.substring(st+12,st+100);
+	    	txt=txt.substring(st+12,txt.length());
                 txt=txt.substring(txt.indexOf("\"")+1,txt.indexOf("\","));
                 return txt;
     	}
@@ -41,7 +41,7 @@ public class YoutubeUtil {
     	int st=txt.indexOf("\"url\":");
     	if(st>-1)
     	{
-	    	txt=txt.substring(st+8,st+500);
+	    	txt=txt.substring(st+8,txt.length());
                 txt=txt.substring(0,txt.indexOf("\""));
                 return txt;
     	}

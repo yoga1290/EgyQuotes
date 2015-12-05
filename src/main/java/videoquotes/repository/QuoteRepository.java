@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 @Service
-public class QuoteRepository extends JDOCrudRepository<Quote, String>{
+public class QuoteRepository extends JDOCrudRepository<Quote, Long>{
 	
 	@Autowired
 	private FBUserRepository users;
@@ -125,7 +125,7 @@ public List<Quote> findByTags(List<String> Tags,List<String> personIds,int offse
 	    List<Entity>  tags= datastore.prepare(qTags).asList(FetchOptions.Builder.withLimit(100));
 	    Iterator<Entity> it=tags.iterator();
 	    while(it.hasNext())
-		quoteIds.add( KeyFactory.createKey("Quote", (String) it.next().getProperty("quoteId") ));
+		quoteIds.add( KeyFactory.createKey("Quote", new Long( (String) it.next().getProperty("quoteId")) ));
 	}
 	
 	

@@ -41,7 +41,7 @@ public class QuoteOwnerSvc
 //	}
 
 	@RequestMapping(value="/quoteowner", method=RequestMethod.GET)
-	public @ResponseBody QuoteOwner findOne(@RequestParam String id)
+	public @ResponseBody QuoteOwner findOne(@RequestParam Long id)
 	{
 		return QuoteOwners.findOne(id);
 	}

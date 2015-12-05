@@ -55,7 +55,7 @@ public class TagSvc
 	public @ResponseBody Tag insert(
 					//@RequestBody Tag otag)
 			@RequestParam String tag,		 
-			@RequestParam String quoteId)
+			@RequestParam Long quoteId)
 	{
 		//TODO: fix tag
 		tagNames.save(new TagName(tag));
@@ -77,7 +77,7 @@ public class TagSvc
 	public @ResponseBody Tag update(
 					 
 			@PathVariable(value="id") long id,
-			@RequestParam String quoteId)
+			@RequestParam Long quoteId)
 	{
 		Tag tag=tags.findOne(id);
 

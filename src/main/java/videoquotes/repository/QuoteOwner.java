@@ -19,24 +19,24 @@ public class QuoteOwner {
 
 	}
 	
-		public QuoteOwner(String quoteId,String userId){
+		public QuoteOwner(Long quoteId,String userId){
 		this.quoteId = quoteId;
 		this.userId = userId;
 	}
 
 	@PrimaryKey
 @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-private String quoteId;
+private Long quoteId;
 
 @Persistent
 private String userId;
 
 
 	
-	public String getQuoteId() {
+	public Long getQuoteId() {
 		return this.quoteId;
 	}
-public void setQuoteId(String quoteId) {
+public void setQuoteId(Long quoteId) {
 		this.quoteId = quoteId;
 	}
 public String getUserId() {

@@ -18,7 +18,7 @@ public class Tag {
 
 	}
 
-		public Tag(String tag,String quoteId){
+		public Tag(String tag,Long quoteId){
 		this.tag = tag;
 		this.quoteId = quoteId;
 	}
@@ -31,7 +31,7 @@ private Long id;
 private String tag;
 
 @Persistent
-private String quoteId;
+private Long quoteId;
 
 
 
@@ -47,10 +47,10 @@ private String quoteId;
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
-	public String getQuoteId() {
+	public Long getQuoteId() {
 		return this.quoteId;
 	}
-	public void setQuoteId(String quoteId) {
+	public void setQuoteId(Long quoteId) {
 		this.quoteId = quoteId;
 	}
 
