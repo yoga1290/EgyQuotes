@@ -1,6 +1,9 @@
 # Motivation
 
-Sharing video scenes and quotes from officially verified Youtube channels; this lets people share their favourite video quotes from TV interviews and shows.
+Sites like [BrainyQuote](http://www.brainyquote.com) and [grabyo](http://about.grabyo.com) are definitely one of the inspiring factors here
+
+VideoQuotes is all about sharing video scenes and quotes from officially verified Youtube channels; this lets people share their favourite video quotes from TV interviews and shows.
+
 
 ------------------------
 
@@ -26,7 +29,7 @@ Sharing video scenes and quotes from officially verified Youtube channels; this 
 + Frontend
 	+ [AngularJS](https://angularjs.org) (via [CDN](https://developers.google.com/speed/libraries/#angularjs) )
 	+ [JADE](http://jade-lang.com) (via [CDN](http://cdnjs.com/libraries/jade))
-	+ [jQuery](http://jquery.com) (via [CDN](http://jquery.com/download/#using-jquery-with-a-cdn))
+	+ [jQuery](http://jquery.com) (via [CDN](https://developers.google.com/speed/libraries/#jquery))
 	+ [Bootstrap](http://getbootstrap.com) (via [CDN](http://getbootstrap.com/getting-started/#download-cdn) )
 	+ [Animate.css](https://daneden.github.io/animate.css/)
 	+ [Youtube iFrame API](https://developers.google.com/youtube/iframe_api_reference) (via [CDN](https://developers.google.com/youtube/iframe_api_reference#Getting_Started) )
@@ -35,33 +38,6 @@ Sharing video scenes and quotes from officially verified Youtube channels; this 
 	+ [Spring Framework](http://projects.spring.io/spring-framework/) running on [Google AppEngine](https://cloud.google.com/appengine/) & managed by [Apache Maven](https://cloud.google.com/appengine/docs/java/tools/maven)
 
 
-------------------------
-
-## Configurations
-
-Configuration files are excluded in the commits but here are my constants:
-
-+ videoquotes.**Credential.java** for the backend
-	+ BASE_URL
-		website's root URL
-	+ ADMIN_USER_ID
-		Facebook UserId for administrations page logging in
-	+ OAuth
-		+ facebook
-			+ PAGE_ID
-				Facebook page Id which is being managed by the app
-			+ APP_ID
-				Facebook App ID
-			+ REDIRECT_URI
-				The URI in which Facebook redirects to after logging in
-			+ REDIRECT_URL
-				The full URL in which Facebook redirects to after logging in (BASE_URL+REDIRECT_URI)
-			+ APP_SECRET
-				facebook app secret
-			+ APP_ACCESS_TOKEN
-				Access token for the app to use
-+ **config.js** for the front-end
-+ WEB-INF/**appengine-web.xml** for AppEngine deployment configuration
 
 ----------------------------------
 
@@ -97,6 +73,35 @@ cd VideoQuotes;
 # see https://cloud.google.com/appengine/docs/java/tools/maven#managing_versions_with_versions-maven-plugin_command_options
 mvn install clean appengine:update;
 ```
+
+
+------------------------
+
+## Configurations
+
+Configuration files are excluded in the commits but here are my constants:
+
++ videoquotes.**Credential.java** for the backend
+	+ BASE_URL
+		website's root URL
+	+ ADMIN_USER_ID
+		Facebook UserId for administrations page logging in
+	+ OAuth
+		+ facebook
+			+ PAGE_ID
+				Facebook page Id which is being managed by the app
+			+ APP_ID
+				Facebook App ID
+			+ REDIRECT_URI
+				The URI in which Facebook redirects to after logging in
+			+ REDIRECT_URL
+				The full URL in which Facebook redirects to after logging in (BASE_URL+REDIRECT_URI)
+			+ APP_SECRET
+				facebook app secret
+			+ APP_ACCESS_TOKEN
+				Access token for the app to use
++ **config.js** for the front-end
++ WEB-INF/**appengine-web.xml** for AppEngine deployment configuration
 
 
 --------------------
