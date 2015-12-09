@@ -118,6 +118,10 @@ public class QuoteSvc
 		return txt;
 	}
 
+	@RequestMapping(value="/Quote/count",produces="application/json;charset=UTF-8", method=RequestMethod.GET)
+	public @ResponseBody int getCount(){
+		return Quotes.count();
+	}
 	@RequestMapping(value="/Quote/list",produces="application/json;charset=UTF-8", method=RequestMethod.GET)
 	public @ResponseBody Collection<Quote> getQuoteList(@RequestParam int offset,@RequestParam int limit){
                 if(limit>200)   return null;

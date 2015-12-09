@@ -234,7 +234,7 @@ app
 					    $(document).scroll(function(){
 						    if(self.isBusy) return;
 						    
-						    var H=$(document).height()-10;
+						    var H=$(document).height()-100;
 						    var s=$('body').scrollTop();
 						    if(s+h>=H)
 //						    if((H-s)<h)
@@ -292,6 +292,17 @@ app
 		    };
 		    sp.stopPropagation=function(e){
 			e.stopPropagation();
+		    };
+		    sp.show = false;
+		    sp.childClick = false;
+		    sp.parentClick = true;
+		    sp.overlayClick=function(){
+			sp.parentClick=true;
+			sp.show=!(!sp.childClick && sp.parentClick);
+			sp.childClick=sp.parentClick=false;
+		    };
+		    sp.click=function(){
+			sp.childClick=true;
 		    };
     }]);
 
@@ -527,7 +538,7 @@ app
 						if(response.length>0)
 						    self.authors=response;
 						else
-						    self.selectedAuthor={key:{name:self.authorName}};
+						    self.selectedAuthor={properties:{name:self.authorName}};
 					    });
 					event.preventDefault();
 					event.stopPropagation();
@@ -577,7 +588,6 @@ app
 					    videoId: video.player.getVideoData().video_id,
 					    start: self.recordingStartTime,
 					    quote: self.text,
-					    personId: self.selectedAuthor.key.name,
 					    end: video.player.getCurrentTime()
 					};
 					if(self.quoteId!==null)
@@ -602,10 +612,10 @@ app
 				},
 				save:function(quote){
 				    if(self.selectedAuthor===null) return;
-				    var insertTags=function(quoteId){
+				    var insertTags=function(quote){
 					angular.forEach(self.selectedTags,function(isSelected,tag){
 					    if(isSelected)
-						TagSvc.insert(tag,quoteId);
+						TagSvc.insert(tag,quote.key);
 					});
 				    };
 				    
@@ -618,7 +628,7 @@ app
 					    QuoteSvc.insert(quote).success(insertTags);
 					}
 					else
-					    PersonSvc.insert(self.selectedAuthor.name)
+					    PersonSvc.insert(self.selectedAuthor.properties.name)
 						.success(function(response){
 						    self.selectedAuthor=response;
 						    quote.personId=response.key;
@@ -728,3 +738,86 @@ app
 				    
 				});
 			}]);
+		    
+		    
+app
+    .controller('SettingsCtrl',function($scope,QuoteSvc,TagSvc){
+	$scope.downloaded = 0;
+	$scope.$parent.show = true;
+	$scope.exportProgress = 0;
+	
+	$scope.export=function(){
+	    $scope.$parent.click();
+	    $scope.exportProgress = 0;
+	    QuoteSvc.count().success(function(count){
+		var exported = [];
+		var total = parseInt(count);
+		var page = 10;
+		var load = function(o) {
+		    $scope.exportProgress = parseInt( o*100 / total );
+		    if(o >= total)
+			Base64.download(JSON.stringify(exported),'quotes.json');
+		    else
+			QuoteSvc.list(o,Math.min(total-o,page)).success(function(response){
+			    angular.forEach(response,function(quote,i){
+				TagSvc.findByQuoteId(quote.key).success(function(tags){
+				    quote.tags=tags;
+				    exported.push(quote);
+
+				})
+				.finally(function(){
+				    if(i === response.length-1) load(o+page);
+				});
+				
+			    });
+			})
+		};
+		load(0);
+	    });
+	    
+	};
+	
+	$scope.exportCSV=function(){
+	    $scope.$parent.click();
+	    $scope.exportProgress = 0;
+	    QuoteSvc.count().success(function(count){
+		var exported = 'quote , personId , videoId , start , end , tags , youtube \n';
+		var total = parseInt(count);
+		var page = 10;
+		var load = function(o) {
+		    $scope.exportProgress = parseInt( o*100 / total );
+		    if(o >= total)
+			Base64.download(exported,'quotes.csv');
+		    else
+			QuoteSvc.list(o,Math.min(total-o,page)).success(function(response){
+			    angular.forEach(response,function(quote,i){
+				
+				TagSvc.findByQuoteId(quote.key).success(function(tags){
+				    
+				    var tmp = '';
+				    angular.forEach(tags,function(tag){
+					tmp += ' #'+ tag.tag;
+				    });
+				    
+				    exported += ''+quote.quote+' , '
+					    + quote.personId +' , '
+					    +quote.videoId+' , '
+					    +parseInt(quote.start)+' , '
+					    +parseInt(quote.end)+' , '
+					    +tmp+' , '
+					    +'https://youtu.be/'+quote.videoId+'?t='+parseInt(quote.start)+'s \n';
+
+				})
+				.finally(function(){
+				    if(i === response.length-1) load(o+page);
+				});
+				
+			    });
+		    })
+		};
+		load(0);
+	    });
+	    
+	};
+	
+    });

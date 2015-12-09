@@ -68,7 +68,7 @@ public class TagSvc
 		return tagNames.searchByTag(tag,0,50);
 	}
 	@RequestMapping(value="/findByQuoteId",produces="application/json;charset=UTF-8" , method=RequestMethod.GET)
-	public @ResponseBody Collection<Tag> findByQuoteId(@RequestParam String quoteId)
+	public @ResponseBody Collection<Tag> findByQuoteId(@RequestParam Long quoteId)
 	{
 		return tags.findByQuoteId(quoteId);
 	}

@@ -30,6 +30,11 @@ app
 			});
 	    return chain;
 	};
+	this.count = function() {
+	    var chain=
+		$http.get('/Quote/count');
+	    return chain;
+	};
 	this.list=function(offset,limit){
 	    var chain=
 		$http.get('/Quote/list',{params:{offset:offset,limit:limit}});
