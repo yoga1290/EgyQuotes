@@ -166,6 +166,14 @@ input#search:focus{
 #videoURL:focus{
     width: 100%;
 }
+#search:focus{
+	background-color: white !important;
+}
+body{
+	padding: 0px;
+	margin: 0px;
+	padding-top: 70px;
+}
 
 .trending{
     -webkit-animation-duration: 5s;

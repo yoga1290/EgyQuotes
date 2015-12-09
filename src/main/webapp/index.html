@@ -11,27 +11,18 @@ html
 		meta(http-equiv="X-UA-Compatible",content="IE=edge")
 		meta(name="viewport",content="width=device-width, initial-scale=1, maximum-scale=1")
 		title EgyQuotes
-		script(src="//code.jquery.com/jquery.js")
+		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
 		link(rel="stylesheet",href="https://fonts.googleapis.com/icon?family=Material+Icons")
 		link(rel="stylesheet",href="/css/animate.css")
 		link(rel="stylesheet",href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css")
 		link(rel="stylesheet",href="/css/style.css")
 
+		script(src="/js/lib/Base64.js")
 		script(src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js")
 		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js")
 		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js")
 		script(src="/js/lib/stickingEffect.js")
 		script(src="/js/config.js")
-		
-		style.
-				#search:focus{
-					background-color: white !important;
-				}
-				body{
-					padding: 0px;
-					margin: 0px;
-					padding-top: 70px;
-				}
 		
 	body(align="center",ng-app="app",ng-controller="gridCtrl")
 		.col-xs-12(ng-controller="dashCtrl")
