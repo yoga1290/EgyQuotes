@@ -9,6 +9,7 @@ import videoquotes.util.*;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
+import java.util.Iterator;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -16,7 +17,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import videoquotes.Credential;
 import videoquotes.errorMessages.FacebookSharingFailed;
+import videoquotes.repository.FBUser;
+import videoquotes.repository.FBUserRepository;
 import videoquotes.repository.Quote;
+import videoquotes.repository.Tag;
+import videoquotes.repository.TagRepository;
 import videoquotes.repository.pageAC;
 import videoquotes.repository.pageACRepository;
 
@@ -32,6 +37,10 @@ public class FacebookUtil {
     private static URLUtil url;
     @Autowired
     private pageACRepository pageACRepo;
+    @Autowired
+    private TagRepository Tags;
+    @Autowired
+    private FBUserRepository users;
 
     public static int getPostShareCount(String postId)
     {
@@ -74,14 +83,25 @@ public class FacebookUtil {
 	String q="";
 	String access_token="";
 	String postId="";
+	String tags="";
+	try{
+	    Iterator<Tag> it=Tags.findByQuoteId(quote.getKey()).iterator();
+	    while(it.hasNext())
+		tags+=" #"+it.next().getTag();
+	}catch(Exception e){
+	}
 	
 	try{
 	    access_token=new pageACRepository().findOne(Credential.facebook.PAGE_ID).getAc();
-	    q="message="+URLEncoder.encode("\u201D"+quote.getQuote()+"\u201C"+"\n\n "+"\u2015"+" #"+quote.getPersonId(), "UTF-8")
+	    q="message="+URLEncoder.encode("\u201D"+quote.getQuote()+"\u201C"+"\n\n "+"\u2015"+" #"+quote.getPersonId()+"\n\n "+tags, "UTF-8")
 		+"&name="+URLEncoder.encode(personName+":", "UTF-8")
 		+"&description="+URLEncoder.encode("\u201D"+quote.getQuote()+"\u201C", "UTF-8")
 		+"&link="+URLEncoder.encode(Credential.BASE_URL+"/#/quote/"+quote.getKey(), "UTF-8")
 		+"&picture="+URLEncoder.encode(YoutubeUtil.getChannelLogo(channelId), "UTF-8")
+		/*
+		+"&actions[0][name]="+URLEncoder.encode("books.quotes", "UTF-8")
+		+"&actions[0][link]="+URLEncoder.encode(Credential.BASE_URL+"/#/quote/"+quote.getKey(), "UTF-8")
+		//*/
 		+"&access_token="+access_token
 		;
 	}catch(Exception e){
@@ -103,6 +123,19 @@ public class FacebookUtil {
 				+"&client_secret="+Credential.facebook.APP_SECRET+"&client_id="+Credential.facebook.APP_ID);
 	access_token=access_token.substring(access_token.indexOf("access_token=")+13,access_token.length());
 	pageACRepo.save(new pageAC(Credential.facebook.PAGE_ID, access_token));
+    }
+    
+    
+    public boolean isAdmin(String access_token) {
+	FBUser user=null;
+	try{
+	    user=users.findByAccessToken(access_token);
+	    if(!user.getId().equals(Credential.ADMIN_USER_ID))
+		    return false;
+	    return true;
+	}catch(Exception ew){
+		return false;
+	}
     }
     
 }
