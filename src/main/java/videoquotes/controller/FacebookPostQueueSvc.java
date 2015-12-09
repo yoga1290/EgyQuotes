@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import videoquotes.repository.FacebookPostQueue;
 import videoquotes.repository.FacebookPostQueueRepository;
+import videoquotes.util.FacebookUtil;
 
 
 @Controller
@@ -31,25 +32,25 @@ public class FacebookPostQueueSvc
 {
 	@Autowired
 	private FacebookPostQueueRepository facebookPostQueues;
+	@Autowired
+	private FacebookUtil facebook;
 
 
 	
-	/*
+	///*
 	@RequestMapping(value="/insert", method=RequestMethod.POST)
 	public @ResponseBody FacebookPostQueue insert(
-					//@RequestBody FacebookPostQueue ofacebookPostQueue)
-
-@RequestParam String quoteId
-)
+						@RequestParam Long quoteId,
+						@RequestParam String access_token)
 	{
+	    if(facebook.isAdmin(access_token))
+	    {
 		FacebookPostQueue facebookpostqueue=new FacebookPostQueue();
-
-		
-	facebookpostqueue.setQuoteId(quoteId);
-
-	facebookpostqueue.setCreatedTime(new Date().getTime());
-
+		facebookpostqueue.setQuoteId(quoteId);
+		facebookpostqueue.setCreatedTime(new Date().getTime());
 		return facebookPostQueues.save(facebookpostqueue);
+	    }
+	    return null;
 	}
 
 	//*/

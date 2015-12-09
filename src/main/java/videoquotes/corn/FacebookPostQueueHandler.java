@@ -61,11 +61,12 @@ public class FacebookPostQueueHandler {
 		//POST to Facebook & save Quote:
 		String fbid=
 			facebook.postQuote(quoteToBePosted,quoteToBePosted.getPersonId(),person.getName(),channelId);
-		    if(fbid.indexOf(":")>-1)
+		///*    
+		if(fbid.indexOf(":")>-1)
 			throw new FacebookSharingFailed();
 		    
 		    posts.save(new FacebookPost(fbid,quoteToBePosted.getKey()));
-		    postQueue.delete(cur);
+		    postQueue.delete(cur);//*/
 	}
     }
 }
