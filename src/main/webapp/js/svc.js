@@ -6,7 +6,7 @@ app
 	    return chain;
 	};
     }])
-    .service('QuoteSvc',function($http){
+    .service('QuoteSvc',function($http,$q){
 	this.query=function(offset,limit,tags,personIds){
 		var chain=
 			$http
@@ -40,33 +40,121 @@ app
 		$http.get('/Quote/list',{params:{offset:offset,limit:limit}});
 	    return chain;
 	};
+	var _findById = {};
 	this.findById=function(quoteId){
-	    var chain=
-		    $http.get('/Quote?id='+quoteId);
-	    return chain;
+	    var asyncTask = $q.defer();
+	    asyncTask.promise.abort=function(){};
+	    if(_findById[quoteId] !== undefined)
+		asyncTask.resolve(_findById[quoteId]);
+	    else {
+		var canceller=$q.defer();
+		$http
+		    $http.get('/Quote?id='+quoteId,{timeout:canceller.promise})
+		    .success(function(response){
+			_findById[quoteId] = response;
+			asyncTask.resolve(response);
+		    })
+		    .error(function(reason){
+			asyncTask.reject(reason);
+		    });
+		asyncTask.promise.abort=function(){
+		    canceller.resolve();
+		};
+	    }
+	    asyncTask.promise.success=function(cb){
+		asyncTask.promise.then(cb,function(){});
+		return asyncTask.promise;
+	    };
+	    asyncTask.promise.error=function(cb){
+		asyncTask.promise.then(function(){},cb);
+		return asyncTask.promise;
+	    };
+	    asyncTask.promise.finally=function(cb){
+		asyncTask.promise.then(cb,cb);
+		return asyncTask.promise;
+	    };
+	    return asyncTask.promise;
 	};
     })
     .service('TagSvc',function($http,$q){
+	var _find = {};
 	this.find=function(tag){
-	    var canceller=$q.defer();
-	    var chain=
+	    var asyncTask = $q.defer();
+	    asyncTask.promise.abort=function(){};
+	    if(_find[tag] !== undefined)
+		asyncTask.resolve(_find[tag]);
+	    else {
+		var canceller=$q.defer();
 		$http
-		    .get('/tag/find',{params:{tag:tag},timeout:canceller.promise});
-	    chain.abort=function(){
-		canceller.resolve();
+		    .get('/tag/find',{params:{tag:tag},timeout:canceller.promise})
+		    .success(function(response){
+			_find[tag] = response;
+			asyncTask.resolve(response);
+		    })
+		    .error(function(reason){
+			asyncTask.reject(reason);
+		    });
+		asyncTask.promise.abort=function(){
+		    canceller.resolve();
+		};
+	    }
+	    asyncTask.promise.success=function(cb){
+		asyncTask.promise.then(cb,function(){});
+		return asyncTask.promise;
 	    };
-	    return chain;
+	    asyncTask.promise.error=function(cb){
+		asyncTask.promise.then(function(){},cb);
+		return asyncTask.promise;
+	    };
+	    asyncTask.promise.finally=function(cb){
+		asyncTask.promise.then(cb,cb);
+		return asyncTask.promise;
+	    };
+	    return asyncTask.promise;
 	};
+	
+	
 	this.insert=function(tag,quoteId){
 	    var chain=
 		$http
 		    .post('/tag/insert','',{params:{tag:tag,quoteId:quoteId}});
 	    return chain;
 	};
+	
+	var _findByQuoteId = {};
 	this.findByQuoteId=function(quoteId){
-	    var chain=
-		    $http.get('/tag/findByQuoteId',{params:{quoteId:quoteId}});
-	    return chain;
+	    var asyncTask = $q.defer();
+	    asyncTask.promise.abort=function(){};
+	    if(_findByQuoteId[quoteId] !== undefined)
+		asyncTask.resolve(_findByQuoteId[quoteId]);
+	    else {
+		var canceller=$q.defer();
+		$http
+		    .get('/tag/findByQuoteId',{params:{quoteId:quoteId},timeout:canceller.promise})
+		    .success(function(response){
+			_findByQuoteId[quoteId] = response;
+			asyncTask.resolve(response);
+		    })
+		    .error(function(reason){
+			asyncTask.reject(reason);
+		    });
+		asyncTask.promise.abort=function(){
+		    canceller.resolve();
+		};
+	    }
+	    asyncTask.promise.success=function(cb){
+		asyncTask.promise.then(cb,function(){});
+		return asyncTask.promise;
+	    };
+	    asyncTask.promise.error=function(cb){
+		asyncTask.promise.then(function(){},cb);
+		return asyncTask.promise;
+	    };
+	    asyncTask.promise.finally=function(cb){
+		asyncTask.promise.then(cb,cb);
+		return asyncTask.promise;
+	    };
+	    return asyncTask.promise;
 	};
     })
     .service('PersonSvc',function($http,$q){
@@ -115,10 +203,42 @@ app
 		    $http.get('/channel/list',{params:{offset:offset,limit:limit}});
 	    return chain;
 	};
+	var _isVerified = {};
 	this.isVerified=function(channelId){
 	    var chain=
-		    $http.get('/channel/isTrusted',{params:{channelId:channelId}});
-	    return chain;
+		    $http;
+	    var asyncTask = $q.defer();
+	    asyncTask.promise.abort=function(){};
+	    if(_isVerified[channelId] !== undefined)
+		asyncTask.resolve(_isVerified[channelId]);
+	    else {
+		var canceller=$q.defer();
+		$http
+		    .get('/channel/isTrusted',{params:{channelId:channelId},timeout:canceller.promise})
+		    .success(function(response){
+			_isVerified[channelId] = response;
+			asyncTask.resolve(response);
+		    })
+		    .error(function(reason){
+			asyncTask.reject(reason);
+		    });
+		asyncTask.promise.abort=function(){
+		    canceller.resolve();
+		};
+	    }
+	    asyncTask.promise.success=function(cb){
+		asyncTask.promise.then(cb,function(){});
+		return asyncTask.promise;
+	    };
+	    asyncTask.promise.error=function(cb){
+		asyncTask.promise.then(function(){},cb);
+		return asyncTask.promise;
+	    };
+	    asyncTask.promise.finally=function(cb){
+		asyncTask.promise.then(cb,cb);
+		return asyncTask.promise;
+	    };
+	    return asyncTask.promise;
 	};
     })
     .service('QuoteAnalyticsSvc',function($http,$q){
