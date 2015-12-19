@@ -29,11 +29,19 @@ public Collection<Person> findByName(String name){
 	return (List<Person>)query.execute(name);//,name+"\ufffd");
 }
 
+/*
 @SuppressWarnings("unchecked")
 public Entity findById(String personId) throws EntityNotFoundException{
 	com.google.appengine.api.datastore.DatastoreService 
 		 		datastore = DatastoreServiceFactory.getDatastoreService();
 	return datastore.get(KeyFactory.createKey("Person", personId));
+}//*/
+@SuppressWarnings("unchecked")
+public Collection<Person> findById(String personId){
+	Query query = PMF.get().getPersistenceManager().newQuery(Person.class);
+	query.setFilter("key == n");
+	query.declareParameters("String n");
+	return (List<Person>)query.execute(personId);//,name+"\ufffd");
 }
 
 }

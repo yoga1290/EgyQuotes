@@ -78,7 +78,7 @@ public Collection<Quote> find(String access_token,String startWith,String selCol
 }//*/
 
 @SuppressWarnings("unchecked")
-public Collection<Quote> findByPersonId(long personId){
+public Collection<Quote> findByPersonId(String personId){
 	Query query = PMF.get().getPersistenceManager().newQuery(Quote.class);
 	query.setFilter("personId == n");
 	query.declareParameters("long n");
@@ -125,7 +125,7 @@ public List<Quote> findByTags(List<String> Tags,List<String> personIds,int offse
 	    List<Entity>  tags= datastore.prepare(qTags).asList(FetchOptions.Builder.withLimit(100));
 	    Iterator<Entity> it=tags.iterator();
 	    while(it.hasNext())
-		quoteIds.add( KeyFactory.createKey("Quote", new Long( (String) it.next().getProperty("quoteId")) ));
+		quoteIds.add( KeyFactory.createKey("Quote", new Long( ""+ it.next().getProperty("quoteId")) ));
 	}
 	
 	
