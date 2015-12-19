@@ -38,7 +38,7 @@ public class TagSvc
 	}
 
 	@RequestMapping(value="/",produces="application/json", method=RequestMethod.GET)
-	public @ResponseBody Tag findOne(@RequestParam Long id)
+	public @ResponseBody Tag findOne(@RequestParam String id)
 	{
 		return tags.findOne(id);
 	}
@@ -76,7 +76,7 @@ public class TagSvc
 	@RequestMapping(value="/update/{id}",produces="application/json", method=RequestMethod.POST)
 	public @ResponseBody Tag update(
 					 
-			@PathVariable(value="id") long id,
+			@PathVariable(value="id") String id,
 			@RequestParam Long quoteId)
 	{
 		Tag tag=tags.findOne(id);

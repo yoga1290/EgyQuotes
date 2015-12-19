@@ -8,7 +8,7 @@ import javax.jdo.Query;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TagRepository extends JDOCrudRepository<Tag, Long>{
+public class TagRepository extends JDOCrudRepository<Tag, String>{
 
 	public TagRepository() {
 		super(Tag.class);
@@ -16,11 +16,20 @@ public class TagRepository extends JDOCrudRepository<Tag, Long>{
 
 	
 @SuppressWarnings("unchecked")
-public Collection<Tag> findById(long id){
+public Collection<Tag> findById(String id){
 	Query query = PMF.get().getPersistenceManager().newQuery(Tag.class);
 	query.setFilter("id == n");
 	query.declareParameters("String n");
 	return (List<Tag>)query.execute(id);
+}
+
+@SuppressWarnings("unchecked")
+public Collection<Tag> findByTagAndQuoteId(String tag,Long quoteId){
+	Query query = PMF.get().getPersistenceManager().newQuery(Tag.class);
+	query.setFilter("tag == n && quoteId == m");
+	query.declareParameters("String n");
+	query.declareParameters("Long m");
+	return (List<Tag>)query.execute(tag,quoteId);
 }
 
 @SuppressWarnings("unchecked")

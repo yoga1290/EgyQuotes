@@ -19,13 +19,14 @@ public class Tag {
 	}
 
 		public Tag(String tag,Long quoteId){
+		    this.id = quoteId+"_"+tag;
 		this.tag = tag;
 		this.quoteId = quoteId;
 	}
 
 	@PrimaryKey
-@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-private Long id;
+@Persistent
+private String id;
 
 @Persistent
 private String tag;
@@ -35,10 +36,10 @@ private Long quoteId;
 
 
 
-	public Long getId() {
+	public String getId() {
 		return this.id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getTag() {
