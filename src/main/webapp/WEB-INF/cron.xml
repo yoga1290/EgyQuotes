@@ -3,7 +3,7 @@
   <cron>
     <url>/cron/updatePostAnalytics</url>
     <description>update likes/shares count</description>
-    <schedule>every 5  minutes</schedule>
+    <schedule>every 5  minutes from 22:00 to 00:00</schedule>
     <!--<target>2</target>-->
   </cron>
   <cron>
@@ -13,7 +13,14 @@
   </cron>
   <cron>
     <url>/cron/updatePageAccessToken</url>
-    <description>Clean up data</description>
+    <description>Refresh token</description>
     <schedule>every 2 hours</schedule>
+  </cron>
+  <cron>
+    <url>/cron/updatePersonTagAnalytics</url>
+    <description>Generate data ready for drawing/analytics</description>
+    <schedule>every 2 minutes from 22:00 to 00:00</schedule>
+    <!-- Google AppEngine timezone -->
+    <timezone>America/New_York</timezone>
   </cron>
 </cronentries>
