@@ -27,9 +27,8 @@ public Collection<Tag> findById(String id){
 public Collection<Tag> findByTagAndQuoteId(String tag,Long quoteId){
 	Query query = PMF.get().getPersistenceManager().newQuery(Tag.class);
 	query.setFilter("tag == n && quoteId == m");
-	query.declareParameters("String n");
-	query.declareParameters("Long m");
-	return (List<Tag>)query.execute(tag,quoteId);
+	query.declareParameters("String n , Long m");
+	return (List<Tag>)query.executeWithArray(tag,quoteId);
 }
 
 @SuppressWarnings("unchecked")

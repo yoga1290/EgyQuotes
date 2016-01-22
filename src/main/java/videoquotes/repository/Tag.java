@@ -19,7 +19,13 @@ public class Tag {
 	}
 
 		public Tag(String tag,Long quoteId){
-		    this.id = quoteId+"_"+tag;
+		    while(tag.indexOf(" ")>-1)
+			tag=tag.replace(" ","_");
+		    while(tag.indexOf("أ")>-1)
+			    tag=tag.replace("أ","ا");
+		    while(tag.indexOf("إ")>-1)
+			    tag=tag.replace("إ","ا");
+			this.id = quoteId+"_"+tag;
 		this.tag = tag;
 		this.quoteId = quoteId;
 	}
