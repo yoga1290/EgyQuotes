@@ -45,6 +45,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.gson.JsonObject;
 import videoquotes.Credential;
+import videoquotes.errorMessages.ChannelNotFound;
 
 import videoquotes.repository.Channel;
 import videoquotes.repository.ChannelRepository;
@@ -90,7 +91,7 @@ public class ChannelSvc
 		    if(chl!=null)
 			return true;
 	    }catch(Exception e){
-		return false;
+		throw new ChannelNotFound();
 	    }
 	    return false;
 	}
