@@ -14,10 +14,10 @@ public class QuoteOwnerRepository extends JDOCrudRepository<QuoteOwner, Long>{
 	
 	
 @SuppressWarnings("unchecked")
-public Collection<QuoteOwner> findByQuoteId(String quoteId){
+public Collection<QuoteOwner> findByQuoteId(Long quoteId){
 	Query query = PMF.get().getPersistenceManager().newQuery(QuoteOwner.class);
 	query.setFilter("quoteId == n");
-	query.declareParameters("String n");
+	query.declareParameters("Long n");
 	return (List<QuoteOwner>)query.execute(quoteId);
 }
 

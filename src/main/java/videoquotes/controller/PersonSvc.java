@@ -19,31 +19,26 @@ import videoquotes.repository.Person;
 import videoquotes.repository.PersonRepository;
 
 @Controller
+@RequestMapping(value="/person",produces="application/json")
 public class PersonSvc
 {
 	@Autowired
 	private PersonRepository Persons;
 	@Autowired
 	private FBUserRepository users;
-
-
-	@RequestMapping(value="/people",produces="application/json", method=RequestMethod.GET)
-	public @ResponseBody Collection<Person> getPersonList(@RequestParam int offset,@RequestParam int limit){
-		return Persons.findAll(offset,limit);
-	}
 	
-	@RequestMapping(value="/person",produces="application/json", method=RequestMethod.GET)
+	@RequestMapping(method=RequestMethod.GET)
 	public @ResponseBody Person findOne(@RequestParam String id)
 	{
-		return Persons.findOne(id);
+	    return Persons.findOne(id);
 	}
-	@RequestMapping(value="/person/find",produces="application/json;charset=UTF-8" , method=RequestMethod.GET)
+	@RequestMapping(value="/find", method=RequestMethod.GET)
 	public @ResponseBody Collection<Person> findByName(@RequestParam String name)
 	{
-		return Persons.find(name,"name",true,0,100);
+	    return Persons.find(name,"name",true,0,100);
 	}
 
-	@RequestMapping(value="/person",produces="application/json", method=RequestMethod.POST)
+	@RequestMapping(method=RequestMethod.POST)
 	public @ResponseBody Person set(@RequestParam String name,@RequestParam String access_token,HttpServletResponse response) throws Exception
 	{
 		FBUser user=null;

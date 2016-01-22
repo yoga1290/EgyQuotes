@@ -38,7 +38,7 @@ public class Video {
 
 	}
 	
-		public Video(String videoId,String[] quoteId,int start[],int end[]){
+		public Video(String videoId,Long[] quoteId,int start[],int end[]){
 		this.videoId = videoId;
 		this.quoteId=quoteId;
 		this.start=start;
@@ -51,55 +51,7 @@ public class Video {
 		@Persistent
 		private int end[];
 		@Persistent
-		private String quoteId[];
-		
-
-		
-
-
-//		@Persistent
-//		//(embeddedElement = "true", defaultFetchGroup = "true")
-//		@Element(types=videoquotes.repository.Video.Segment.class)
-//		private Segment[] segments;
-//		
-//		@PersistenceCapable(embeddedOnly="true")
-//		public static class Segment {
-//			
-//			private long quoteId;
-//			private int s;
-//			private int e;
-//			
-//			public long getQuoteId() {
-//				return quoteId;
-//			}
-//		
-//			public void setQuoteId(long quoteId) {
-//				this.quoteId = quoteId;
-//			}
-//		
-//			public int getS() {
-//				return s;
-//			}
-//		
-//			public void setS(int s) {
-//				this.s = s;
-//			}
-//		
-//			public int getE() {
-//				return e;
-//			}
-//		
-//			public void setE(int e) {
-//				this.e = e;
-//			}
-//		
-//			public Segment(long quoteId,int s,int e){
-//				this.quoteId=quoteId;
-//				this.s=s;
-//				this.e=e;
-//			}
-//		}
-
+		private Long quoteId[];
 
 	
 	public int[] getStart() {
@@ -118,11 +70,11 @@ public class Video {
 			this.end = end;
 		}
 
-		public String[] getQuoteId() {
+		public Long[] getQuoteId() {
 			return quoteId;
 		}
 
-		public void setQuoteId(String[] quoteId) {
+		public void setQuoteId(Long[] quoteId) {
 			this.quoteId = quoteId;
 		}
 

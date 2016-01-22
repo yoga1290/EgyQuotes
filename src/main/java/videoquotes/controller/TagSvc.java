@@ -1,5 +1,6 @@
 package videoquotes.controller;
 
+import videoquotes.controller.requestBody.dataTableResponse;
 import videoquotes.repository.Tag;
 import videoquotes.repository.*;
 
@@ -26,18 +27,18 @@ public class TagSvc
 	@Autowired
 	private TagNameRepository tagNames;
 
-	@RequestMapping(value="/all",produces="application/json", method=RequestMethod.GET)
+	@RequestMapping(value="/all", method=RequestMethod.GET)
 	public @ResponseBody Collection<Tag> getTagList(){
 		return com.google.appengine.repackaged.com.google.common.collect.Lists.newArrayList(tags.findAll());
 	}
 
 
-	@RequestMapping(value="/list",produces="application/json", method=RequestMethod.GET)
+	@RequestMapping(value="/list", method=RequestMethod.GET)
 	public @ResponseBody Collection<Tag> list(@RequestParam int offset,@RequestParam int limit){
 		return tags.findAll(offset,limit);
 	}
 
-	@RequestMapping(value="/",produces="application/json", method=RequestMethod.GET)
+	@RequestMapping(value="/", method=RequestMethod.GET)
 	public @ResponseBody Tag findOne(@RequestParam String id)
 	{
 		return tags.findOne(id);
@@ -51,15 +52,15 @@ public class TagSvc
 	{
 		return tagNames.save(new TagName(tag));
 	}//*/
-	@RequestMapping(value="/insert",produces="application/json", method=RequestMethod.POST)
+	@RequestMapping(value="/insert", method=RequestMethod.POST)
 	public @ResponseBody Tag insert(
 					//@RequestBody Tag otag)
 			@RequestParam String tag,		 
 			@RequestParam Long quoteId)
 	{
 		//TODO: fix tag
-		tagNames.save(new TagName(tag));
 		Tag ntag=new Tag(tag,quoteId);
+		tagNames.save(new TagName(ntag.getTag()));		
 		return tags.save(ntag);
 	}
 	@RequestMapping(value="/find",produces="application/json;charset=UTF-8" , method=RequestMethod.GET)
