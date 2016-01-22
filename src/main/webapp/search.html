@@ -13,13 +13,9 @@
 						span.badge {{search.people.length}}
 						| People
 					.panel-body(style="font-size: 32px;")
-						.panel.panel-default.clickable(ng-repeat="person in search.people track by $index",ng-click="search.selectPerson($index);",ng-hide="search.isPersonSelected(person)")
+						.panel.panel-default.clickable(ng-repeat="person in search.people track by $index",ng-click="search.selectPerson(person.key.name);")
 							.panel-body
-								| {{person.properties.name}}
-					.panel-body(style="font-size: 32px;")
-						.panel.panel-default.clickable(ng-repeat="person in search.selected.people track by $index",ng-click="search.unselectPerson(person);")
-							.panel-body
-								i.material-icons(style="font-size: 48px;float: right;") tag_face
+								i.material-icons(ng-show="search.selected.people[person.key.name]",style="font-size: 48px;float: right;") tag_face
 								| {{person.properties.name}}
 			.col-xs-12.col-md-6
 				.panel.panel-default
@@ -28,13 +24,9 @@
 						span.badge {{search.tags.length}}
 						| Tags
 					.panel-body(style="font-size: 32px;")
-						.panel.panel-default.clickable(ng-repeat="tag in search.tags track by $index",ng-click="search.selectTag($index);",ng-hide="search.isTagSelected($index)")
+						.panel.panel-default.clickable(ng-repeat="tag in search.tags track by $index",ng-click="search.selectTag(tag.key.name);")
 							.panel-body
-								i.material-icons(style="font-size: 48px;float: left;") label_outline
-								| {{tag.key.name}}
-					.panel-body(style="font-size: 32px;")
-						.panel.panel-default.clickable(ng-repeat="tag in search.selected.tags track by $index",ng-click="search.unselectTag(tag);")
-							.panel-body
-								i.material-icons(style="font-size: 48px;float: left;") label
+								i.material-icons(ng-hide="search.selected.tags[tag.key.name]",style="font-size: 48px;float: left;") label_outline
+								i.material-icons(ng-show="search.selected.tags[tag.key.name]",style="font-size: 48px;float: left;") label
 								| {{tag.key.name}}
 </jade>
