@@ -305,19 +305,8 @@
 	      <scope>compile</scope>
 	    </dependency>
 
-	    <!-- JSON -->
-	    <dependency>
-	      <groupId>org.json</groupId>
-	      <artifactId>json</artifactId>
-	      <version>20141113</version>
-	    </dependency>
 	    
 	    <!-- Spring AOP + AspectJ -->
-	    <dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-aop</artifactId>
-		    <version>${spring.version}</version>
-	    </dependency>
 
 	    <dependency>
 		    <groupId>org.aspectj</groupId>
@@ -430,6 +419,77 @@
 					</execution>
 				</executions>
 			</plugin>
+			
+			
+			<!-- minify-maven-plugin
+			    http://samaxes.github.io/minify-maven-plugin/usage.html
+			-->
+			<plugin>
+			    <groupId>com.samaxes.maven</groupId>
+			    <artifactId>minify-maven-plugin</artifactId>
+			    <version>1.7.4</version>
+			    <executions>
+			      <execution>
+				<id>default-minify</id>
+				<phase>package</phase><!-- When omitted defaults to 'process-resources' -->
+				<configuration>
+				  <charset>UTF-8</charset>
+				  <cssSourceDir>css</cssSourceDir>
+				  <cssSourceIncludes>
+				    <cssSourceInclude>*.css</cssSourceInclude>
+				  </cssSourceIncludes>
+				  <cssTargetDir>/</cssTargetDir>
+				  <cssFinalFile>style.css</cssFinalFile>
+				  
+				  <jsSourceDir>js</jsSourceDir>
+				  <jsSourceIncludes>
+				    <jsSourceInclude>app.js</jsSourceInclude>
+				    <jsSourceInclude>config.js</jsSourceInclude>
+				    <jsSourceInclude>svc/*.js</jsSourceInclude>
+				    <jsSourceInclude>lib/*.js</jsSourceInclude>
+				    <jsSourceInclude>ctrl/*.js</jsSourceInclude>
+				    <jsSourceInclude>factories/*.js</jsSourceInclude>
+				  </jsSourceIncludes>
+				  <jsTargetDir>/</jsTargetDir>
+				  <jsFinalFile>app.js</jsFinalFile>
+				  
+				  <jsEngine>CLOSURE</jsEngine>
+				</configuration>
+				<goals>
+				  <goal>minify</goal>
+				</goals>
+			      </execution>
+			      
+			      <execution>
+				<id>minify-devserver</id>
+				<phase>test-compile</phase> 
+				<configuration>
+				  <charset>UTF-8</charset>
+				  <cssSourceDir>css</cssSourceDir>
+				  <cssSourceIncludes>
+				    <cssSourceInclude>*.css</cssSourceInclude>
+				    <jsSourceInclude>devserver/*.css</jsSourceInclude>
+				  </cssSourceIncludes>
+				  <cssTargetDir>/</cssTargetDir>
+				  <cssFinalFile>style.css</cssFinalFile>
+				  
+				  <jsSourceDir>js</jsSourceDir>
+				  <jsSourceIncludes>
+				    <jsSourceInclude>devserver/*.js</jsSourceInclude>
+				  </jsSourceIncludes>
+				  <jsTargetDir>/</jsTargetDir>
+				  <jsFinalFile>devserver.js</jsFinalFile>
+				  
+				  <jsEngine>CLOSURE</jsEngine>
+				</configuration>
+				<goals>
+				  <goal>minify</goal>
+				</goals>
+			      </execution>
+			      
+			    </executions>
+			</plugin>
+			<!-- end of minify-maven-plugin-->
 		</plugins>
 
 
