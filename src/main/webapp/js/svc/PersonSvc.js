@@ -1,6 +1,6 @@
-app.service('PersonSvc',['$http',function($http,$q){
+app.service('PersonSvc',['$http','$q', function($http,$q) {
 	var _findByName = {};
-	this.findByName=function(name){
+	this.findByName=function(name) {
 	    if(_findByName[name] !== undefined)
 		return _findByName[name];
 	    
@@ -30,7 +30,8 @@ app.service('PersonSvc',['$http',function($http,$q){
 		asyncTask.promise.then(cb,cb);
 		return asyncTask.promise;
 	    };
-	    return _findByName[name] = asyncTask.promise;
+	    _findByName[name] = asyncTask.promise;
+	    return asyncTask.promise;
 	};
 	
 	this.insert=function(name){
