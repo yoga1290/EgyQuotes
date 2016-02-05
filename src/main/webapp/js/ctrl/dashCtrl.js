@@ -1,5 +1,6 @@
 app
     .controller('dashCtrl',['$scope','facebookSvc','QuoteSvc','VideoSvc','ChannelSvc', function($scope,facebookSvc,QuoteSvc,VideoSvc,ChannelSvc){
+	$scope.page = -1;
 	$scope.isAuthenticated=false;
 	$scope.picture='';
 	facebookSvc.getUserPicture().success(function(data){

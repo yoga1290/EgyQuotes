@@ -1,5 +1,6 @@
 package videoquotes.controller;
 
+import videoquotes.controller.requestBody.dataTableResponse;
 import videoquotes.repository.FBUser;
 import videoquotes.repository.*;
 
@@ -29,21 +30,13 @@ public class QuoteOwnerSvc
 	@Autowired
 	private FBUserRepository users;
 
-//	@RequestMapping(value="/quoteowners/all", method=RequestMethod.GET)
-//	public @ResponseBody Collection<QuoteOwner> getQuoteOwnerList(){
-//		return com.google.appengine.repackaged.com.google.common.collect.Lists.newArrayList(QuoteOwners.findAll());
-//	}
-
-
-//	@RequestMapping(value="/quoteowner/list", method=RequestMethod.GET)
-//	public @ResponseBody Collection<QuoteOwner> list(@RequestParam int offset,@RequestParam int limit){
-//		return QuoteOwners.findAll(offset,limit);
-//	}
-
 	@RequestMapping(value="/quoteowner", method=RequestMethod.GET)
-	public @ResponseBody QuoteOwner findOne(@RequestParam Long id)
+	public @ResponseBody boolean findOne(@RequestParam Long quoteId, @RequestParam String access_token)
 	{
-		return QuoteOwners.findOne(id);
+	    return
+		    users.findByAccessToken(access_token).getId().equals(
+			QuoteOwners.findOne(quoteId).getUserId()
+		    );
 	}
 
 	@RequestMapping(value="/quoteowner/insert", method=RequestMethod.POST)
@@ -64,20 +57,7 @@ public class QuoteOwnerSvc
 		}
 		return quoteowner;
 	}
-
-//	@RequestMapping(value="/quoteowner/update/{id}", method=RequestMethod.POST)
-//	public @ResponseBody QuoteOwner update(
-//					 
-//			@PathVariable(value="id") String quoteId,
-//			@RequestParam String userId)
-//	{
-//		QuoteOwner quoteowner=QuoteOwners.findOne(quoteId);
-//
-//		
-//				quoteowner.setUserId(userId);
-//		return QuoteOwners.update(quoteowner);
-//	}
-
+/*
 	@RequestMapping(value="/quoteowner/DataTable/admin",produces="application/json;charset=UTF-8", method=RequestMethod.POST)
 	public @ResponseBody dataTableResponse adminDatatable(
 		HttpServletResponse									response,
@@ -143,7 +123,7 @@ public class QuoteOwnerSvc
 			return null;
 		}
 	}
-
+//*/
 }
 
 // uncomment the next line, iff dataTableResponse class wasn't previously defined

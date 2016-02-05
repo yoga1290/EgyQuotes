@@ -24,9 +24,9 @@ div(ng-class="{'hidden':!show}",style="z-index:5;background-color:rgba(0,0,0,0.6
 						i.material-icons(style="font-size:18px;") local_offer
 						| {{tag.tag}}
 		.col-md-5.col-sm-6.col-xs-12
-			i.btn-circle.material-icons(style="font-size:62px; border-radius: 35px; border: solid green 5px; background: #cccccc; margin: 15px;",ng-click="newQuote.edit(quote)") create
-			i.btn-circle.material-icons(style="font-size:62px; border-radius: 35px; border: solid orange 5px; background: #cccccc; margin: 15px;",ng-hide="favourites.isFavourite(quote)",ng-click="favourites.add(quote)") star_border
-			i.btn-circle.material-icons(style="font-size:62px;color: orange; border-radius: 35px; border: solid orange 5px; background: #cccccc; margin: 15px;",ng-show="favourites.isFavourite(quote)",ng-click="favourites.remove(quote)") star
+			i.edit.btn-circle.material-icons(ng-click="newQuote.edit(quote)")
+			i.btn-circle.material-icons(style="font-size:62px; border-radius: 35px; border: solid orange 5px; background: #cccccc; margin: 15px;",ng-hide="Favorites.isFavorites(quote)",ng-click="Favorites.add(quote)") star_border
+			i.btn-circle.material-icons(style="font-size:62px;color: orange; border-radius: 35px; border: solid orange 5px; background: #cccccc; margin: 15px;",ng-show="Favorites.isFavorites(quote)",ng-click="Favorites.remove(quote)") star
 			i.btn-circle.material-icons(style="font-size:62px; border-radius: 35px; border: solid blue 5px; background: #cccccc; margin: 15px;") share
 			#tagger.dropdown.col-xs-2
 				i.btn-circle.material-icons.dropdown-toggle(data-toggle="dropdown",style="font-size:62px; border-radius: 35px; border: solid green 5px; background: #cccccc; margin: 15px;") local_offer
