@@ -1,7 +1,7 @@
 app
 		.controller('videoCtrl',
-			['$scope','QuoteSvc','TagSvc','PersonSvc','VideoSvc','ChannelSvc','$timeout','$routeParams','YTPlayer',
-			function(sp,QuoteSvc,TagSvc,PersonSvc,VideoSvc,ChannelSvc,to,$routeParams, YTPlayer){
+			['$scope','QuoteSvc','TagSvc','PersonSvc','VideoSvc','ChannelSvc','$timeout','$routeParams','YTPlayer','Favorites',
+			function(sp,QuoteSvc,TagSvc,PersonSvc,VideoSvc,ChannelSvc,to,$routeParams, YTPlayer, Favorites){
 				
 				sp.video = YTPlayer.init('video');
 				YTPlayer.onload(function(){
@@ -246,27 +246,7 @@ app
 				}
 			    };
 			}(TagSvc));
-			sp.favourites=(function(){
-			    var show=false;
-			    var mark={};
-			    function add(quote){
-				mark[quote.key.id]=quote;
-			    }
-			    function remove(quote){
-				mark[quote.key.id]=null;
-			    }
-			    function isFavourite(quote){
-				return (mark[quote.key.id]!==null && mark[quote.key.id]!==undefined);
-			    }
-			    
-			    return {
-				show:show,
-				quotes:mark,
-				add:add,
-				remove:remove,
-				isFavourite:isFavourite
-			    };
-			}());
+			sp.Favorites = Favorites;
 
 			sp.$routeParams=$routeParams;
 			if($routeParams.quoteId!==undefined)
