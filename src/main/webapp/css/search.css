@@ -1,0 +1,30 @@
+#search input{
+    text-align: center;
+    font-size: 32px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    width:100%;
+    
+    -moz-box-shadow: 0 0 15px #b2b2b2;
+    -webkit-box-shadow: 0 0 15px #b2b2b2;
+    box-shadow: 0 0 15px #b2b2b2;
+}
+#search input:focus,
+#search input:focus + i.material-icons {
+    position: fixed !important;
+    top: 0px !important;
+    left: 0px !important;
+}
+
+#search input:focus {
+    background-color: white !important;
+}
+
+#search i.material-icons {
+    font-size: 48px;
+    z-index: 3;
+    top: -45px;
+    position: relative;
+    left: 0px;
+    float: left;
+}

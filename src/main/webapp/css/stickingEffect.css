@@ -1,0 +1,8 @@
+.stickOnTop{
+    position:fixed !important;
+    top:0px;
+    left:0px;
+}
+.stickable{
+    position: relative;
+}

@@ -125,27 +125,13 @@ a.light{
     -webkit-box-shadow: 0 0 5px #b2b2b2;
     box-shadow: 0 0 5px #b2b2b2;
 }
-.material-icons.loader{
-    font-size: 200px;
-    -webkit-animation: fadeInUp 1s ease;
-    animation: fadeInUp 1s ease;
-    -webkit-animation-iteration-count: infinite;
-    animation-iteration-count: infinite;
-}
+
 .hidden{
     visibility: hidden;
 }
 
-input#search{
-    -moz-box-shadow: 0 0 15px #b2b2b2;
-    -webkit-box-shadow: 0 0 15px #b2b2b2;
-    box-shadow: 0 0 15px #b2b2b2;
-}
-input#search:focus{
-    position: fixed;
-    top:0px;
-    left:0px;
-}
+
+
 .btn-circle{
     font-size:62px;
     border-radius: 35px;
@@ -154,21 +140,10 @@ input#search:focus{
 }
 
 
-.stickOnTop{
-    position:fixed !important;
-    top:0px;
-    left:0px;
-}
-.stickable{
-    position: relative;
-}
-
 #videoURL:focus{
     width: 100%;
 }
-#search:focus{
-	background-color: white !important;
-}
+
 body{
 	padding: 0px;
 	margin: 0px;

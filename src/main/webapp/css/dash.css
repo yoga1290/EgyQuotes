@@ -1,0 +1,9 @@
+button#facebook{
+    font-size: 40px;
+    min-width: 72px;
+    border-radius: 50px;
+    border: solid #474747 5px;
+    background-color: #337ab7;
+    color: white;
+    float: left;
+}

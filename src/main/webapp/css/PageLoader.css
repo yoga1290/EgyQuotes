@@ -1,0 +1,7 @@
+#PageLoader > i.material-icons{
+    font-size: 200px;
+    -webkit-animation: fadeInUp 1s ease;
+    animation: fadeInUp 1s ease;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+}

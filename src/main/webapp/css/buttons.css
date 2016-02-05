@@ -1,0 +1,12 @@
+.edit.btn-circle.material-icons {
+    font-size:62px;
+    border-radius: 35px;
+    border: solid green 5px;
+    background: #cccccc;
+    margin: 15px;
+}
+.edit.btn-circle.material-icons:before {
+    content: "create";
+}
+
+
