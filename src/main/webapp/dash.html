@@ -1,0 +1,20 @@
+<jade>
+.col-xs-12(ng-controller="dashCtrl")
+	.col-sm-offset-1.col-sm-3.col-xs-12.panel.panel-default
+		.panel-body(style="text-align: left;")
+			button#facebook(ng-hide="isAuthenticated",ng-click="login()") f
+			img.img-circle(style="width: 72px; height: 72; float:left;",ng-show="isAuthenticated",src="{{picture}}")
+			i.edit.material-icons.btn-circle(ng-show="isAuthenticated",ng-click="page=1")
+			i.material-icons.btn-circle(ng-click="page=0") history
+			i.material-icons.btn-circle(ng-click="page=0") language
+			i.material-icons.btn-circle(ng-click="page=0") folder_special
+			
+	.col-sm-offset-1.col-sm-6.col-xs-12.panel.panel-default
+		.panel-body(style="text-align: right;")
+			div(ng-show="page==0") coming soon
+			div(ng-show="page==1")
+				input.form-control(placeholder="Video URL for new Quote",type="text",ng-model="videoURL",ng-keypress="onVideoURLChange()",ng-show="isAuthenticated")
+				i.material-icons.btn-circle(style="float:left;") tv
+				span(ng-repeat="channel in channels")
+					img.img-circle(src="{{channel}}",style="width:62px;")
+</jade>

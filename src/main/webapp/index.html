@@ -21,21 +21,10 @@ html
 		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js")
 		
 	body(align="center",ng-app="app",ng-controller="gridCtrl",class="ng-cloak")
-		.col-xs-12(ng-controller="dashCtrl")
-			.col-sm-offset-1.col-sm-3.col-xs-12.panel.panel-default
-				.panel-body(style="text-align: left;")
-					i.material-icons.btn-circle(ng-hide="isAuthenticated") account_circle
-					button.btn.btn-primary.btn-lg(ng-hide="isAuthenticated",ng-click="login()") Login via Facebook
-					img.img-circle(style="width:62px;",ng-show="isAuthenticated",src="{{picture}}")
-					input.form-control(placeholder="Video URL for new Quote",type="text",ng-model="videoURL",ng-keypress="onVideoURLChange()",ng-show="isAuthenticated")
-			.col-sm-offset-1.col-sm-6.col-xs-12.panel.panel-default
-				.panel-body(style="text-align: right;")
-					i.material-icons.btn-circle(style="float:left;") tv
-					span(ng-repeat="channel in channels")
-						img.img-circle(src="{{channel}}",style="width:62px;")
+		ng-include(src="'dash.html'")
 		ng-include(src="'search.html'")
 		ng-include(src="'grid.html'")
-		#loader(ng-show="PageLoader.count")
+		#PageLoader(ng-show="PageLoader.count")
 			div(style="background-color:rgba(0,0,0,0.6);top:0px;left:0px;position:fixed;width:100%;height:100%;z-index:6;")
 			i.animated.material-icons.loader(style="position:fixed;z-index:6;top:30%;height:100%;left:0px;width:100%;alignment-baseline: central;color:white;") wifi
 		ng-view
