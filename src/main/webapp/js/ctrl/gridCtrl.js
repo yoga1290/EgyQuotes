@@ -3,13 +3,11 @@ app.controller('gridCtrl',
 	    function(sp,QuoteSvc,TagSvc,PersonSvc,VideoSvc,to,$routeParams, PageLoader){
 		    sp.quotes=[];
 		    sp.PageLoader = PageLoader;
-		    QuoteSvc.query(0,50,[],[]).success(function(response){
-			    sp.quotes=response;
-		    });
 		    
 		    var onload=(function(){
-			if(location.href.indexOf("access_token=")>0)
+			if(location.href.indexOf("access_token=")>0) {
 			    localStorage.setItem('access_token',location.href.substring(location.href.indexOf("access_token=")+13,location.href.indexOf('&expires')));
+			}
 		    }());
 		
 		    sp.menu=(function($scope){
@@ -157,16 +155,13 @@ app.controller('gridCtrl',
 							    return;
 							}
 							$(response).each(function(i,quote){
-							    sp.quotes.push(quote);
 							    
-							    /*
-							    VideoSvc.getChannelId(quote.videoId)
-							    .success(function(videoData){
-								VideoSvc.getChannelData(videoData.items[0].id)
-								.success(function(channelData){
-								    quote.logo=channelData.items[0].snippet.thumbnails.default.url;
+							    VideoSvc.getChannelId(quote.properties.videoId).success(function(response){
+								VideoSvc.getChannelData(response.items[0].snippet.channelId).success(function(data){
+								    quote.logo = data.items[0].snippet.thumbnails.high.url;
+								    sp.quotes.push(quote);
 								});
-							    });//*/
+							    });
 							    
 							});
 							
@@ -176,6 +171,7 @@ app.controller('gridCtrl',
 			    };
 		    }());
 		    sp.quoteLoader.init();
+		    sp.quoteLoader.setQuery([], []);
 		    
 		    
 		    sp.parseInt = parseInt;
@@ -198,5 +194,15 @@ app.controller('gridCtrl',
 		    };
 		    sp.click=function(){
 			sp.childClick=true;
+		    };
+		    
+		    sp.getChannelLogoByVideoId = function(videoId) {
+			var url={url:''};
+			VideoSvc.getChannelId(videoId).success(function(response){
+			    VideoSvc.getChannelData(response.items[0].snippet.channelId).success(function(data){
+				url = {url: data.items[0].snippet.thumbnails.default.url};
+			    });
+			});
+			return url.url;
 		    };
     }]); 

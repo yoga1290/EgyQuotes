@@ -1,5 +1,6 @@
 app
-    .controller('SettingsCtrl',['$scope','QuoteSvc','TagSvc', function($scope,QuoteSvc,TagSvc){
+    .controller('SettingsCtrl',['$scope','QuoteSvc','TagSvc', 'ChannelSvc','VideoSvc',
+function($scope,QuoteSvc,TagSvc, ChannelSvc, VideoSvc) {
 	$scope.downloaded = 0;
 	$scope.$parent.show = true;
 	$scope.exportProgress = 0;
@@ -78,4 +79,12 @@ app
 	    
 	};
 	
+	$scope.insertChannelByVideoURL = function(videoURL) {
+	    var videoId = $scope.videoURL.match(/(?:v\=)+(\w*)|(?:youtu\.be\/)+(\w*)/);
+	    if(videoId !== null) {
+		VideoSvc.getChannelId(videoId[1]).success(function(response) {
+		    ChannelSvc.insert(response.items[0].snippet.channelId);
+		});
+	    }
+	};
     }]);
