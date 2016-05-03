@@ -69,8 +69,8 @@ app.factory('YTPlayer', ['$timeout', function(to) {
 		    to(function(){
 			onload();
 		    });
-		    var param={'autoplay': 1,'suggestedQuality': 'small','videoId': videoId,'suggestedQuality': 'small','origin':'https://egyquotes.appspot.com'};
-		    var playerVars={ 'autoplay': 1,'videoId': videoId,'suggestedQuality': 'small','origin':'https://egyquotes.appspot.com'};
+		    var param={'autoplay': 1,'suggestedQuality': 'small','videoId': videoId,'suggestedQuality': 'small','origin':config.BASE_URL};
+		    var playerVars={ 'autoplay': 1,'videoId': videoId,'suggestedQuality': 'small','origin':config.BASE_URL};
 		    if((location.href.indexOf('#e=')>-1))
 			    playerVars.end=param.endSeconds=parseInt(
 				    location.href.substring(

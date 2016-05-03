@@ -332,6 +332,15 @@
 	  <version>1.8.6</version>
 	  <type>jar</type>
 	 </dependency>
+	 
+	 <!-- Mongo
+	    http://projects.spring.io/spring-data-mongodb/
+	 -->
+	 <dependency>
+	  <groupId>org.springframework.data</groupId>
+	  <artifactId>spring-data-mongodb</artifactId>
+	  <version>1.9.0.RELEASE</version>
+	 </dependency>
 	</dependencies>
 
 	<build>
