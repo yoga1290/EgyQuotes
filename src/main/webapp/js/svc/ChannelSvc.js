@@ -36,4 +36,11 @@ app.service('ChannelSvc',['$http','$q',function($http,$q){
 	    };
 	    return _isVerified[channelId] = asyncTask.promise;
 	};
+	
+	this.insert = function(channelId) {
+	    return $http.get('/channel/insert', {params: {
+		    id:channelId,
+		    access_token: localStorage.getItem('access_token')
+	    }});
+	};
     }]);
