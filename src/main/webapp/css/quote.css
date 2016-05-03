@@ -1,0 +1,45 @@
+.quote.material-icons.right{
+    font-size: 56px;
+    float: right;
+    margin-top: -25px;
+    color: rgba(144, 142, 142, 0.5);
+}
+.quote.material-icons.left{
+    transform: rotate(180deg);
+  ms-transform: rotate(180deg); /* IE 9 */
+  -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+    font-size: 56px;
+    float: left;
+    margin-top: -25px;
+    color: rgba(144, 142, 142, 0.5);
+}
+.quote.panel{
+    border: 0px;
+    font-size: 30px;
+    color: #4c4c4c;
+    background-color: #c4c4c4;
+    color: #4c4c4c;
+    
+    -moz-box-shadow: 0 0 5px #b2b2b2;
+    -webkit-box-shadow: 0 0 5px #b2b2b2;
+    box-shadow: 0 0 5px #b2b2b2;
+    
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.quote.panel .panel-body {
+    background-color: rgba(240, 235, 233, 0.7);
+}
+
+.quote-tag{
+  float: right;
+  right: 14px;
+  margin-top: -37px; /*-44px;*/
+  position: absolute;
+  color: rgba(144, 142, 142, 0.5);
+  font-size: 42px; /* 56px;*/
+  transform: rotate(180deg);
+  ms-transform: rotate(180deg); /* IE 9 */
+  -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+}

@@ -1,6 +1,6 @@
 <jade>
 #quoteLoader.col-md-3.col-sm-6.col-xs-12.clickable(ng-repeat="quote in quotes track by $index")
-	.quote.panel.panel-default(ng-click="onQuoteClick(quote)")
+	.quote.panel.panel-default(ng-click="onQuoteClick(quote)",style="background-image: url('{{quote.logo}}')")
 		i.material-icons.quote.right format_quote
 		.panel-body
 			| {{quote.properties.quote}}

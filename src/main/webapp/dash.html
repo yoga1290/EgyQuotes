@@ -5,13 +5,22 @@
 			button#facebook(ng-hide="isAuthenticated",ng-click="login()") f
 			img.img-circle(style="width: 72px; height: 72; float:left;",ng-show="isAuthenticated",src="{{picture}}")
 			i.edit.material-icons.btn-circle(ng-show="isAuthenticated",ng-click="page=1")
-			i.material-icons.btn-circle(ng-click="page=0") history
+			i.watch_later.material-icons.btn-circle(ng-click="page=0",onclick="location.href='#/WatchLater'")
 			i.material-icons.btn-circle(ng-click="page=0") language
-			i.material-icons.btn-circle(ng-click="page=0") folder_special
+			i.favorites.material-icons.btn-circle(ng-click="page=2")
 			
 	.col-sm-offset-1.col-sm-6.col-xs-12.panel.panel-default
 		.panel-body(style="text-align: right;")
 			div(ng-show="page==0") coming soon
+			div(ng-show="page==2")
+				.col-md-5.col-sm-12.col-xs-12(ng-repeat="(quoteId, quote) in Favorites.list")
+					.quote.panel.panel-default(ng-click="openQuote(quote)")
+						i.material-icons.quote.right format_quote
+						.panel-body
+							| {{quote.quote}}
+						i.material-icons.quote.left format_quote
+						.panel-footer
+							span.label.label-default(style="font-size:18px") {{quote.personId}}
 			div(ng-show="page==1")
 				input.form-control(placeholder="Video URL for new Quote",type="text",ng-model="videoURL",ng-keypress="onVideoURLChange()",ng-show="isAuthenticated")
 				i.material-icons.btn-circle(style="float:left;") tv
