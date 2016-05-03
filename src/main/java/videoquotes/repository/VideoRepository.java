@@ -20,5 +20,12 @@ public Collection<Video> findByVideoId(String videoId){
 	return (List<Video>)query.execute(videoId);
 }
 
+@SuppressWarnings("unchecked")
+public Collection<Video> findByChannelId(String channelId){
+	Query query = PMF.get().getPersistenceManager().newQuery(Video.class);
+	query.setFilter("channelId == n");
+	query.declareParameters("String n");
+	return (List<Video>)query.execute(channelId);
+}
 
 }

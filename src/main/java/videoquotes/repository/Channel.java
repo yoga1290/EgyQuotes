@@ -1,42 +1,27 @@
 package videoquotes.repository;
 
-import java.util.Objects;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 
 
 @PersistenceCapable
 public class Channel {
-/*
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private long key;
-	public long getKey() {
-		return this.key;
-	}
-	public void setKey(long key) {
-		this.key = key;
-	}
-    private Key key;
-	public void setKey(Key key) {
-		this.key = key;
-	}
-	public void setKey(String key) {
-		this.key = KeyFactory.createKey(this.getClass().getSimpleName(), key);
-	}
-	//*/
 
 	public Channel(){
 
 	}
 	public Channel(String channelId){
 	    this.channelId=channelId;
+	    this.quotesCnt=0L;
+	    this.lastSync=0L;
+	}
+	public Channel(String channelId, String name){
+	    this.channelId=channelId;
+	    this.name = name;
 	    this.quotesCnt=0L;
 	    this.lastSync=0L;
 	}
@@ -61,6 +46,9 @@ this.lastSync=lastSync;
 @PrimaryKey
 @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 private String channelId;
+
+@Persistent
+private String name;
 
 @Persistent
 private Long quotesCnt;
@@ -95,4 +83,13 @@ private Long lastSync;
         this.lastSync=lastSync;
     }
 
+    public String getName() {
+	return name;
+    }
+
+    public void setName(String name) {
+	this.name = name;
+    }
+
+    
 }

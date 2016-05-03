@@ -16,6 +16,8 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import java.util.logging.Logger;
+import javax.jdo.annotations.NullValue;
 
 
 @PersistenceCapable
@@ -24,34 +26,38 @@ public class Video {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private String videoId;
-	/*
-    private Key key;
-	public void setKey(Key key) {
-		this.key = key;
-	}
-	public void setKey(String key) {
-		this.key = KeyFactory.createKey(this.getClass().getSimpleName(), key);
-	}
-	//*/
+	@Persistent
+	private int start[];
+	@Persistent
+	private int end[];
+	@Persistent
+	private Long quoteId[];
+	@Persistent
+	private String channelId;
+	@Persistent
+	private long time;
 
 	public Video(){
 
 	}
 	
-		public Video(String videoId,Long[] quoteId,int start[],int end[]){
+	public Video(String videoId,String channelId,Long[] quoteId,int start[],int end[]){
 		this.videoId = videoId;
+		this.channelId = channelId;
 		this.quoteId=quoteId;
 		this.start=start;
 		this.end=end;
 //		this.segments = segments;//Arrays.asList(segments);
 	}
-	
-		@Persistent
-		private int start[];
-		@Persistent
-		private int end[];
-		@Persistent
-		private Long quoteId[];
+	public Video(String videoId,long time,String channelId,Long[] quoteId,int start[],int end[]){
+		this.videoId = videoId;
+		this.channelId = channelId;
+		this.quoteId=quoteId;
+		this.start=start;
+		this.end=end;
+		this.time = time;
+//		this.segments = segments;//Arrays.asList(segments);
+	}
 
 	
 	public int[] getStart() {
@@ -85,7 +91,21 @@ public void setVideoId(String videoId) {
 		this.videoId = videoId;
 	}
 
+    public String getChannelId() {
+	return channelId;
+    }
 
+    public void setChannelId(String channelId) {
+	this.channelId = channelId;
+    }
 
+    public long getTime() {
+	return time;
+    }
+
+    public void setTime(long time) {
+	this.time = time;
+    }
+    
 }
 		

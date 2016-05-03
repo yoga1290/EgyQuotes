@@ -32,7 +32,7 @@ public class VideoUtil {
     @Autowired
     private VideoRepository Videos;
     
-    public void insertQuote(Quote quote)
+    public void insertQuote(Quote quote, String channelId)
     {
 	int s=new Double(quote.getStart()).intValue(),e=new Double(quote.getEnd()).intValue();
 	try{
@@ -80,7 +80,8 @@ public class VideoUtil {
 		    int segStart[]=new int[]{s};
 		    int segEnd[]=new int[]{e};
 		    Long quoteId[]=new Long[]{(quote.getKey())};
-		    Videos.save(new Video(	quote.getVideoId(),quoteId,segStart,segEnd) );
+		    long time = YoutubeUtil.getPublishedTime(quote.getVideoId());
+		    Videos.save(new Video(	quote.getVideoId(), time, channelId,quoteId,segStart,segEnd) );
 	    }catch(Exception eww){
 		    throw new UpdateVideoFailed();
 	    }
