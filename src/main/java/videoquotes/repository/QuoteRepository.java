@@ -43,39 +43,6 @@ public Collection<Quote> findByVideoId(String videoId){
 	query.declareParameters("String n");
 	return (List<Quote>)query.execute(videoId);
 }
-/**
- * @author yoga1290
- */
-/*
-@SuppressWarnings("unchecked")
-public Collection<Quote> find(String access_token,String startWith,String selCol,boolean isAsc,int offset,int limit){
-	
-	long quoteIds[]=users.findByAccessToken(access_token).getQuotes();
-	Filter myQuotesFilter=new FilterPredicate(Key.class.getName(), FilterOperator.IN, Arrays.asList(quoteIds));
-	
-	 com.google.appengine.api.datastore.DatastoreService 
-	 		datastore = DatastoreServiceFactory.getDatastoreService();
-	 com.google.appengine.api.datastore.Query 
-	 		q = new com.google.appengine.api.datastore.Query(Quote.class.getSimpleName());
-	 
-	 if(selCol.length()>0)
-	 {
-		 q=q.addSort(selCol, isAsc ? SortDirection.ASCENDING:SortDirection.DESCENDING);
-		 
-		 if(startWith.length()>0)
-		 {
-			 Filter startWithFilter1=new FilterPredicate(selCol, FilterOperator.GREATER_THAN_OR_EQUAL, startWith);
-			 Filter startWithFilter2=new FilterPredicate(selCol, FilterOperator.LESS_THAN, startWith+ "\ufffd");
-			 
-			 Filter startWithFilter= CompositeFilterOperator.and(startWithFilter1,startWithFilter2,myQuotesFilter);		 
-			 q.setFilter(startWithFilter);
-		 }
-		 else
-			 q.setFilter(myQuotesFilter);
-	}
-	 PreparedQuery pq = datastore.prepare(q);
-	return (List) pq.asList(FetchOptions.Builder.withOffset(offset).limit(limit));
-}//*/
 
 @SuppressWarnings("unchecked")
 public Collection<Quote> findByPersonId(String personId){

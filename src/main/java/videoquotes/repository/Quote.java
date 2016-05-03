@@ -23,21 +23,12 @@ public class Quote {
 	public void setKey(Long key) {
 		this.key = key;
 	}
-	/*
-    private Key key;
-	public void setKey(Key key) {
-		this.key = key;
-	}
-	public void setKey(String key) {
-		this.key = KeyFactory.createKey(this.getClass().getSimpleName(), key);
-	}
-	//*/
 
 	public Quote(){
 
 	}
 	
-		public Quote(String videoId,String personId,String quote,double start,double end){
+		public Quote(String videoId,String personId,String quote,int start,int end){
 		this.videoId = videoId;
 		this.personId = personId;
 		this.quote = quote;
@@ -55,16 +46,11 @@ private String personId;
 private String quote;
 
 @Persistent
-private double start;
+private int start;
 
 @Persistent
-private double end;
+private int end;
 
-@Persistent
-private long likes;
-
-@Persistent
-private long shares;
 
 
 
@@ -96,30 +82,13 @@ public void setQuote(String quote) {
 	return end;
     }
 
-    public void setStart(double start) {
+    public void setStart(int start) {
 	this.start = start;
     }
 
-    public void setEnd(double end) {
+    public void setEnd(int end) {
 	this.end = end;
     }
-
-    public long getLikes() {
-	return likes;
-    }
-
-    public long getShares() {
-	return shares;
-    }
-
-    public void setLikes(long likes) {
-	this.likes = likes;
-    }
-
-    public void setShares(long shares) {
-	this.shares = shares;
-    }
-
 
 }
 		
