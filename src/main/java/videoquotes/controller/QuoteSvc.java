@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Date;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import videoquotes.errorMessages.AccessExpired;
 import videoquotes.errorMessages.AuthorNotFound;
@@ -82,8 +83,7 @@ public class QuoteSvc
  * @throws Exception 
  */
 	@RequestMapping( method=RequestMethod.POST)
-	public @ResponseBody String insert(@RequestBody videoquotes.controller.requestBody.Quote quote,
-									HttpServletResponse response) 
+	public @ResponseBody String insert(@RequestBody videoquotes.controller.requestBody.Quote quote) 
 			throws Exception
 	{	
 		FBUser user=null;
@@ -125,7 +125,7 @@ public class QuoteSvc
 		}
 
 		
-		VideoUtil.insertQuote(nQuote);
+		VideoUtil.insertQuote(nQuote, channelId);
 		
 		
 		//update User:
@@ -194,4 +194,13 @@ public class QuoteSvc
 		{
 		    return Quotes.findByTags(gridObj.getTags(),gridObj.getPersonIds(),gridObj.getOffset(),gridObj.getLimit());
 		}
+	
+//	@Autowired
+//	MongoTemplate mongo;
+//	@RequestMapping(value="/mongo",produces="application/json;charset=UTF-8", method=RequestMethod.GET)
+//	public @ResponseBody String mongo() throws Exception
+//		{
+//		  mongo.insertAll(Quotes.findAll(0, 10));
+//		  return "OK";
+//		}
 }

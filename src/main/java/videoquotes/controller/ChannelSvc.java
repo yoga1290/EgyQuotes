@@ -46,11 +46,13 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.gson.JsonObject;
 import videoquotes.Credential;
 import videoquotes.errorMessages.ChannelNotFound;
+import videoquotes.errorMessages.Unauthorized;
 
 import videoquotes.repository.Channel;
 import videoquotes.repository.ChannelRepository;
 import videoquotes.repository.FBUser;
 import videoquotes.repository.FBUserRepository;
+import videoquotes.util.YoutubeUtil;
 
 
 @Controller
@@ -69,13 +71,12 @@ public class ChannelSvc
 		try{
 			user=users.findByAccessToken(access_token);
 			if(!user.getId().equals(Credential.ADMIN_USER_ID))
-				return null;
+				throw new Unauthorized();
+			else
+			    return channels.save(new Channel(id, YoutubeUtil.getChannelName(id)));
 		}catch(Exception ew){
-			response.sendError(404, ew.getLocalizedMessage() );
-			return null;
+			throw new Unauthorized();
 		}
-		
-		return channels.save(new Channel(id));
 	}
 	
 	@RequestMapping(value="/list",produces="application/json", method=RequestMethod.GET)
@@ -94,6 +95,12 @@ public class ChannelSvc
 		throw new ChannelNotFound();
 	    }
 	    return false;
+	}
+	
+	@RequestMapping(value="/find", method=RequestMethod.GET)
+	public @ResponseBody Collection<Channel> findByName(@RequestParam String name)
+	{
+	    return channels.find(name,"name",true,0,100);
 	}
 		
 }

@@ -14,18 +14,18 @@ import java.util.Map;
  */
 public class Quote {
     
-    private double start;
-    private double end;
+    private int start;
+    private int end;
     private String quote;
     private String personId;
     private String videoId;
     private String access_token;
 
-    public double getStart() {
+    public int getStart() {
 	return start;
     }
 
-    public double getEnd() {
+    public int getEnd() {
 	return end;
     }
 
@@ -41,11 +41,11 @@ public class Quote {
 	return access_token;
     }
 
-    public void setStart(double start) {
+    public void setStart(int start) {
 	this.start = start;
     }
 
-    public void setEnd(double end) {
+    public void setEnd(int end) {
 	this.end = end;
     }
 
