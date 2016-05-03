@@ -1,7 +1,7 @@
 app
 		.controller('videoCtrl',
-			['$scope','QuoteSvc','TagSvc','PersonSvc','VideoSvc','ChannelSvc','$timeout','$routeParams','YTPlayer','Favorites',
-			function(sp,QuoteSvc,TagSvc,PersonSvc,VideoSvc,ChannelSvc,to,$routeParams, YTPlayer, Favorites){
+			['$scope','QuoteSvc','TagSvc','PersonSvc','VideoSvc','ChannelSvc','$timeout','$routeParams','YTPlayer','Favorites', 'WatchLater',
+			function(sp,QuoteSvc,TagSvc,PersonSvc,VideoSvc,ChannelSvc,to,$routeParams, YTPlayer, Favorites, WatchLater){
 				
 				sp.video = YTPlayer.init('video');
 				YTPlayer.onload(function(){
@@ -247,6 +247,7 @@ app
 			    };
 			}(TagSvc));
 			sp.Favorites = Favorites;
+			sp.WatchLater = WatchLater;
 
 			sp.$routeParams=$routeParams;
 			if($routeParams.quoteId!==undefined)

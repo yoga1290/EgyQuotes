@@ -58,5 +58,9 @@ app.config(['$routeProvider','$httpProvider', function($routeProvider,$httpProvi
 	.when('/error/:code', {
 	    templateUrl: 'error.html',
 	    controller: 'AlertCtrl'
+	})
+	.when('/WatchLater', {
+	    templateUrl: 'WatchLater.html',
+	    controller: 'WatchLaterCtrl'
 	});
 }]);
