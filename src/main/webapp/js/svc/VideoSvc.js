@@ -1,4 +1,4 @@
-app.service('VideoSvc',['$http', '$q', function($http, $q){
+app.service('VideoSvc',['$http', '$q', 'YTKey', function($http, $q, YTKey){
 	var _findById = {};
 	this.findById=function(videoId){
 	    if(_findById[videoId] !== undefined)
@@ -7,7 +7,7 @@ app.service('VideoSvc',['$http', '$q', function($http, $q){
 	    var asyncTask = $q.defer();
 	    var canceller=$q.defer();
 	    $http
-		.get('/video',{params:{id:videoId},timeout:canceller.promise})
+		.get('/api/video',{params:{id:videoId},timeout:canceller.promise})
 		.success(function(response){
 		    asyncTask.resolve(response);
 		})
@@ -33,7 +33,6 @@ app.service('VideoSvc',['$http', '$q', function($http, $q){
 	    return _findById[videoId] = asyncTask.promise;
 	};
 	
-	var YTKey='AIzaSyBNWNnIBvHyBaREu7ikXf7jqW_865D4CD0';
 	var _getChannelData = {};
 	this.getChannelData=function(channelId){
 	    if(_getChannelData[channelId] !== undefined)
@@ -98,4 +97,17 @@ app.service('VideoSvc',['$http', '$q', function($http, $q){
 	    _getChannelId[videoId] = asyncTask.promise;
 	    return _getChannelId[videoId];
 	};
-    }]);
+	
+	// see https://developers.google.com/youtube/v3/docs/search/list#parameters
+	this.findByChannelIdAndTime = function(channelId, start, end, q, pageToken) {
+	    return $http.get('https://www.googleapis.com/youtube/v3/search', { params: {
+			    key: YTKey,
+			    part: 'snippet',
+			    channelId: channelId,
+			    publishedAfter: new Date(start).toISOString(),
+			    publishedBefore: new Date(end).toISOString(),
+			    q: q,
+			    pageToken: pageToken
+		    }});
+    };
+}]);

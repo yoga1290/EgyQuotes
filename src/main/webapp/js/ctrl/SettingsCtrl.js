@@ -19,7 +19,7 @@ function($scope,QuoteSvc,TagSvc, ChannelSvc, VideoSvc) {
 		    else
 			QuoteSvc.list(o,Math.min(total-o,page)).success(function(response){
 			    angular.forEach(response,function(quote,i){
-				TagSvc.findByQuoteId(quote.key).success(function(tags){
+				TagSvc.findByQuoteId(quote.id).success(function(tags){
 				    quote.tags=tags;
 				    exported.push(quote);
 
@@ -80,7 +80,7 @@ function($scope,QuoteSvc,TagSvc, ChannelSvc, VideoSvc) {
 	};
 	
 	$scope.insertChannelByVideoURL = function(videoURL) {
-	    var videoId = $scope.videoURL.match(/(?:v\=)+(\w*)|(?:youtu\.be\/)+(\w*)/);
+	    var videoId = $scope.videoURL.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?)(?:ebc=[\w|\s|\w|-]*\&v=|v=|\/)([^\s]+)+/);
 	    if(videoId !== null) {
 		VideoSvc.getChannelId(videoId[1]).success(function(response) {
 		    ChannelSvc.insert(response.items[0].snippet.channelId);

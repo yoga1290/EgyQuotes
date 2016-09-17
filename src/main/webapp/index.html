@@ -1,51 +1,18 @@
-<html>
+<html ng-app="app">
 	<head>
 		<meta charset="utf-8">
-		<script src="//cdnjs.cloudflare.com/ajax/libs/jade/1.3.1/jade.min.js"></script>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" href="/style.css">
+		<script src="/app.js"></script>
 	</head>
-	<body>
-<script type="jade" id="jade">
-html
-	head
-		meta(charset="utf-8")
-		meta(http-equiv="X-UA-Compatible",content="IE=edge")
-		meta(name="viewport",content="width=device-width, initial-scale=1, maximum-scale=1")
-		title EgyQuotes
-		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
-		link(rel="stylesheet",href="https://fonts.googleapis.com/icon?family=Material+Icons")
-		link(rel="stylesheet",href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css")
-		link(rel="stylesheet",href="/style.css")
 
-		script(src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js")
-		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js")
-		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js")
-		
-	body(align="center",ng-app="app",ng-controller="gridCtrl",class="ng-cloak")
-		ng-include(src="'dash.html'")
-		ng-include(src="'search.html'")
-		ng-include(src="'grid.html'")
-		#PageLoader(ng-show="PageLoader.count")
-			div(style="background-color:rgba(0,0,0,0.6);top:0px;left:0px;position:fixed;width:100%;height:100%;z-index:6;")
-			i.animated.material-icons.loader(style="position:fixed;z-index:6;top:30%;height:100%;left:0px;width:100%;alignment-baseline: central;color:white;") wifi
-		ng-view
-		script(src="/app.min.js")
-		script(src="https://www.youtube.com/iframe_api?enablejsapi=1&playsinline=1")
-
-			
-</script>
-<script>
-window.onload=function(){
-
-		document.write(
-			jade.render(
-				document.getElementById('jade').innerHTML,
-				{pretty:'\t'}
-			)
-		);
-		//AngularJS DOES NOT WORK W/OUT THIS:
-		document.close();
-};
-</script>
-
-
-</body></html>
+	<body class="ng-cloak" ng-controller="gridCtrl">
+		<div ng-include="'/dash.html'"></div>
+		<div ng-include="'/grid.html'"></div>
+		<page-loader></page-loader>
+		<ng-view></ng-view>
+		<script src="https://www.youtube.com/iframe_api?enablejsapi=1&playsinline=1"></script>
+	</body>
+</html>

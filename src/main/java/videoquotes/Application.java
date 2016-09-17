@@ -1,26 +1,18 @@
-/* 
- **
- ** Copyright 2014, Jules White
- **
- ** 
- */
 package videoquotes;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-@Configuration
-@ComponentScan
-@EnableWebMvc
-//@EnableAspectJAutoProxy //comment this to make it invisible to spring
-public class Application extends WebMvcConfigurerAdapter {
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-	// We do not have the typical main method because we need
-	// the Maven AppEngine plugin to launch / configure the
-	// development server. However, we are still using this
-	// class to define configuration information.
+
+@EnableSwagger2
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {	
+	
+        ApplicationContext ctx = SpringApplication.run(Application.class, args);
+    }
 
 }

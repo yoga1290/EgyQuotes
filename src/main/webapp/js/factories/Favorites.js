@@ -10,18 +10,18 @@ app.service('Favorites', function() {
     };
     
     this.add = function(quote) {
-	_this.list[quote.key] = quote;
+	_this.list[quote.id] = quote;
 	save();
     };
     
     this.isFavorites = function(quote) {
-	return (_this.list[quote.key] !== undefined && _this.list[quote.key] !== null);
+	return (_this.list[quote.id] !== undefined && _this.list[quote.id] !== null);
     };
     
     this.remove = function(quote) {
 	var nList = {};
 	for(var i in _this.list)
-	    if(i !== quote.key)
+	    if(i !== quote.id)
 		nList[i] = _this.list[i];
 	_this.list = nList;
 	save();

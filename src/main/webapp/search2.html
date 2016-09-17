@@ -1,0 +1,45 @@
+<jade>
+.dialog.animated.slideInDown
+	.overlay
+	#search.stickable(style="height:0px;")
+		input(type="text",ng-model="field",ng-keyup="query();",placeholder="search")
+		i.material-icons search
+	#search-panel.col-xs-12.col-md-8.col-md-offset-2(style="position:absolute;left:0px;top:70px;margin-top:70px;")
+		.col-xs-12.col-sm-4
+			.panel.panel-default
+				.panel-body
+					.col-xs-12
+						.col-xs-12(style="float:none;")
+							i.material-icons(style="font-size: 48px;") live_tv
+						.col-xs-12
+							span.badge {{people.length}}
+							| People
+					.btn-box.col-xs-12(ng-repeat="channel in channels",ng-click="selectChannel(channel.id)") {{channel.name}}
+		.col-xs-12.col-sm-4
+			.panel.panel-default
+				.panel-body(style="font-size: 32px;")
+					.col-xs-12
+						.col-xs-12(style="float:none;")
+							i.material-icons(style="font-size: 48px;") face
+						.col-xs-12
+							span.badge {{people.length}}
+							| People
+					.panel.panel-default.clickable(ng-repeat="person in people track by $index",ng-click="selectPerson(person.id);")
+						.panel-body
+							i.material-icons(ng-show="selected.people[person.id]",style="font-size: 48px;float: right;") tag_face
+							| {{person.name}}
+		.col-xs-12.col-sm-4
+			.panel.panel-default
+				.panel-body(style="font-size: 32px;")
+					.col-xs-12
+						.col-xs-12(style="float:none;")
+							i.material-icons(style="font-size: 48px;") local_offer
+						.col-xs-12
+							span.badge {{tags.length}}
+							| Tags
+					.panel.panel-default.clickable(ng-repeat="tag in tags track by $index",ng-click="selectTag(tag.key.name);")
+						.panel-body
+							i.material-icons(ng-hide="selected.tags[tag.name]",style="font-size: 48px;float: left;") label_outline
+							i.material-icons(ng-show="selected.tags[tag.name]",style="font-size: 48px;float: left;") label
+							| {{tag.name}}
+</jade>

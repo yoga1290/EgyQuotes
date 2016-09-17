@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package videoquotes.util;
 
 import java.io.BufferedReader;
@@ -32,9 +27,9 @@ public class URLUtil {
 			while((ch=in.read(buff))!=-1)
 					res+=new String(buff,0,ch);
 			in.close();
-			
 			return res;
-		}catch(Exception e){return  e.getLocalizedMessage();}
+		}catch(Exception e){
+		    return  res + "\n" + e.getLocalizedMessage();}
 	}
     
     

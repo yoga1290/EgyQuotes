@@ -1,25 +1,35 @@
 app.service('QuoteSvc',['$http','$q', function($http,$q){
-	this.query=function(offset,limit,tags,personIds){
-		var chain=
-			$http
-			.post('/Quote/grid',{
-				offset: offset,
-				limit:  limit,
-				tags:   tags,
-				personIds: personIds
-			});
-		return chain;
+	/*
+	 {
+		offsets: {
+		    tag: 0,
+		    video: 0,
+		    person: 0
+		},
+		limit:  limit,
+		tags:   tags,
+		channelIds: channelIds,
+		start: start,
+		end: end,
+		personIds: personIds
+	}
+	 */
+	this.search = function(searchDTO) {
+	    return $http.post('/Quote/grid', searchDTO);
+	};
+	this.trNgGrid = function(searchObj, isASC, isGlobal) {
+	    if(searchObj.mandatoryFilters===undefined) {
+		searchObj.mandatoryFilters={};
+	    }
+
+	    var chain=
+		    $http
+			.post('/Quote/trNgGrid',searchObj,{params:{isASC:isASC,isGlobal:isGlobal}});
+	    return chain;
 	};
 	this.insert=function(quote){
 	    var chain=
-		    $http.post('/Quote',{
-				videoId:quote.videoId,
-				personId:quote.personId,
-				quote:quote.quote,
-				start:quote.start,
-				end:quote.end,
-				access_token: localStorage.getItem('access_token')
-			});
+		    $http.post('/Quote/insert', quote);
 	    return chain;
 	};
 	this.count = function() {

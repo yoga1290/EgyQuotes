@@ -1,0 +1,44 @@
+.menu-tooltip {
+  position: absolute;
+  padding: 5px;
+  margin: 10px;
+  margin-left: 80px;
+  border: 1px solid;
+  min-width: 220px;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 32px;
+  color:white;
+  background-color: rgba(0,0,0,0.5);
+}
+
+i.material-icons.login {
+  font-size: 64px;
+  border-color:#0b346f;
+  color:  #0b346f;
+}
+i.material-icons.login:before {
+  content: "account_circle";
+}
+i.material-icons.login:hover {
+  border-color: #37beff;
+  color: #37beff;
+  background-color: #0b346f;
+}
+/*.menu-overlay {
+    transition: 2s cubic-bezier(0.86, 0, 0.07, 1);
+    top: -50%;
+    left: -50%;
+
+    border-radius: 50%;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+.menu-overlay.ng-hide {
+    width: 0%;
+    height: 0%;
+}
+.menu-overlay.ng-show {
+    width: 200%;
+    height: 200%;
+}*/

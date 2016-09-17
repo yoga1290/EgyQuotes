@@ -1,26 +1,18 @@
 app.controller('gridCtrl',
-	    ['$scope','QuoteSvc','TagSvc','PersonSvc','VideoSvc','$timeout','$routeParams', 'PageLoader',
-	    function(sp,QuoteSvc,TagSvc,PersonSvc,VideoSvc,to,$routeParams, PageLoader){
+	    ['$scope','QuoteSvc','TagSvc','PersonSvc','VideoSvc','$timeout','$routeParams', 'PageLoader', 'ResponseDialog',
+	    function(sp,QuoteSvc,TagSvc,PersonSvc,VideoSvc,to,$routeParams, PageLoader, ResponseDialog){
 		    sp.quotes=[];
 		    sp.PageLoader = PageLoader;
+		    sp.ResponseDialog = ResponseDialog;
 		    
 		    var onload=(function(){
 			if(location.href.indexOf("access_token=")>0) {
 			    localStorage.setItem('access_token',location.href.substring(location.href.indexOf("access_token=")+13,location.href.indexOf('&expires')));
 			}
 		    }());
-		
-		    sp.menu=(function($scope){
-			var self={};
-			return self={
-			    newQuote:function(){
-				$scope.$broadcast('newQuote');
-			    }
-			};
-		    }(sp));
 		    
-		    sp.onQuoteClick=function(quote){
-			location.href='#/quote/'+quote.key.id;
+		    sp.onQuoteClick=function(quote) {
+			window.location.href='#/quote/'+quote.id;
 		    };
 		    
 		    var tags=[],personId=[];
@@ -37,7 +29,7 @@ app.controller('gridCtrl',
 		    if(tags.length >0 || personId.length>0) {
 			sp.search.selected.people = personId;
 			sp.search.selected.tags = tags;
-			sp.quoteLoader.setQuery(tags,personId);
+//			sp.quoteLoader.setQuery(tags,personId);
 		    }
 		    
 		    sp.search=(function(sp){
@@ -78,6 +70,8 @@ app.controller('gridCtrl',
 					.success(function(response){
 					    self.people=response;
 					});
+					
+//					sp.$emit('QuoteGridCtrl.query', 0, 10, '', {}, 'airedTime', false);
 				},
 				selectTag:function(tag){
 				    if(self.selected.tags[tag] === true)
@@ -102,77 +96,12 @@ app.controller('gridCtrl',
 					if(isSelected)
 					    personId.push(person);
 				    });
-				    sp.quoteLoader.setQuery(tags,personId);
+				    //TODO
+//				    sp.$emit('QuoteGridCtrl.query', 0, 10, '', {}, 'airedTime', false);
+//				    sp.quoteLoader.setQuery(tags,personId);
 				}
 			};
 		    }(sp));
-
-		    
-		    sp.quoteLoader=(function(){
-			    var self={};
-			    return self={
-				    offset:0,
-				    page:10,
-				    count:10,
-				    hasNext:true,
-				    tags:[],
-				    personIds:[],
-				    init:function(){
-					    var tmp=
-						    $('<div>')
-						    .css('top','0px')
-						    .css('visibility','hidden')
-						    .css('height','100%')
-						    .appendTo('body');
-					    var h=tmp.height();
-						    tmp.css('display','none').remove();
-					    $(document).scroll(function(){
-						    if(self.isBusy) return;
-						    
-						    var H=$(document).height()-100;
-						    var s=$('body').scrollTop();
-						    if(s+h>=H)
-//						    if((H-s)<h)
-							    self.more();
-					    });
-				    },
-				    setQuery:function(tags,personIds){
-					self.tags=tags;
-					self.personIds=personIds;
-					self.offset=0;
-					self.hasNext=true;
-					sp.quotes=[];
-					self.more();
-				    },
-				    more:function(){
-					    if(!self.hasNext) return;
-					    QuoteSvc
-						    .query(self.offset,self.page,self.tags,self.personIds)
-						    .success(function(response){
-							if(response.length==0)
-							{
-							    self.hasNext=false;
-							    return;
-							}
-							$(response).each(function(i,quote){
-							    
-							    VideoSvc.getChannelId(quote.properties.videoId).success(function(response){
-								VideoSvc.getChannelData(response.items[0].snippet.channelId).success(function(data){
-								    quote.logo = data.items[0].snippet.thumbnails.high.url;
-								    sp.quotes.push(quote);
-								});
-							    });
-							    
-							});
-							
-						    });
-					self.offset+=self.page;
-				    }
-			    };
-		    }());
-		    sp.quoteLoader.init();
-		    sp.quoteLoader.setQuery([], []);
-		    
 		    
 		    sp.parseInt = parseInt;
 		    sp.to2Digit=function(x){
@@ -198,7 +127,9 @@ app.controller('gridCtrl',
 		    
 		    sp.getChannelLogoByVideoId = function(videoId) {
 			var url={url:''};
+			console.log(videoId);
 			VideoSvc.getChannelId(videoId).success(function(response){
+			    if (response.items.length > 0)
 			    VideoSvc.getChannelData(response.items[0].snippet.channelId).success(function(data){
 				url = {url: data.items[0].snippet.thumbnails.default.url};
 			    });

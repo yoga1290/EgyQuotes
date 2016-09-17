@@ -64,6 +64,7 @@ public class YoutubeUtil {
     
     public static long getPublishedTime(String videoId)
     {
+	//https://www.googleapis.com/youtube/v3/videos?part=snippet&id=videoId&key=AIzaSyAiom5s4YGZ7C00vCm1YWFvBmwbSFQ67Cs
     	String txt=url.readText("https://www.googleapis.com/youtube/v3/videos?part=snippet&id="+videoId+"&key="+Credential.OAuth.google.API_KEY);
 	String tag = "\"publishedAt\": \"";
     	int st=txt.indexOf(tag);
@@ -74,8 +75,10 @@ public class YoutubeUtil {
 		// e.g: 2013-09-26T15:48:11.000Z
 		// see http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html#rfc822timezone
 		try {
-		 return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").parse(txt).getTime();
-		}catch(Exception e){}
+		 return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(txt).getTime();
+		}catch(Exception e) {
+		    e.printStackTrace();
+		}
                 return -1;
     	}
     	return -1;

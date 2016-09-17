@@ -1,16 +1,24 @@
-app.service('PageLoader', [function(){
+app
+.service('PageLoader', [function() {
     this.count = 0;
-}]);
-
-app.config(['$httpProvider', function($httpProvider) {
+}])
+.controller('PageLoaderCtrl', ['$scope', 'PageLoader', function($scope, PageLoader) {
+    $scope.PageLoader = PageLoader;
+}])
+.directive('pageLoader', function() {
+    return {
+	    templateUrl: 'page-loader.html'
+    };
+})
+.config(['$httpProvider', function($httpProvider) {
 	
     $httpProvider.interceptors.push(['$q','PageLoader', function($q, PageLoader) {
 	var self={};
 	return self={
 	    count:0,
 	    changeLoader:function(){
-		if(PageLoader.count==0)
-		    stickingEffect.scan();
+//		if(PageLoader.count==0)
+//		    stickingEffect.scan();
 	    },
 	    // optional method
 	    'request': function(config) {

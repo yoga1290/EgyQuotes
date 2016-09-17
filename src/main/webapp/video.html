@@ -1,50 +1,53 @@
 <jade>
-div(ng-class="{'hidden':!show}",style="z-index:5;background-color:rgba(0,0,0,0.6);top:0px;left:0px;position:absolute;width:100%;height:1000%",ng-click="overlayClick()")
-	.col-xs-12.col-md-6.embed-responsive.embed-responsive-16by9(ng-click="click()")
+.dialog.animated.fadeInDown
+	.overlay
+	.col-md-1(style="padding:0px;")
+		i.edit.btn-circle.material-icons(ng-click="showEdit=!showEdit;", ng-class="{'open':showEdit}")
+		i.btn-circle.material-icons(ng-click="Favorites.add(quote)", ng-class="{'isFavorite': Favorites.isFavorites(quote)}") star
+		i.btn-circle.material-icons add_to_queue
+		i.btn-circle.material-icons share
+	.col-xs-12.col-md-offset-1.col-md-8.animated.slideInDown.ng-cloak(ng-show="showEdit||!quote",style="padding: 0px;position:absolute; z-index: 6; background-color: rgba(12, 12, 12, 0.68);")
+			ng-form.col-xs-12(name="quoteForm",ng-controller="QuoteEditorCtrl")
+
+				.timer.col-xs-12
+					i.material-icons.btn-circle(ng-click="decreasePlaybackRate()") directions_walk
+					i.material-icons.btn-circle(ng-click="increasePlaybackRate()") directions_run
+				.timer.col-xs-12
+					i.left.material-icons subdirectory_arrow_right
+					input(type="tel",name="startTime",ng-model="startTime",ng-keyup="onStartTimeChange()",ng-class="{'has-error': (quoteForm.startTime.$invalid)}",ng-pattern="[/d]{1-2}[:]+[/d]{2}")
+					i.right.material-icons(style="position:absolute; top:50%;") subdirectory_arrow_left
+					input(type="tel",name="endTime",ng-model="endTime",ng-keyup="onEndTimeChange()",ng-class="{'has-error': (quoteForm.endTime.$invalid)}",ng-pattern="[/d]{1-2}[:]+[/d]{2}")
+
+				.col-xs-12
+					i.material-icons#author face
+					input#author(placeholder="{{translation.VIDEO.AUTHOR}}",name="author",ng-model="authorName", ng-keyup="onAuthorNameChange()",required,ng-class="{'has-error': quoteForm.author.$invalid}")
+					#author-list(ng-show="suggestedAuthors.length")
+						.author(ng-repeat="author in suggestedAuthors", ng-click="selectAuthor(author)") {{author.name}}
+				.col-xs-12(style="padding:0px;")
+					#edit-tip
+					textarea#quote.col-xs-12(placeholder="{{translation.VIDEO.QUOTE}}",name="quote",ng-class="{'has-error': (quoteForm.quote.$invalid)}",ng-model="quote.quote")
+					i.material-icons.quote.right(style="position: absolute;margin-left: -45px;") format_quote
+					i.material-icons.quote.left(style="margin-top: -38px;") format_quote
+				.btn-box.col-xs-12.col-sm-3.gray(ng-click="save()", ng-disabled="quoteForm.$invalid")
+					i.material-icons save
+					| {{translation.VIDEO.SAVE}}
+	.col-xs-12.col-md-8.embed-responsive.embed-responsive-16by9
 		#video
+	.col-xs-12.col-md-3
+		quote.col-xs-12(quote="quote",ng-show="quote")
+		.reaction-badge(ng-show="reactions[1].length") {{reactions[1].length}}
+		i.reaction.btn-circle.material-icons(ng-click="selectReaction(-1)")
+		.reaction-badge(ng-show="reactions[2].length") {{reactions[2].length}}
+		i.reaction.btn-circle.material-icons(ng-click="selectReaction(2)")
+		.reaction-badge(ng-show="reactions[3].length") {{reactions[3].length}}
+		i.reaction.btn-circle.material-icons(ng-click="selectReaction(3)")
+		.reaction-badge(ng-show="reactions[-1].length") {{reactions[-1].length}}
+		i.btn-circle.material-icons(ng-click="selectReaction(-1000)", style="color: red;border-color: red;background-color: rgb(84, 0, 0);") assistant_photo
 
 
 
 
-	ng-include(src="'video/new.html'")
-
-	div(ng-repeat="quote in video.playlist track by $index",ng-click="click()")
-		.col-md-5.col-sm-12.col-xs-12
-			.quote.panel.panel-default
-				i.material-icons.quote.right format_quote
-				.panel-body
-					| {{quote.quote}}
-				i.material-icons.quote.left format_quote
-				.panel-footer
-					span.label.label-default(style="font-size:18px")
-						i.material-icons(style="font-size:18px") face
-						| {{quote.personId}}
-					span.label.label-default(style="font-size:18px;margin: 10px",ng-repeat="tag in quote.tags")
-						i.material-icons(style="font-size:18px;") local_offer
-						| {{tag.tag}}
-		.col-md-5.col-sm-6.col-xs-12
-			i.edit.btn-circle.material-icons(ng-click="newQuote.edit(quote)")
-			i.btn-circle.material-icons(style="font-size:62px; border-radius: 35px; border: solid orange 5px; background: #cccccc; margin: 15px;",ng-hide="Favorites.isFavorites(quote)",ng-click="Favorites.add(quote)") star_border
-			i.btn-circle.material-icons(style="font-size:62px;color: orange; border-radius: 35px; border: solid orange 5px; background: #cccccc; margin: 15px;",ng-show="Favorites.isFavorites(quote)",ng-click="Favorites.remove(quote)") star
-			i.btn-circle.material-icons(style="font-size:62px; border-radius: 35px; border: solid blue 5px; background: #cccccc; margin: 15px;") share
-			#tagger.dropdown.col-xs-2
-				i.btn-circle.material-icons.dropdown-toggle(data-toggle="dropdown",style="font-size:62px; border-radius: 35px; border: solid green 5px; background: #cccccc; margin: 15px;") local_offer
-				i.material-icons.dropdown-toggle(data-toggle="dropdown",style="font-size:32px; color: white; position:absolute;top:35px;left:50px;") add_circle
-				ul.dropdown-menu.col-xs-12(style="overflow:hidden;width:600%")
-							li
-								i.material-icons.right-addon search
-								input.form-control(type="text",ng-model="tagger.tagNameQuery",ng-keypress="tagger.findByTagName($event)",ng-click="stopPropagation($event)")
-							li(ng-repeat="tag in tagger.tagNames track by $index",ng-click="tagger.selectTag(tag)")
-								a
-									i.material-icons(ng-show="tagger.selectedTags[tag.key.name]!=true") label_outline
-									i.material-icons(ng-show="tagger.selectedTags[tag.key.name]==true") label
-									|	{{tag.key.name}}
-
-
-
-
-
-
-
-
+	.col-xs-12.col-md-offset-2.col-md-6
+		.connector.col-md-offset-6
+		quote.clickable(ng-repeat="otherQuote in quotes", ng-hide="otherQuote.id==quote.id", quote="otherQuote", ng-click="openQuote(otherQuote)")
 </jade>

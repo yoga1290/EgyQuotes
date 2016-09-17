@@ -1,557 +1,186 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>yoga1290.videoquotes</groupId>
+    <artifactId>videoquotes.heroku</artifactId>
+    <packaging>jar</packaging>
+    <version>0.1.0</version>
 
-	<modelVersion>4.0.0</modelVersion>
-	<packaging>war</packaging>
-	<version>1</version>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.3.5.RELEASE</version>
+    </parent>
 
-	<groupId>videoquotes.Application</groupId>
-	<artifactId>VideoQuotes</artifactId>
+    <properties>
+        <java.version>1.8</java.version>
+	<!-- The main class to start by executing java -jar -->
+	<start-class>videoquotes.Application</start-class>
+	<skipMinify>true</skipMinify>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>google-staging</id>
-			<name>Google Staging</name>
-			<url>https://oss.sonatype.org/content/repositories/comgoogleappengine-1004/</url>
-		</pluginRepository>
-	</pluginRepositories>
+    <dependencies>
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-web</artifactId>
+	</dependency>
+	<dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+	    <version>1.12.1.RELEASE</version>
+        </dependency>
+	<!-- Swagger -->
+	<dependency>
+		<groupId>io.springfox</groupId>
+		<artifactId>springfox-swagger-ui</artifactId>
+		<version>2.4.0</version>
+	</dependency>
+	<dependency>
+		<groupId>io.springfox</groupId>
+		<artifactId>springfox-swagger2</artifactId>
+		<version>2.4.0</version>
+	</dependency>
+	<dependency>
+		<groupId>io.springfox</groupId>
+		<artifactId>springfox-core</artifactId>
+		<version>2.4.0</version>
+	</dependency>
+	<!-- Spring Data MongoDB -->
+	<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+	    <version>1.4.0.RELEASE</version>
+        </dependency>
 
-	<properties>
-		<appengine.app.version>1</appengine.app.version>
-		<appengine.target.version>1.9.14</appengine.target.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>4.0.0.RELEASE</spring.version>
-		<jackson.version>2.2.3</jackson.version>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20141113</version>
+            <type>jar</type>
+        </dependency>
 
-		<java.version>1.7</java.version>
-	    <spring.version>4.1.1.RELEASE</spring.version>
-	    <jstl.version>1.2</jstl.version>
-	    <junit.version>4.11</junit.version>
-	    <logback.version>1.0.13</logback.version>
-	    <jcl-over-slf4j.version>1.7.5</jcl-over-slf4j.version>
-	</properties>
+	<dependency>
+	    <groupId>org.projectlombok</groupId>
+	    <artifactId>lombok</artifactId>
+	    <version>1.16.8</version>
+	    <scope>provided</scope>
+	</dependency>
 
-	<repositories>
-		<repository>
-			<id>gmultipart</id>
-			<url>http://gmultipart.googlecode.com/svn/repo/m2</url>
-		</repository>
-	</repositories>
-
-	<dependencies>
-		<!-- Compile/runtime dependencies -->
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-api-1.0-sdk</artifactId>
-			<version>${appengine.target.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.squareup.retrofit</groupId>
-			<artifactId>retrofit</artifactId>
-			<version>1.6.1</version>
-		</dependency>
-
-		<!-- CGLib -->
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-			<version>3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.objenesis</groupId>
-			<artifactId>objenesis</artifactId>
-			<version>2.1</version>
-		</dependency>
-
-		<!-- Open CSV -->
-		<dependency>
-			<groupId>net.sf.opencsv</groupId>
-			<artifactId>opencsv</artifactId>
-			<version>2.3</version>
-		</dependency>
-
-		<!-- Weka -->
-		<dependency>
-			<groupId>nz.ac.waikato.cms.weka</groupId>
-			<artifactId>weka-stable</artifactId>
-			<version>3.6.10</version>
-		</dependency>
-
-		<!-- Google Cloud SDK -->
-		<dependency>
-			<groupId>com.google.appengine.tools</groupId>
-			<artifactId>appengine-gcs-client</artifactId>
-			<version>RELEASE</version>
-		</dependency>
-
-		<!-- Test Dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.10</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.9.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-testing</artifactId>
-			<version>${appengine.target.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-api-stubs</artifactId>
-			<version>${appengine.target.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-xml</artifactId>
-			<version>2.1.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.woodstox</groupId>
-			<artifactId>woodstox-core-asl</artifactId>
-			<version>4.1.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.jdo</groupId>
-			<artifactId>jdo-api</artifactId>
-			<version>3.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.jsr107cache</groupId>
-			<artifactId>jsr107cache</artifactId>
-			<version>1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.appengine.orm</groupId>
-			<artifactId>datanucleus-appengine</artifactId>
-			<version>2.1.2</version>
-
-			<exclusions>
-				<exclusion>
-					<groupId>org.datanucleus</groupId>
-					<artifactId>datanucleus-enhancer</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-api-jdo</artifactId>
-			<version>3.1.3</version>
-		</dependency>
+	<!-- Spring Security & OAuth2 -->
+        <dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-security</artifactId>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework.security.oauth</groupId>
+	    <artifactId>spring-security-oauth2</artifactId>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-jwt</artifactId>
+	</dependency>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0.2</version>
+            <type>jar</type>
+        </dependency>
+	<!-- http://stackoverflow.com/a/31579737 -->
+	<dependency>
+	    <groupId>com.h2database</groupId>
+	    <artifactId>h2</artifactId>
+	    <version>1.4.187</version>
+	</dependency>
+    </dependencies>
 
 
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
-		</dependency>
+    <build>
+	<resources>
+		<resource>
+			<directory>${project.basedir}/src/main/resources</directory>
+		</resource>
+		<resource>
+			<directory>${project.build.directory}/generated-resources</directory>
+		</resource>
+	</resources>
+	<!-- <resources>
+	    <resource>
+		<directory>src/main/resources</directory>
+		<filtering>true</filtering>
+		<excludes>
+		    <exclude>*.jks</exclude>
+		</excludes>
+	    </resource>
+	</resources> -->
+        <plugins>
 
-		<dependency>
-			<groupId>com.google.inject.extensions</groupId>
-			<artifactId>guice-multibindings</artifactId>
-			<version>3.0</version>
-		</dependency>
-		
-		<!-- JSON -->
-	    <dependency>
-	      <groupId>org.json</groupId>
-	      <artifactId>json</artifactId>
-	      <version>20141113</version>
-	    </dependency>
 
-		<!-- Spring Dependencies -->
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-expression</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>14.0</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>google-collect</artifactId>
-					<groupId>com.google</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.inject</groupId>
-			<artifactId>guice</artifactId>
-			<version>3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>gmultipart</groupId>
-			<artifactId>gmultipart</artifactId>
-			<version>0.4</version>
-		</dependency>
-
-		<!-- The following two libraries should have been included in the guava -->
-		<!-- <dependency> <groupId>com.google.guava</groupId> <artifactId>guava-collections</artifactId> 
-			<version>r03</version> </dependency> <dependency> <groupId>com.google.guava</groupId> 
-			<artifactId>guava-base</artifactId> <version>r03</version> </dependency> -->
-
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.3</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>persistence-api</artifactId>
-			<version>1.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-jodatime</artifactId>
-			<version>3.2.1</version>
-		</dependency>
-
-		<dependency>
-	      <groupId>org.slf4j</groupId>
-	      <artifactId>jcl-over-slf4j</artifactId>
-	      <version>${jcl-over-slf4j.version}</version>
-	    </dependency>
-	 
-	    <dependency>
-	      <groupId>ch.qos.logback</groupId>
-	      <artifactId>logback-classic</artifactId>
-	      <version>${logback.version}</version>
-	    </dependency>
-
-	    <dependency>
-	      <groupId>mysql</groupId>
-	      <artifactId>mysql-connector-java</artifactId>
-	      <version>5.1.25</version>
-	      <type>jar</type>
-	      <scope>compile</scope>
-	    </dependency>
-
-	    
-	    <!-- Spring AOP + AspectJ -->
-
-	    <dependency>
-		    <groupId>org.aspectj</groupId>
-		    <artifactId>aspectjrt</artifactId>
-		    <version>1.6.11</version>
-	    </dependency>
-
-	    <dependency>
-		    <groupId>org.aspectj</groupId>
-		    <artifactId>aspectjweaver</artifactId>
-		    <version>1.6.11</version>
-	    </dependency>
-	    
-	    <!-- for OAuth 2.0 -->
-	    <dependency>
-		<groupId>org.springframework.security.oauth</groupId>
-		<artifactId>spring-security-oauth2</artifactId>
-		<version>2.0.7.RELEASE</version>
-	    </dependency>
-	 <dependency>
-	  <groupId>org.aspectj</groupId>
-	  <artifactId>aspectjrt</artifactId>
-	  <version>1.8.6</version>
-	  <type>jar</type>
-	 </dependency>
-	 
-	 <!-- Mongo
-	    http://projects.spring.io/spring-data-mongodb/
-	 -->
-	 <dependency>
-	  <groupId>org.springframework.data</groupId>
-	  <artifactId>spring-data-mongodb</artifactId>
-	  <version>1.9.0.RELEASE</version>
-	 </dependency>
-	</dependencies>
-
-	<build>
-		<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<version>2.5.1</version>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.18</version>
-				<configuration>
-					<excludes>
-						<exclude>**/*ApiTest.java</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.3</version>
-				<configuration>
-					<archiveClasses>true</archiveClasses>
-					<webResources>
-						<!-- in order to interpolate version from pom into appengine-web.xml -->
-						<resource>
-							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
-							<filtering>true</filtering>
-							<targetPath>WEB-INF</targetPath>
-						</resource>
-						<resource>
-							<directory>${basedir}/src/main/java/META-INF</directory>
-							<filtering>true</filtering>
-							<targetPath>WEB-INF/classes/META-INF/</targetPath>
-						</resource>
-					</webResources>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>com.google.appengine</groupId>
-				<artifactId>appengine-maven-plugin</artifactId>
-				<version>${appengine.target.version}</version>
-				<!-- <configuration> <jvmFlags> <jvmFlag>-Xdebug</jvmFlag> <jvmFlag>-Xrunjdwp:transport=dt_socket,address=1044,server=y,suspend=y 
-					</jvmFlag> </jvmFlags> <disableUpdateCheck>true</disableUpdateCheck> </configuration> -->
-			</plugin>
-
-			<!-- Enhance all classes found within a entities folder. -->
-			<plugin>
-				<groupId>org.datanucleus</groupId>
-				<artifactId>maven-datanucleus-plugin</artifactId>
-				<version>3.1.3</version>
-
-				<configuration>
-					<fork>false</fork>
-					<mappingIncludes>/videoquotes/repository/*.class</mappingIncludes>
-					<verbose>true</verbose>
-					<enhancerName>ASM</enhancerName>
-					<api>JDO</api>
-				</configuration>
-
-				<dependencies>
-					<dependency>
-						<groupId>org.datanucleus</groupId>
-						<artifactId>datanucleus-core</artifactId>
-						<version>3.1.3</version>
-					</dependency>
-				</dependencies>
-
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>enhance</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			
-			
-			<!-- minify-maven-plugin
+	    <!-- minify-maven-plugin
 			    http://samaxes.github.io/minify-maven-plugin/usage.html
 			-->
-			<plugin>
-			    <groupId>com.samaxes.maven</groupId>
-			    <artifactId>minify-maven-plugin</artifactId>
-			    <version>1.7.4</version>
-			    <executions>
-			      <execution>
-				<id>default-minify</id>
-				<phase>package</phase><!-- When omitted defaults to 'process-resources' -->
-				<configuration>
-				  <charset>UTF-8</charset>
-				  <cssSourceDir>css</cssSourceDir>
-				  <cssSourceIncludes>
-				    <cssSourceInclude>*.css</cssSourceInclude>
-				  </cssSourceIncludes>
-				  <cssTargetDir>/</cssTargetDir>
-				  <cssFinalFile>style.css</cssFinalFile>
-				  
-				  <jsSourceDir>js</jsSourceDir>
-				  <jsSourceIncludes>
-				    <jsSourceInclude>app.js</jsSourceInclude>
-				    <jsSourceInclude>config.js</jsSourceInclude>
-				    <jsSourceInclude>svc/*.js</jsSourceInclude>
-				    <jsSourceInclude>lib/*.js</jsSourceInclude>
-				    <jsSourceInclude>ctrl/*.js</jsSourceInclude>
-				    <jsSourceInclude>factories/*.js</jsSourceInclude>
-				  </jsSourceIncludes>
-				  <jsTargetDir>/</jsTargetDir>
-				  <jsFinalFile>app.js</jsFinalFile>
-				  
-				  <jsEngine>CLOSURE</jsEngine>
-				</configuration>
-				<goals>
-				  <goal>minify</goal>
-				</goals>
-			      </execution>
-			      
-			      <execution>
-				<id>minify-devserver</id>
-				<phase>test-compile</phase> 
-				<configuration>
-				  <charset>UTF-8</charset>
-				  <cssSourceDir>css</cssSourceDir>
-				  <cssSourceIncludes>
-				    <cssSourceInclude>*.css</cssSourceInclude>
-				    <jsSourceInclude>devserver/*.css</jsSourceInclude>
-				  </cssSourceIncludes>
-				  <cssTargetDir>/</cssTargetDir>
-				  <cssFinalFile>style.css</cssFinalFile>
-				  
-				  <jsSourceDir>js</jsSourceDir>
-				  <jsSourceIncludes>
-				    <jsSourceInclude>devserver/*.js</jsSourceInclude>
-				  </jsSourceIncludes>
-				  <jsTargetDir>/</jsTargetDir>
-				  <jsFinalFile>devserver.js</jsFinalFile>
-				  
-				  <jsEngine>CLOSURE</jsEngine>
-				</configuration>
-				<goals>
-				  <goal>minify</goal>
-				</goals>
-			      </execution>
-			      
-			    </executions>
-			</plugin>
-			<!-- end of minify-maven-plugin-->
-		</plugins>
+	    <plugin>
+		<groupId>com.samaxes.maven</groupId>
+		<artifactId>minify-maven-plugin</artifactId>
+		<version>1.7.4</version>
+		<executions>
+		  <execution>
+		    <id>default-minify</id>
+		    <phase>process-resources</phase><!-- When omitted defaults to 'process-resources' -->
+		    <configuration>
+		      <charset>UTF-8</charset>
+		      <cssSourceDir>/</cssSourceDir>
+		      <cssSourceIncludes>
+			<cssSourceInclude>css/*.css</cssSourceInclude>
+		      </cssSourceIncludes>
+		      <cssTargetDir>/</cssTargetDir>
+		      <cssFinalFile>style.css</cssFinalFile>
 
+		      <jsSourceDir>/</jsSourceDir>
+		      <jsSourceIncludes>
+			 <jsSourceInclude>js/_123/*.js</jsSourceInclude>
+			<jsSourceInclude>js/*.js</jsSourceInclude>
+			<jsSourceInclude>js/svc/*.js</jsSourceInclude>
+			<jsSourceInclude>js/lib/*.js</jsSourceInclude>
+			<jsSourceInclude>js/ctrl/*.js</jsSourceInclude>
+			<jsSourceInclude>js/factories/*.js</jsSourceInclude>
+		      </jsSourceIncludes>
+		      <jsTargetDir>/</jsTargetDir>
+		      <nosuffix>true</nosuffix>
+		      <skipMinify>${skipMinify}</skipMinify>
+		      <jsFinalFile>app.js</jsFinalFile>
 
-		<pluginManagement>
-			<plugins>
-				<!--
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.datanucleus</groupId>
-										<artifactId>maven-datanucleus-plugin</artifactId>
-										<versionRange>3.1.3</versionRange>
-
-										<goals>
-											<goal>enhance</goal>
-										</goals>
-									</pluginExecutionFilter>
-
-									<action>
-										<execute>
-											<runOnIncremental>false</runOnIncremental>
-										</execute>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			-->
-
-
-			<!-- Eclipse project -->
-		      <plugin>
-		      <groupId>org.apache.maven.plugins</groupId>
-		      <artifactId>maven-eclipse-plugin</artifactId>
-		      <version>2.9</version>
-		      <configuration>
-		              <!-- Always download and attach dependencies source code -->
-		        <downloadSources>true</downloadSources>
-		        <downloadJavadocs>false</downloadJavadocs>
-		        <!-- Avoid type mvn eclipse:eclipse -Dwtpversion=2.0 -->
-		        <wtpversion>2.0</wtpversion>
-		      </configuration>
-		      </plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
-
+		      <jsEngine>CLOSURE</jsEngine>
+		      <webappTargetDir>${basedir}/src/main/webapp</webappTargetDir>
+		    </configuration>
+		    <goals>
+		      <goal>minify</goal>
+		    </goals>
+		  </execution>
+		</executions>
+	    </plugin>
+		<!-- end of minify-maven-plugin-->
+	<plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+	    <!-- https://devcenter.heroku.com/articles/deploying-java-applications-with-the-heroku-maven-plugin -->
+	    <plugin>
+	      <groupId>com.heroku.sdk</groupId>
+	      <artifactId>heroku-maven-plugin</artifactId>
+	      <version>1.0.0</version>
+	      <configuration>
+		<appName>videoquotes</appName>
+		<processTypes>
+		    <web>java -Dserver.port=$PORT $JAVA_OPTS -jar target/videoquotes.heroku-0.1.0.jar</web>
+		</processTypes>
+		<includeTarget>false</includeTarget>
+		<includes>
+		  <include>target/videoquotes.heroku-0.1.0.jar</include>
+		</includes>
+	      </configuration>
+	    </plugin>
+        </plugins>
+    </build>
 </project>

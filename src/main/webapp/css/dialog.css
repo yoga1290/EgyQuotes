@@ -1,0 +1,21 @@
+.dialog .overlay{
+	position: absolute;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:10000px;
+	background: rgba(0,0,0,0.7);
+}
+.dialog {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	z-index:4;
+}
+.dialog .container {
+    position: fixed;
+    overflow: scroll;
+}
+.dialog * {
+    z-index: 5;
+}

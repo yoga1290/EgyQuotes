@@ -1,6 +1,6 @@
 app.service('PersonSvc',['$http','$q', function($http,$q) {
 	var _findByName = {};
-	this.findByName=function(name) {
+	this.findByName = function(name) {
 	    if(_findByName[name] !== undefined)
 		return _findByName[name];
 	    

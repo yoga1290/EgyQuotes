@@ -1,10 +1,29 @@
 <jade>
-#quoteLoader.col-md-3.col-sm-6.col-xs-12.clickable(ng-repeat="quote in quotes track by $index")
-	.quote.panel.panel-default(ng-click="onQuoteClick(quote)",style="background-image: url('{{quote.logo}}')")
-		i.material-icons.quote.right format_quote
-		.panel-body
-			| {{quote.properties.quote}}
-		i.material-icons.quote.left format_quote
-		.panel-footer
-			span.label.label-default(style="font-size:18px") {{quote.properties.personId}}
+.section
+.col-sm-1.hidden-xs(ng-controller="MenuCtrl")
+	.stickable.hidden-xs.col-sm-1(ng-mouseout="menuHover=-1")
+
+		.menu-tooltip.animated.fadeIn(ng-show="menuHover==0") {{translation.MENU.LOGIN}}
+		i.login.btn-circle.material-icons(ng-mouseover="menuHover=0",ng-click="login()")
+
+		.menu-tooltip.animated.fadeIn(ng-show="menuHover==1") {{translation.MENU.FAVORITES}}
+		i.material-icons(ng-mouseover="menuHover=1",style="font-size:64px",ng-show="isRouteEquals('/Favorites')") star
+		i.favorites.material-icons.btn-circle(ng-mouseover="menuHover=1",ng-hide="isRouteEquals('/Favorites')",ng-click="goToRoute('/Favorites')")
+
+		.menu-tooltip.animated.fadeIn(ng-show="menuHover==2") {{translation.MENU.WATCH_LATER}}
+		i.btn-circle.material-icons(ng-mouseover="menuHover=2",ng-show="isRouteEquals('/WatchLater')",ng-click="goToRoute('/WatchLater')") watch_later
+		i.watch_later.material-icons.btn-circle(ng-mouseover="menuHover=2",ng-hide="isRouteEquals('/WatchLater')",ng-click="goToRoute('/WatchLater')")
+
+		.menu-tooltip.animated.fadeIn(ng-show="menuHover==3") {{translation.MENU.RECENT_SHOWS}}
+		i.btn-circle.material-icons(ng-mouseover="menuHover=3",ng-hide="isRouteEquals('/browse')",ng-click="goToRoute('/browse')") live_tv
+
+
+.col-md-11.col-sm-9.col-xs-12.section(ng-controller="QuoteGridCtrl")
+	#quoteLoader
+		.col-md-4.col-sm-6.col-xs-12.clickable(ng-repeat="quote in items track by $index")
+			.quote.fadeInUp.animated.panel.panel-default.clickable(style="background-image: url('{{quote.thumbnail}}'); background-position-x: 50%;background-position-y: 50%; min-height: 200px;position: relative;",ng-click="onQuoteClick(quote)")
+				i.material-icons.quote.right format_quote
+				.panel-body(style="color:black;font-size:32px;") {{quote.quote}}
+				i.material-icons.quote.left format_quote
+				img.img-circle.col-md-3.col-xs-4(style="position:absolute;bottom:0px;right:0px;",ng-src="{{quote.logo}}")
 </jade>

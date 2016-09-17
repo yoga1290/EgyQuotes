@@ -2,7 +2,7 @@
     font-size: 56px;
     float: right;
     margin-top: -25px;
-    color: rgba(144, 142, 142, 0.5);
+    color: rgb(144, 142, 142);
 }
 .quote.material-icons.left{
     transform: rotate(180deg);
@@ -11,7 +11,7 @@
     font-size: 56px;
     float: left;
     margin-top: -25px;
-    color: rgba(144, 142, 142, 0.5);
+    color: rgb(144, 142, 142);
 }
 .quote.panel{
     border: 0px;
@@ -42,4 +42,16 @@
   transform: rotate(180deg);
   ms-transform: rotate(180deg); /* IE 9 */
   -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+}
+
+.quote-container .quote.panel {
+    transition-duration: 1s;
+}
+.quote-container .quote.panel:hover {
+    transform: translateX(50px);
+}
+
+.quote-overlay {
+    z-index: -1;
+    position: absolute;
 }

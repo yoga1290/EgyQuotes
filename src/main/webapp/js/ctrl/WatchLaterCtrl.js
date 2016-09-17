@@ -1,6 +1,5 @@
 app
     .controller('WatchLaterCtrl',['$scope', 'WatchLater', 'VideoSvc',function($scope, WatchLater, VideoSvc){
-	$scope.$parent.show = true;
 	$scope.WatchLater = WatchLater;
 	
 	$scope.videos = {};

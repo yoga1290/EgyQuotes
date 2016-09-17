@@ -1,0 +1,17 @@
+.tree { 
+    height:90%; 
+    width:20px; 
+    border-left: 10px solid #474747;
+    display:table;
+    margin: 0px;
+    margin-left: 10px;
+    padding: 0px;
+ }
+ 
+ .tree .node {
+    border-radius: 0px 0px 0px 200px;
+    border-left: 10px solid #474747;
+    padding-top: 100px;
+    padding-left: 50px;
+    margin-left: -10px;
+ }
