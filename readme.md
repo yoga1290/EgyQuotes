@@ -7,41 +7,9 @@ VideoQuotes is all about sharing video scenes and quotes from officially verifie
 
 ------------------------
 
+## Install, Configure & Heroku deploy
 
-#Outline
-
-+ [Motivation](#Motivation)
-+ [Framework & tools](#framework--tools)
-+  [Configurations](#configurations)
-+ [Install & Deploy](#install--deploy)
-+ Implementation
-	+ Backend
-	+ Frontend
-		+ Services
-		+ Controllers
-		+ Views
-
-
------------------------------------
-
-## Framework & tools
-
-+ Frontend
-	+ [AngularJS](https://angularjs.org) (via [CDN](https://developers.google.com/speed/libraries/#angularjs) )
-	+ [JADE](http://jade-lang.com) (via [CDN](http://cdnjs.com/libraries/jade))
-	+ [jQuery](http://jquery.com) (via [CDN](https://developers.google.com/speed/libraries/#jquery))
-	+ [Bootstrap](http://getbootstrap.com) (via [CDN](http://getbootstrap.com/getting-started/#download-cdn) )
-	+ [Animate.css](https://daneden.github.io/animate.css/)
-	+ [Youtube iFrame API](https://developers.google.com/youtube/iframe_api_reference) (via [CDN](https://developers.google.com/youtube/iframe_api_reference#Getting_Started) )
-	+ [Google Material Design Font](https://www.google.com/design/icons/) (via [CDN](http://google.github.io/material-design-icons/#setup-method-1-using-via-google-web-fonts) )
-+ Backend
-	+ [Spring Framework](http://projects.spring.io/spring-framework/) running on [Google AppEngine](https://cloud.google.com/appengine/) & managed by [Apache Maven](https://cloud.google.com/appengine/docs/java/tools/maven)
-
-
-
-----------------------------------
-
-## Install & Deploy
+#### Install
 
 + Form Unix/OS X systems, if you do have Java JDK installed, then you can just run this script in terminal:
 ```bash
@@ -68,73 +36,34 @@ git clone https://github.com/yoga1290/VideoQuotes.git;
 
 # change directory to the repository
 cd VideoQuotes;
-
-#Use Maven to clean,compile & deploy to Google AppEngine
-# see https://cloud.google.com/appengine/docs/java/tools/maven#managing_versions_with_versions-maven-plugin_command_options
-mvn install clean appengine:update;
 ```
 
+#### Configure
 
-------------------------
+You'll need to change properties in the following files:
 
-## Configurations
++ [credentials.properties](https://github.com/yoga1290/VideoQuotes/blob/master/credentials.properties)
++ [application.properties](https://github.com/yoga1290/VideoQuotes/blob/master/src/main/resources/application.properties)
++ [deploy.sh](https://github.com/yoga1290/VideoQuotes/blob/master/deploy.sh)
 
-Configuration files are excluded in the commits but here are my constants:
+#### Deploy
 
-+ videoquotes.**Credential.java** for the backend
-	+ BASE_URL
-		website's root URL
-	+ ADMIN_USER_ID
-		Facebook UserId for administrations page logging in
-	+ OAuth
-		+ facebook
-			+ PAGE_ID
-				Facebook page Id which is being managed by the app
-			+ APP_ID
-				Facebook App ID
-			+ REDIRECT_URI
-				The URI in which Facebook redirects to after logging in
-			+ REDIRECT_URL
-				The full URL in which Facebook redirects to after logging in (BASE_URL+REDIRECT_URI)
-			+ APP_SECRET
-				facebook app secret
-			+ APP_ACCESS_TOKEN
-				Access token for the app to use
-+ **config.js** for the front-end
-+ WEB-INF/**appengine-web.xml** for AppEngine deployment configuration
+As simple as:
 
+```bash
+sh deploy.sh
+```
 
---------------------
+----------------------------------
 
 ## Backend
 
-### Repositories & Datastore
+### Security
 
-#### Channel:
-+ Table/Object type: **Channel**
-	+ columns/properties: { **channelId** }
-	+ Stores the trusted Youtube channel IDs
-+ Object: **FBUser**
-	+ properties: { **_id_** }
-+ Object: **Person**
-	+ properties: { **_key_**,**name** }
-+ Object: **Quote**
-	+ properties: { **_id_**,**videoId**,**personId**,**start**,**end**,**quote** }
-+ 
+[deploy.sh](https://github.com/yoga1290/VideoQuotes/blob/master/deploy.sh) generates Public/Private keys for the OAuth2/JWT  (check [experiment-spring-oauth2-jwt](https://github.com/yoga1290/experiment-spring-oauth2-jwt) for more details)
 
+### Datastore
 
-### Controllers
-+ Channel
-+ Person
-+ Quote
-+ QuoteOwner
-+ Tag
-+ TagName
-+ Video
-+ YouTube
-+ Data Transfer Objects (Request Body)
-	+ Quote
-	+ Search
-+ Error Handling
-+ Services & Utils
-+ Schuduled Tasks
+Mongo database hosted in [MLab](http://mlab.com/) configurable in [application.properties](https://github.com/yoga1290/VideoQuotes/blob/master/src/main/resources/application.properties)
+
+**TODO: will add more details later on**
