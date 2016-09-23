@@ -5,12 +5,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import videoquotes.Credential;
 import videoquotes.model.User;
 import videoquotes.model.repository.UserRepository;
 import videoquotes.util.FacebookUtil;
@@ -22,6 +22,9 @@ import videoquotes.util.FacebookUtil;
 @Configuration
 public class UserDetailsSvc implements UserDetailsService {
 
+    @Value("${credentials.admin}")
+    String ADMIN_USER_ID;
+    
     @Autowired
     UserRepository userRepository;
 
@@ -47,7 +50,7 @@ public class UserDetailsSvc implements UserDetailsService {
       user.setAccountNonLocked(true);
 	    List<String> authority = new LinkedList<>();
 	    authority.add("ROLE_USER");
-	    if (facebookId == Credential.ADMIN_USER_ID) {
+	    if (facebookId.equals(ADMIN_USER_ID)) {
 		authority.add("ROLE_ADMIN");
 	    }
 	    user.setGrantedAuthorities(authority);
