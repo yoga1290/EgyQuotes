@@ -1,13 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package videoquotes.api;
 
-import com.google.common.base.Predicate;
 import static com.google.common.collect.Lists.newArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +13,6 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.GrantType;
 import springfox.documentation.service.LoginEndpoint;
-import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
@@ -74,7 +66,7 @@ public class SwaggerConfiguration {
     }
     
     List<GrantType> grantTypes() {
-	//TODO
+	//TODO: Add Authorization option to Swagger
         GrantType grantType = new ImplicitGrantBuilder()
                 .loginEndpoint(new LoginEndpoint("https://www.facebook.com/dialog/oauth?client_id=504291066443321&redirect_uri=https://videoquotes.herokuapp.com/OAuth/facebook/&scope=email&state=/index"))
                 .build();
