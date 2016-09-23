@@ -1,31 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package videoquotes.util;
 
-import videoquotes.util.*;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import videoquotes.Credential;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author yoga1290
  */
-@Component
+@Service
 public class YoutubeUtil {
+    
+    @Value("${credentials.oauth.google.apiKey}")
+    String API_KEY;
     
     @Autowired
     private static URLUtil url;
 
-    public static String getChannelId(String videoId)
+    public String getChannelId(String videoId)
     {
-    	String txt=url.readText("https://www.googleapis.com/youtube/v3/videos?part=snippet%2Cid&id="+videoId+"&key="+Credential.OAuth.google.API_KEY);
+    	String txt=url.readText("https://www.googleapis.com/youtube/v3/videos?part=snippet%2Cid&id="+videoId+"&key="+ API_KEY);
     	int st=txt.indexOf("\"channelId\":");
     	if(st>-1)
     	{
@@ -36,9 +31,9 @@ public class YoutubeUtil {
     	return "";
     }
     
-    public static String getChannelLogo(String channelId)
+    public String getChannelLogo(String channelId)
     {
-    	String txt=url.readText("https://www.googleapis.com/youtube/v3/channels?part=snippet&id="+channelId+"&key="+Credential.OAuth.google.API_KEY);
+    	String txt=url.readText("https://www.googleapis.com/youtube/v3/channels?part=snippet&id="+channelId+"&key="+ API_KEY);
     	int st=txt.indexOf("\"url\":");
     	if(st>-1)
     	{
@@ -49,9 +44,9 @@ public class YoutubeUtil {
     	return "";
     }
     
-    public static String getChannelName(String channelId)
+    public String getChannelName(String channelId)
     {
-    	String txt=url.readText("https://www.googleapis.com/youtube/v3/channels?part=snippet&id="+channelId+"&key="+Credential.OAuth.google.API_KEY);
+    	String txt=url.readText("https://www.googleapis.com/youtube/v3/channels?part=snippet&id="+channelId+"&key="+ API_KEY);
     	int st=txt.indexOf("\"title\":");
     	if(st>-1)
     	{
@@ -62,10 +57,10 @@ public class YoutubeUtil {
     	return "";
     }
     
-    public static long getPublishedTime(String videoId)
+    public long getPublishedTime(String videoId)
     {
 	//https://www.googleapis.com/youtube/v3/videos?part=snippet&id=videoId&key=AIzaSyAiom5s4YGZ7C00vCm1YWFvBmwbSFQ67Cs
-    	String txt=url.readText("https://www.googleapis.com/youtube/v3/videos?part=snippet&id="+videoId+"&key="+Credential.OAuth.google.API_KEY);
+    	String txt=url.readText("https://www.googleapis.com/youtube/v3/videos?part=snippet&id="+videoId+"&key="+ API_KEY);
 	String tag = "\"publishedAt\": \"";
     	int st=txt.indexOf(tag);
     	if(st>-1)
