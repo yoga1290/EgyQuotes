@@ -1,6 +1,5 @@
 package videoquotes.config;
 
-import java.io.InputStream;
 import java.security.KeyPair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -45,22 +44,6 @@ class OAuth2AuthorizationConfig extends
 			    new ClassPathResource("keystore.jks"), STOREPASS.toCharArray())
 			    .getKeyPair(OAUTH2ALIAS);
 	    converter.setKeyPair(keyPair);
-
-			// Resource Server config:
-
-// 			 String publicKey = null;
-// 			 byte buff[] = new byte[200];
-// 			 int o = 0;
-// 			 try {
-// 			     InputStream resource = new ClassPathResource("public_key.txt").getInputStream();
-// 			     while( (o = resource.read(buff, 0, buff.length)) > 0) {
-// 				 publicKey += new String(buff, 0, o);
-// 			     }
-// 			   publicKey = IOUtils.toString(resource.getInputStream());
-// 			 } catch (final Exception e) {
-// 			   throw new RuntimeException(e);
-// 			 }
-// 			 converter.setVerifierKey(publicKey);
 	    return converter;
 	}
 	
