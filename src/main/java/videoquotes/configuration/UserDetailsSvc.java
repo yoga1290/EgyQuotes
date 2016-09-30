@@ -19,7 +19,7 @@ import videoquotes.util.FacebookUtil;
 @Configuration
 public class UserDetailsSvc implements UserDetailsService {
 
-    @Value("${credentials.admin}")
+    @Value("${videoquotes.admin}")
     String ADMIN_USER_ID;
     
     @Autowired
