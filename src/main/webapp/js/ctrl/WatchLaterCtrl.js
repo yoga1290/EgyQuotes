@@ -1,5 +1,6 @@
 app
-    .controller('WatchLaterCtrl',['$scope', 'WatchLater', 'VideoSvc',function($scope, WatchLater, VideoSvc){
+    .controller('WatchLaterCtrl',['$scope', '$location', 'WatchLater', 'VideoSvc',
+    function($scope, $location, WatchLater, VideoSvc){
 	$scope.WatchLater = WatchLater;
 	
 	$scope.videos = {};
@@ -13,7 +14,7 @@ app
 	});
 	
 	$scope.onclick = function(videoId) {
-	    window.location.href = "#/new/"+videoId;
+	    $location.path('#/new/' + videoId);
 	};
 	
 }]);

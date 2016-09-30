@@ -1,6 +1,6 @@
 app.controller('gridCtrl',
-	    ['$scope','QuoteSvc','TagSvc','PersonSvc','VideoSvc','$timeout','$routeParams', 'PageLoader', 'ResponseDialog',
-	    function(sp,QuoteSvc,TagSvc,PersonSvc,VideoSvc,to,$routeParams, PageLoader, ResponseDialog){
+	    ['$scope', '$location', 'QuoteSvc','TagSvc','PersonSvc','VideoSvc','$timeout','$routeParams', 'PageLoader', 'ResponseDialog',
+	    function(sp, $location, QuoteSvc,TagSvc,PersonSvc,VideoSvc,to,$routeParams, PageLoader, ResponseDialog){
 		    sp.quotes=[];
 		    sp.PageLoader = PageLoader;
 		    sp.ResponseDialog = ResponseDialog;
@@ -12,7 +12,7 @@ app.controller('gridCtrl',
 		    }());
 		    
 		    sp.onQuoteClick=function(quote) {
-			window.location.href='#/quote/'+quote.id;
+			$location.path('/quote/' + quote.id);
 		    };
 		    
 		    var tags=[],personId=[];

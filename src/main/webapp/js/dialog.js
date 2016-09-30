@@ -1,5 +1,7 @@
-$(document).click(function(e) {
+app.run(['$location', function($location) {
+    $(document).click(function(e) {
 	if (e.target.className.toUpperCase()==='OVERLAY') {
-		window.location.href = '#/';
+		$location.path('/');
 	}
-});
+    });
+}]);

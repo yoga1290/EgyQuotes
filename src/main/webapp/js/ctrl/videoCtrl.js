@@ -1,13 +1,13 @@
 app
     .controller('videoCtrl',
-	    ['$scope','QuoteSvc','TagSvc','PersonSvc','VideoSvc','ChannelSvc','$timeout','$routeParams','YTPlayer','Favorites', 'WatchLater', 'ReactionSvc',
-	    function(sp,QuoteSvc,TagSvc,PersonSvc,VideoSvc,ChannelSvc,to,$routeParams, YTPlayer, Favorites, WatchLater, ReactionSvc){
+	    ['$scope', '$location', 'QuoteSvc','TagSvc','PersonSvc','VideoSvc','ChannelSvc','$timeout','$routeParams','YTPlayer','Favorites', 'WatchLater', 'ReactionSvc',
+	    function(sp, $location, QuoteSvc,TagSvc,PersonSvc,VideoSvc,ChannelSvc,to,$routeParams, YTPlayer, Favorites, WatchLater, ReactionSvc){
 
     sp.YTPlayer = YTPlayer;
     sp.YTPlayer.init('video');
 
     sp.openQuote = function(quote) {
-	window.location.href = '#/quote/' + quote.id;
+	$location.path('/quote/' + quote.id);
     };
 
     sp.tagger=(function(TagSvc){
