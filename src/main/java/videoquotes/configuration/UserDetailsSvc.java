@@ -1,18 +1,15 @@
-package videoquotes.config;
+package videoquotes.configuration;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import videoquotes.model.User;
-import videoquotes.model.repository.UserRepository;
+import videoquotes.repository.mongo.UserRepository;
 import videoquotes.util.FacebookUtil;
 
 /**
@@ -33,6 +30,7 @@ public class UserDetailsSvc implements UserDetailsService {
 	//TODO: findUserDetailsByUsername()
 	//TODO: findUserDetailsByFacebookToken()
 	//TODO: findUserDetailsByGoogleToken()
+	System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n loadUserByUsername:" + username + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	if (username.indexOf("fb:") == 0) {
 	    return findUserDetailsByFacebookAccessToken(username.substring(3));
 	}
@@ -40,8 +38,9 @@ public class UserDetailsSvc implements UserDetailsService {
     }
 
     private UserDetails findUserDetailsByFacebookAccessToken(String accessToken) {
+	System.out.println("\n\n\n\n\n\n\n\n\n\n findUserDetailsByFacebookAccessToken");
 	String facebookId = FacebookUtil.getFacebookId(accessToken);
-	User user = userRepository.findByFacebookId(facebookId);
+	User user = userRepository.findOneByFacebookId(facebookId);
 	if (user == null) {
 	    user = new User();
 	    user.setFacebookId(facebookId);
@@ -56,76 +55,16 @@ public class UserDetailsSvc implements UserDetailsService {
 	    user.setGrantedAuthorities(authority);
 	    userRepository.save(user);
 	}
-	return new user2UserDetails(user);
+	return new UserDetailsImpl(user);
     }
 
     private UserDetails findUserDetailsByUsername(String username) {
-	User user = userRepository.findByName(username);
+	System.out.println("\n\n\n\n\n\n\n\n\n\n findUserDetailsByUsername");
+	User user = userRepository.findOneByName(username);
 	if (user !=  null) {
-	    return new user2UserDetails(user);
+	    return new UserDetailsImpl(user);
 	} else {
 	    throw new UsernameNotFoundException("user does not exists");
 	}
     }
-
-    class user2UserDetails implements UserDetails {
-
-	private User user;
-
-	public user2UserDetails(User user) {
-	    this.user = user;
-	}
-
-	class GrantedAuthorityString implements GrantedAuthority {
-	    private String authority;
-	    public GrantedAuthorityString(String authority) {
-		this.authority = authority;
-	    }
-	    @Override
-	    public String getAuthority() {
-		return authority;
-	    }
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-	    Iterator<String> it = user.getGrantedAuthorities().iterator();
-	    LinkedList<GrantedAuthority> result = new LinkedList<>();
-	    while(it.hasNext()) {
-		result.add(new GrantedAuthorityString(it.next()));
-	    }
-	    return result;
-	}
-
-	@Override
-	public String getPassword() {
-	    return "";
-	}
-
-	@Override
-	public String getUsername() {
-	    return user.getId();
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-	    return user.isAccountNonExpired();
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-	    return user.isAccountNonLocked();
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-	    return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-	    return user.isEnabled();
-	}
-    }
-
 }
