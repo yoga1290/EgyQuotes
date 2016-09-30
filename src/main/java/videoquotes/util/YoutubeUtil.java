@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class YoutubeUtil {
     
-    @Value("${credentials.oauth.google.apiKey}")
+    @Value("${videoquotes.oauth.google.apiKey}")
     String API_KEY;
     
     @Autowired
@@ -59,6 +59,8 @@ public class YoutubeUtil {
     
     public long getPublishedTime(String videoId)
     {
+	System.out.println("\n\n\n\n\n\n " + videoId + "\n\n\n\n\n");
+	///*
 	//https://www.googleapis.com/youtube/v3/videos?part=snippet&id=videoId&key=AIzaSyAiom5s4YGZ7C00vCm1YWFvBmwbSFQ67Cs
     	String txt=url.readText("https://www.googleapis.com/youtube/v3/videos?part=snippet&id="+videoId+"&key="+ API_KEY);
 	String tag = "\"publishedAt\": \"";
@@ -76,7 +78,8 @@ public class YoutubeUtil {
 		}
                 return -1;
     	}
-    	return -1;
+	//*/
+    	return 0;
     }
     
 //    public static String isChannelTrusted(String videoId)
