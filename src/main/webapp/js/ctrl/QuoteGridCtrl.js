@@ -1,4 +1,5 @@
-app.controller('QuoteGridCtrl', ['$scope', 'QuoteSvc', 'VideoSvc', '$rootScope',  function($scope, QuoteSvc, VideoSvc, $rootScope) {
+app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', '$rootScope', 
+    function($scope, $location, QuoteSvc, VideoSvc, $rootScope) {
 	
 	var fadeIndex = 0;
 	function animate() {
@@ -14,27 +15,22 @@ app.controller('QuoteGridCtrl', ['$scope', 'QuoteSvc', 'VideoSvc', '$rootScope',
 	animate();
 	
 	var searchDTO = {
-	    offsets: [0, 0, 0],
-	    limit:  10,
+	    page: 0,
+	    size:  10,
 	    tags:   [],
 	    channelIds: [],
 	    start: 0,
-	    end: 1<<30,
+	    end: new Date().getTime(),
 	    personIds: []
 	};
 	var offsetIndexToIncreament = 0;
 	var page = 10;
-	function increamentOffsets() {
-	    offsetIndexToIncreament++;
-	    offsetIndexToIncreament %= searchDTO.offsets.length;
-	    searchDTO.offsets[offsetIndexToIncreament] += page;
-	}
 	function searchCallback(response) {
 	    angular.forEach(response, function(quote, i) {
 
-		    VideoSvc.getChannelId(quote.videoId).success(function(response) {
+		    VideoSvc.getChannelId(quote.video.id).success(function(response) {
 			quote.thumbnail = response.items[0].snippet.thumbnails.high.url;
-			VideoSvc.getChannelData(response.items[0].snippet.channelId).success(function(data){
+			VideoSvc.getChannelData(response.items[0].snippet.channelId).success(function(data) {
 			    if (data.items.length === 0 ) {
 				console.error('No thumbnails for channelId#', response.items[0].snippet.channelId);
 			    } else {
@@ -45,21 +41,15 @@ app.controller('QuoteGridCtrl', ['$scope', 'QuoteSvc', 'VideoSvc', '$rootScope',
 		    });
 
 		});
-		
-	    if (response.length === 0) {
-		for (var i = 0; i <= offsetIndexToIncreament; i++)
-		    searchDTO.offsets[i] = 0;
-		offsetIndexToIncreament++;
+	    if (response.length > 0) {
+		searchDTO.page++;   
 	    }
-	    console.log(searchDTO.offsets, response.length);
 	    isBusy = false;
 	}
 	function loadMore() {
 	    if (isBusy) return;
-	    if (offsetIndexToIncreament >= searchDTO.offsets.length) return;
 	    
 	    isBusy = true;
-	    searchDTO.offsets[offsetIndexToIncreament] += page;	    
 	    QuoteSvc.search(searchDTO).success(searchCallback);
 	}
 	
@@ -138,18 +128,17 @@ app.controller('QuoteGridCtrl', ['$scope', 'QuoteSvc', 'VideoSvc', '$rootScope',
 	};
 	
 	$rootScope.$on('QuoteGridCtrl.query', function (event, tags, channelIds, personIds, start, end) {
-	    //TODO: searchObj.mandatoryFilters = {};
-//	    $scope.query(currentPage, pageItems, filterBy, filterByFields, orderBy, orderByReverse);
-	    offsetIndexToIncreament = 0;
 	    searchDTO = {
-		offsets: [0, 0, 0],
-		limit:  10,
+		page: 0,
+		size:  10,
 		tags:   tags,
 		channelIds: channelIds,
 		start: start,
 		end: end,
 		personIds: personIds
 	    };
+	    $location.search('channelIds', channelIds.join(','));
+	    $location.search('personId', personIds.join(','));
 	    QuoteSvc.search(searchDTO).success(searchCallback);
 	});
 	

@@ -94,7 +94,7 @@ app
 		    });
 
 		VideoSvc
-		    .findById(quote.videoId)
+		    .findById(quote.video.id)
 		    .success(getVideoQuotes);
 	    });
     } else if($routeParams.videoId !== undefined) {

@@ -49,7 +49,13 @@ app.config(['$httpProvider', function($httpProvider) {
 	       ResponseDialog.statusText = rejection.statusText;
 	       ResponseDialog.status = rejection.status;
 	       ResponseDialog.config = rejection.config;
-	       ResponseDialog.show();
+	       var ignoredPath = {};
+	       ignoredPath['/person/find'] = 
+	       ignoredPath['/tagName/searchByTag'] =
+	       ignoredPath['/channel/searchByName'] = true;
+	       if (!ignoredPath[rejection.config.url]) {
+		    ResponseDialog.show();
+	       }
 	      return $q.reject(rejection);
 	    }
 	};
