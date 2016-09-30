@@ -52,7 +52,7 @@ function YTPlayer(to) {
 		
 		playlist = quotes;
 		currentPlayingIndex=0;
-		load(quotes[0].videoId,quotes[0].start,quotes[0].end);
+		load(quotes[0].video.id,quotes[0].start,quotes[0].end);
 	    };
 	    
 	    var onReady = function(event) {};
