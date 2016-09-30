@@ -14,7 +14,7 @@ public class SearchDTO {
     public List<String> channelIds;
     public long start;
     public long end;
-    public int limit;
-    public int offsets[];
+    public int size;
+    public int page;
     
 }

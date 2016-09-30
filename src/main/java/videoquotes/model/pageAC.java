@@ -1,6 +1,6 @@
 package videoquotes.model;
 import java.util.Objects;
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document

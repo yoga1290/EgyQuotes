@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import videoquotes.model.Person;
-import videoquotes.model.repository.PersonRepository;
+import videoquotes.repository.mongo.PersonRepository;
 
 
 @Controller
@@ -27,8 +28,8 @@ public class PersonApi
     @ApiOperation(value = "Search for people by name", notes = "Search for people by name [offset|limit]")
     public @ResponseBody List<Person> findByName(
 	    @RequestParam String name,
-	    @RequestParam(required = false, defaultValue = "0") int offset,
-	    @RequestParam(required = false, defaultValue = "50") int limit) {
-	return personRepository.findByName(name, offset, limit);
+	    @RequestParam(required = false, defaultValue = "0") int page,
+	    @RequestParam(required = false, defaultValue = "50") int size) {
+	return personRepository.findByName(name, new PageRequest(page, size)).getContent();
     }
 }

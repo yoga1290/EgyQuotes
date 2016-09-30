@@ -6,6 +6,7 @@ import io.swagger.annotations.Authorization;
 import java.security.Principal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import videoquotes.errors.Unauthorized;
 import videoquotes.model.Reaction;
-import videoquotes.model.repository.ReactionRepository;
+import videoquotes.repository.mongo.ReactionRepository;
 import org.springframework.security.access.annotation.Secured;
 
 /**
@@ -33,9 +34,9 @@ public class ReactionApi {
     @RequestMapping(value = "/reaction/findByQuoteId", method = RequestMethod.GET)
     @ApiOperation(value = "Returns a list of Reactions for a given QuoteId", notes = "Returns a list of Reactions for a given QuoteId [offset|limit]")
     public @ResponseBody List<Reaction> findByQuoteId(@RequestParam String quoteId,
-	    @RequestParam(required = false, defaultValue = "0") int offset,
-	    @RequestParam(required = false, defaultValue = "50") int limit) {
-	return reactionRepository.findByQuoteId(quoteId, offset, limit);
+	    @RequestParam(required = false, defaultValue = "0") int page,
+	    @RequestParam(required = false, defaultValue = "10") int size) {
+	return reactionRepository.findByQuoteId(quoteId, new PageRequest(page, size)).getContent();
     }
 
     @RequestMapping(value = "/reaction/countByQuoteId", method = RequestMethod.GET)
