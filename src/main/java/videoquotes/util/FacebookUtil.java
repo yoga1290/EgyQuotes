@@ -12,19 +12,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class FacebookUtil {
     
-    @Value("${credentials.oauth.facebook.appId}")
+    @Value("${videoquotes.oauth.facebook.appId}")
     String APP_ID;
     
-    @Value("${credentials.oauth.facebook.pageId}")
+    @Value("${videoquotes.oauth.facebook.pageId}")
     String PAGE_ID;
     
-    @Value("${credentials.oauth.facebook.redirectUri}")
+    @Value("${videoquotes.oauth.facebook.redirectUri}")
     String REDIRECT_URL;
     
-    @Value("${credentials.oauth.facebook.appSecret}")
+    @Value("${videoquotes.oauth.facebook.appSecret}")
     String APP_SECRET;
     
-    @Value("${credentials.oauth.facebook.appAccessToken}")
+    @Value("${videoquotes.oauth.facebook.appAccessToken}")
     String APP_ACCESS_TOKEN;
 
     @Autowired
@@ -37,7 +37,6 @@ public class FacebookUtil {
     	if(st>-1)
     	{
 	    	txt=txt.substring(st+9,txt.length());
-		    txt=txt.substring(txt.indexOf("\"count\": ")+9,txt.indexOf("\n"));
 		    return Integer.parseInt(txt);
     	}
     	return 0;
@@ -68,10 +67,9 @@ public class FacebookUtil {
     }
 
     public static String getFacebookId(String access_token) {
+	System.out.println("FacebookUtil.getFacebookId\n\n\n\n\n\n\n");
 	String facebookId = url.readText("https://graph.facebook.com/me?access_token="+access_token);
 	return new JSONObject(facebookId).getString("id");
-	// return access_token;
-//	return facebookId.substring(facebookId.indexOf("\"id\":\"")+6,facebookId.indexOf("\","));
     }
 
 }
