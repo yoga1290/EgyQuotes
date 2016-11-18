@@ -20,19 +20,6 @@ app
 	    }
 	};
     }]);
-    var test ={};
-app.run(['$location', '$window', '$rootScope', function($location, $window, $rootScope) {
-    $rootScope.$on('$locationChangeStart', function() {
-      var unregister = $rootScope.$on('$locationChangeSuccess', function(e, to) {
-          unregister();
-          var path = to.match(/#(.*)/)[1];
-	  path = path.split('_=_').join('');
-          $window.history.replaceState(null, null, '/#' + path);
-          $location.$$absUrl = $window.location.href;
-          $location.replace();
-      });
-    });
-}]);
 app.config(['$routeProvider','$httpProvider', function($routeProvider, $httpProvider){
 	$routeProvider
 	.when('/', {
@@ -86,8 +73,6 @@ app.config(['$routeProvider','$httpProvider', function($routeProvider, $httpProv
 	    controller: 'WatchLaterCtrl'
 	})
   .when('/Favorites', {
-	    templateUrl: '/Favorites.html',
-	    controller: 'FavoritesCtrl'
 	})
 	.when('/favorites', {
 	    templateUrl: '/favorites.html',
