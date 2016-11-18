@@ -1,4 +1,4 @@
-package videoquotes.configuration;
+package videoquotes.security;
 
 import java.security.KeyPair;
 import org.springframework.beans.factory.annotation.Autowired;

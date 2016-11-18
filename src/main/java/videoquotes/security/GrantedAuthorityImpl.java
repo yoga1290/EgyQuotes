@@ -1,4 +1,4 @@
-package videoquotes.configuration;
+package videoquotes.security;
 
 import org.springframework.security.core.GrantedAuthority;
 
