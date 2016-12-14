@@ -73,6 +73,8 @@ app.config(['$routeProvider','$httpProvider', function($routeProvider, $httpProv
 	    controller: 'WatchLaterCtrl'
 	})
   .when('/Favorites', {
+	    templateUrl: '/Playlist.html',
+	    controller: 'PlaylistCtrl'
 	})
 	.when('/favorites', {
 	    templateUrl: '/favorites.html',
