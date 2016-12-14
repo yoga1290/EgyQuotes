@@ -20,19 +20,6 @@ app
 	    }
 	};
     }]);
-    var test ={};
-app.run(['$location', '$window', '$rootScope', function($location, $window, $rootScope) {
-    $rootScope.$on('$locationChangeStart', function() {
-      var unregister = $rootScope.$on('$locationChangeSuccess', function(e, to) {
-          unregister();
-          var path = to.match(/#(.*)/)[1];
-//	  path = path.split('_=_').join('/');
-          $window.history.replaceState(null, null, '/#' + path);
-//          $location.$$absUrl = $window.location.href;
-          $location.replace();
-      });
-    });
-}]);
 app.config(['$routeProvider','$httpProvider', function($routeProvider, $httpProvider){
 	$routeProvider
 	.when('/', {
@@ -86,8 +73,8 @@ app.config(['$routeProvider','$httpProvider', function($routeProvider, $httpProv
 	    controller: 'WatchLaterCtrl'
 	})
   .when('/Favorites', {
-	    templateUrl: '/Favorites.html',
-	    controller: 'FavoritesCtrl'
+	    templateUrl: '/Playlist.html',
+	    controller: 'PlaylistCtrl'
 	})
 	.when('/favorites', {
 	    templateUrl: '/favorites.html',
@@ -151,7 +138,8 @@ app.config(['$routeProvider','$httpProvider', function($routeProvider, $httpProv
        if (rejection.status === 401) {
          window.localStorage.removeItem('access_token');
          document.cookie = 'access_token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-	 return rejection.config;
+	 window.location.href = '/';
+//	 return rejection.config;
        }
         // do something on error
         return $q.reject(rejection);

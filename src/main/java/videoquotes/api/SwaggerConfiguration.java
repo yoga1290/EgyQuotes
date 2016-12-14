@@ -1,12 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package videoquotes.api;
 
-import com.google.common.base.Predicate;
 import static com.google.common.collect.Lists.newArrayList;
+import io.swagger.annotations.Contact;
+import io.swagger.annotations.ExternalDocs;
+import io.swagger.annotations.Info;
+import io.swagger.annotations.License;
+import io.swagger.annotations.SwaggerDefinition;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +19,6 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.GrantType;
 import springfox.documentation.service.LoginEndpoint;
-import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
@@ -28,20 +26,23 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger.web.ApiKeyVehicle;
 import springfox.documentation.swagger.web.SecurityConfiguration;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  *
  * @author yoga1290
  */
 @Configuration
+@EnableSwagger2
 public class SwaggerConfiguration {
     @Bean
     public Docket VideoQuotesApi() {                
 	return new Docket(DocumentationType.SWAGGER_2)          
 	  .select()
-	  .apis(RequestHandlerSelectors.basePackage("videoquotes.api"))
+	  .apis(RequestHandlerSelectors.basePackage(SwaggerConfiguration.class.getPackage().getName()))
 	  .paths(PathSelectors.any())
 	  .build()
+	  .securityContexts(Arrays.asList(securityContext()))
 	  .apiInfo(apiInfo());
     }
     
@@ -57,7 +58,7 @@ public class SwaggerConfiguration {
 
         return SecurityContext.builder()
                 .securityReferences(newArrayList(securityReference))
-                .forPaths(ant("/Quote"))//ant("/api/pet.*"))
+                .forPaths(ant("/**"))//ant("/api/pet.*"))
                 .build();
     }
     @Bean
@@ -70,11 +71,12 @@ public class SwaggerConfiguration {
     }
     @Bean
     public SecurityConfiguration securityInfo() {
-        return new SecurityConfiguration("swagger", "", "pets", "swagger", "swagger", ApiKeyVehicle.HEADER, "access_token", ",");
+	return new SecurityConfiguration(null, null, null, null, null, ApiKeyVehicle.HEADER, null, null);
+//        return new SecurityConfiguration("swagger", "", "pets", "swagger", "swagger", ApiKeyVehicle.HEADER, "access_token", ",");
     }
     
     List<GrantType> grantTypes() {
-	//TODO
+	//TODO: Add Authorization option to Swagger
         GrantType grantType = new ImplicitGrantBuilder()
                 .loginEndpoint(new LoginEndpoint("https://www.facebook.com/dialog/oauth?client_id=504291066443321&redirect_uri=https://videoquotes.herokuapp.com/OAuth/facebook/&scope=email&state=/index"))
                 .build();
@@ -98,3 +100,21 @@ private ApiInfo apiInfo() {
     return apiInfo;
 }
 }
+
+//@SwaggerDefinition(
+//        info = @Info(
+//                description = "My API",
+//                version = "V1.2.3",
+//                title = "The only API you'll ever need to learn about me",
+//                termsOfService = "share and care",
+//                contact = @Contact(name = "Sponge-Bob", email = "sponge-bob@swagger.io", url = "http://swagger.io"),
+//                license = @License(name = "Apache 2.0", url = "http://www.apache.org")
+
+//        consumes = {"application/json" },
+//        produces = {"application/json" },
+//        schemes = {SwaggerDefinition.Scheme.HTTP, SwaggerDefinition.Scheme.HTTPS},
+//        externalDocs = @ExternalDocs(value = "About me", url = "http://about.me/me")
+//)
+//class MyApiDefinition implements ReaderListener {
+//
+//} 

@@ -15,7 +15,7 @@ app.service('QuoteSvc',['$http','$q', function($http,$q){
 	}
 	 */
 	this.search = function(searchDTO) {
-	    return $http.post('/Quote/grid', searchDTO);
+	    return $http.post('/Quote/search', searchDTO);
 	};
 	this.trNgGrid = function(searchObj, isASC, isGlobal) {
 	    if(searchObj.mandatoryFilters===undefined) {

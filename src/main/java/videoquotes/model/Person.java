@@ -5,14 +5,13 @@
  */
 package videoquotes.model;
 
-import javax.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  *
  * @author yoga1290
  */
-@Document
+//@Document
 public class Person extends BasicRecord {
     
     private String name;

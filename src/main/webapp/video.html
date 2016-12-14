@@ -6,7 +6,7 @@
 		i.btn-circle.material-icons(ng-click="Favorites.add(quote)", ng-class="{'isFavorite': Favorites.isFavorites(quote)}") star
 		i.btn-circle.material-icons add_to_queue
 		i.btn-circle.material-icons share
-	.col-xs-12.col-md-offset-1.col-md-8.animated.slideInDown.ng-cloak(ng-show="showEdit||!quote",style="padding: 0px;position:absolute; z-index: 6; background-color: rgba(12, 12, 12, 0.68);")
+	.video-overlay.col-xs-12.col-md-offset-1.col-md-8.animated.slideInDown.ng-cloak(ng-show="showEdit||!quote")
 			ng-form.col-xs-12(name="quoteForm",ng-controller="QuoteEditorCtrl")
 
 				.timer.col-xs-12
@@ -31,6 +31,10 @@
 				.btn-box.col-xs-12.col-sm-3.gray(ng-click="save()", ng-disabled="quoteForm.$invalid")
 					i.material-icons save
 					| {{translation.VIDEO.SAVE}}
+	.playlist.video-overlay.col-xs-12.col-md-offset-1.col-md-8.animated.slideInDown.ng-cloak(ng-show="false")
+			ng-form.col-xs-12(name="playlistForm", ng-controller="PlaylistMenuCtrl")
+				input(type="text", ng-model="query", ng-keyup="searchByName()")
+
 	.col-xs-12.col-md-8.embed-responsive.embed-responsive-16by9
 		#video
 	.col-xs-12.col-md-3

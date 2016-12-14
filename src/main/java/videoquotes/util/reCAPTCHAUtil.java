@@ -14,7 +14,7 @@ public class reCAPTCHAUtil {
     @Autowired
     private URLUtil url;
     
-    @Value("${credentials.oauth.google.recaptcha.secret}")
+    @Value("${videoquotes.oauth.google.recaptcha.secret}")
     String SECRET;
     
     // https://developers.google.com/recaptcha/docs/verify

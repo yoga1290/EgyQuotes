@@ -1,10 +1,11 @@
-package videoquotes.model.repository;
+package videoquotes.repository;
 
+import videoquotes.repository.mongo.VideoRepository;
+import videoquotes.repository.mongo.QuoteRepository;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import videoquotes.model.Quote;
@@ -16,37 +17,27 @@ import videoquotes.util.YoutubeUtil;
  * @author yoga1290
  */
 @Service
-public class VideoRepository extends BasicRecordRepository<Video> {
+public class VideoSvc {
     
     @Autowired
     QuoteRepository quoteRepository;
     
-    public VideoRepository() {
-	super(Video.class);
-    }
+    @Autowired
+    VideoRepository videoRepository;
     
-    public List<Video> findByChannelIds(List<String> channelId, int offset, int limit) {
-	return find(new Query().addCriteria(Criteria.where("channelId").in(channelId)), offset, limit);
-    }
-    
-    public List<Video> findByChannelIdsWithinTime(List<String> channelId, long start, long end, int offset, int limit) {
-	return find(new Query().addCriteria(
-		Criteria.where("channelId").in(channelId))
-//		.addCriteria(Criteria.where("start").gte(start))
-//		.addCriteria(Criteria.where("end").lte(end))
-		,offset, limit);
-    }
+    @Autowired
+    YoutubeUtil youtubeUtil;
     
     // MUST Save Quote 1st
     @Async
-    public void updateOrInsertVideoRecord(Quote quote) {
+    public void updateOrInsertVideoRecord(Quote quote, String videoId) {
 	Video video;
-	String channelId = YoutubeUtil.getChannelId(quote.getVideoId());
+	String channelId = youtubeUtil.getChannelId(videoId);
 	//TODO: 
-	long publishedTime = YoutubeUtil.getPublishedTime(quote.getVideoId());
+	long publishedTime = youtubeUtil.getPublishedTime(videoId);
 	
 	try {
-	    video = findById(quote.getVideoId());
+	    video = videoRepository.findOne(videoId);
 	    video.getQuotes().add(quote.getId());
 	    
 	    List<Integer> start = video.getStart();
@@ -58,9 +49,9 @@ public class VideoRepository extends BasicRecordRepository<Video> {
 	    video.setStart(end);
 	}catch(Exception e) {
 	    video = new Video();
-	    video.setId(quote.getVideoId());
+	    video.setId(videoId);
 	    
-	    video.setChannelId(channelId);
+	    
 	    
 	    video.setQuotes(new LinkedList<String>());
 	    video.getQuotes().add(quote.getId());
@@ -73,11 +64,14 @@ public class VideoRepository extends BasicRecordRepository<Video> {
 	    end.add(quote.getEnd());
 	    video.setStart(end);
 	    
-	    video.setTime(publishedTime);
 	}
-	quote.setAiredTime(publishedTime);
+	video.setChannelId(channelId);
+	video.setTime(new Date(publishedTime));
+	videoRepository.save(video);
+	
+	quote.setAiredTime(new Date(publishedTime));
 	quote.setChannelId(channelId);
+	quote.setVideo(video);
 	quoteRepository.save(quote);
-	save(video);
     }
 }

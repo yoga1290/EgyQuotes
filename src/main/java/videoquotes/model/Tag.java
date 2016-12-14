@@ -1,12 +1,17 @@
 package videoquotes.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @Document
 public class Tag extends BasicRecord {
     
+    @Getter @Setter
     private String tag;
+    
+    @Getter @Setter
     private String quoteId;
 
     public Tag(String tag,String quoteId) {
@@ -19,21 +24,6 @@ public class Tag extends BasicRecord {
 	setId(quoteId + "_" + tag);
 	this.tag = tag;
 	this.quoteId = quoteId;
-    }
-
-
-
-    public String getTag() {
-	    return this.tag;
-    }
-    public void setTag(String tag) {
-	    this.tag = tag;
-    }
-    public String getQuoteId() {
-	    return this.quoteId;
-    }
-    public void setQuoteId(String quoteId) {
-	    this.quoteId = quoteId;
     }
 
 }

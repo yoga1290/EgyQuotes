@@ -19,11 +19,32 @@
 
 
 .col-md-11.col-sm-9.col-xs-12.section(ng-controller="QuoteGridCtrl")
+	img.img-circle(ng-repeat="channel in channelData", ng-src="{{channel.thumbnail}}")
+	.btn-circle(ng-repeat="author in authorsData") {{author}}
+
 	#quoteLoader
-		.col-md-4.col-sm-6.col-xs-12.clickable(ng-repeat="quote in items track by $index")
-			.quote.fadeInUp.animated.panel.panel-default.clickable(style="background-image: url('{{quote.thumbnail}}'); background-position-x: 50%;background-position-y: 50%; min-height: 200px;position: relative;",ng-click="onQuoteClick(quote)")
+		.col-md-3.col-sm-6.col-xs-12.clickable(style="padding:0px; border-left: 3px solid white;")
+			.quote.fadeInUp.animated.clickable(ng-repeat="quote in items track by $index", ng-if="$index%4==0", style="background-image: url('{{quote.thumbnail}}');",ng-click="onQuoteClick(quote)")
 				i.material-icons.quote.right format_quote
-				.panel-body(style="color:black;font-size:32px;") {{quote.quote}}
+				.body {{quote.quote}}
 				i.material-icons.quote.left format_quote
-				img.img-circle.col-md-3.col-xs-4(style="position:absolute;bottom:0px;right:0px;",ng-src="{{quote.logo}}")
+				img.logo.img-circle.col-xs-3(ng-src="{{quote.logo}}")
+		.col-md-3.col-sm-6.col-xs-12.clickable(style="padding:0px; border-left: 3px solid white;")
+			.quote.fadeInUp.animated.clickable(ng-repeat="quote in items track by $index", ng-if="$index%4==1", style="background-image: url('{{quote.thumbnail}}');",ng-click="onQuoteClick(quote)")
+				i.material-icons.quote.right format_quote
+				.body {{quote.quote}}
+				i.material-icons.quote.left format_quote
+				img.logo.img-circle.col-xs-3(ng-src="{{quote.logo}}")
+		.col-md-3.col-sm-6.col-xs-12.clickable(style="padding:0px; border-left: 3px solid white;")
+			.quote.fadeInUp.animated.clickable(ng-repeat="quote in items track by $index", ng-if="$index%4==2", style="background-image: url('{{quote.thumbnail}}');",ng-click="onQuoteClick(quote)")
+				i.material-icons.quote.right format_quote
+				.body {{quote.quote}}
+				i.material-icons.quote.left format_quote
+				img.logo.img-circle.col-xs-3(ng-src="{{quote.logo}}")
+		.col-md-3.col-sm-6.col-xs-12.clickable(style="padding:0px; border-left: 3px solid white;")
+			.quote.fadeInUp.animated.clickable(ng-repeat="quote in items track by $index", ng-if="$index%4==3", style="background-image: url('{{quote.thumbnail}}');",ng-click="onQuoteClick(quote)")
+				i.material-icons.quote.right format_quote
+				.body {{quote.quote}}
+				i.material-icons.quote.left format_quote
+				img.logo.img-circle.col-xs-3(ng-src="{{quote.logo}}")
 </jade>

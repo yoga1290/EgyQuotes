@@ -1,4 +1,5 @@
 {
+    "TITLE": "VideoQuotes",
     "DASH": {
 	"FACEBOOK_SIGIN": "Sign in via facebook",
 	"YOUTUBE_URL": "Youtube URL",
@@ -14,6 +15,11 @@
 	"AUTHOR": "Author",
 	"QUOTE": "Quote",
 	"SAVE": "Save"
+    },
+    "SEARCH": {
+	"CHANNELS": "Channels",
+	"PEOPLE": "People",
+	"TAGS": "Tags"
     },
     "ERROR": {
 	"0": "Connection is down?",

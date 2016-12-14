@@ -47,18 +47,18 @@ app.service('ChannelSvc',['$http','$q',function($http,$q) {
 	
 
 	var _searchByName = {};
-	this.searchByName = function(name, offset, limit) {
+	this.searchByName = function(name, page, size) {
 	    if(_searchByName[name] !== undefined)
 		return _searchByName[name];
 	    var asyncTask = $q.defer();
 	    var canceller=$q.defer();
 	    $http
-		.get('/channel/searchByName',{params:{name:name, offset:offset, limit:limit},timeout:canceller.promise})
+		.get('/channel/searchByName',{params:{name:name, page:page, size:size},timeout:canceller.promise})
 		.success(function(response){
 		    asyncTask.resolve(response);
 		})
 		.error(function(reason){
-		    _isVerified[name] = undefined;
+//		    _isVerified[name] = undefined;
 		    asyncTask.reject(reason);
 		});
 	    asyncTask.promise.abort=function(){

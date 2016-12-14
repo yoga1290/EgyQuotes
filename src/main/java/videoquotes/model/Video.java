@@ -1,8 +1,8 @@
 package videoquotes.model;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,7 +12,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Video extends BasicRecord {
 
-	@Id
+//	@Id
+    //TODO: useless field now?
 	private @Getter @Setter String videoId;
 	
 	private @Getter @Setter List<Integer> start;
@@ -23,9 +24,9 @@ public class Video extends BasicRecord {
 	
 	private @Getter @Setter String channelId;
 	
-	private @Getter @Setter long time;
+	private @Getter @Setter Date time;
 
-	public Video(){
+	public Video() {
 	    start = new LinkedList<Integer>();
 	    end = new LinkedList<Integer>();
 	    quotes = new LinkedList<String>();
@@ -40,7 +41,7 @@ public class Video extends BasicRecord {
 	    this.end=end;
 //		this.segments = segments;//Arrays.asList(segments);
 	}
-	public Video(String videoId,long time,String channelId,List<String> quotes,List<Integer> start,List<Integer> end){
+	public Video(String videoId,Date time,String channelId,List<String> quotes,List<Integer> start,List<Integer> end){
 	    this.setId(videoId);
 	    this.videoId = videoId;
 	    this.channelId = channelId;

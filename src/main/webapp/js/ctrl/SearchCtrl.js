@@ -1,9 +1,7 @@
-app.controller('SearchCtrl', ['$scope', 'TagSvc', 'TagNameSvc', 'PersonSvc', 'ChannelSvc',
-    function($scope, TagSvc, TagNameSvc, PersonSvc, ChannelSvc) {
-	
-	
-	$('#search input').focus();
-	$scope.field = '';
+app.controller('SearchCtrl', ['$scope', '$location', 'TagSvc', 'TagNameSvc', 'PersonSvc', 'ChannelSvc', 'VideoSvc',
+    function($scope, $location, TagSvc, TagNameSvc, PersonSvc, ChannelSvc, VideoSvc) {
+		
+	$scope.field = $location.search().query;
 	$scope.result = [];
 	$scope.selected = {
 	    people:{},
@@ -37,7 +35,16 @@ app.controller('SearchCtrl', ['$scope', 'TagSvc', 'TagNameSvc', 'PersonSvc', 'Ch
 	    _channels.abort();
 	    _channels =
 		ChannelSvc.searchByName(channelName, offset, limit).success(function(channels) {
-		    $scope.channels = channels;
+		    $scope.channels = [];
+		    angular.forEach(channels, function(channel) {
+			VideoSvc
+			    .getChannelData(channel.id)
+			    .success(function(response) {
+				channel.logo = response.items[0].snippet.thumbnails.default.url;
+				$scope.channels.push(channel);
+			    });
+			
+		    });
 		});
 	};
 	
@@ -72,7 +79,15 @@ app.controller('SearchCtrl', ['$scope', 'TagSvc', 'TagNameSvc', 'PersonSvc', 'Ch
 	};
 	$scope.search = function() {
 	    // TODO: #?tags=..&people=..
+//	    console.log($('#startTime').datepicker('getDate').getTime());
+//	    console.log($('#endTime').datepicker('getDate').getTime());
 	    var tags=[], personId=[], channelIds = [];
+	    if ($location.search().channelIds && $location.search().channelIds.split) {
+            channelIds = $location.search().channelIds.split(',');
+        }
+        if ($location.search().personId && $location.search().personId.split) {
+            personId = $location.search().personId.split(',');
+        }
 	    angular.forEach($scope.selected.tags, function(isSelected,tag) {
 		if (isSelected) {
 		    tags.push(tag);
@@ -88,8 +103,26 @@ app.controller('SearchCtrl', ['$scope', 'TagSvc', 'TagNameSvc', 'PersonSvc', 'Ch
 		    channelIds.push(channelId);
 		}
 	    });
-	    $scope.$emit('QuoteGridCtrl.query', tags, channelIds, personId, 0, new Date().getTime() );
+	    //TODO: start/end time?
+	    console.log($location.search().channelIds);
+
+	    var startTime = 0;
+        if( $('#startTime').datepicker('getDate')) {
+            startTime = $('#startTime').datepicker('getDate').getTime();
+        }
+
+        var endTime = new Date().getTime();
+        if( $('#endTime').datepicker('getDate')) {
+            endTime = $('#endTime').datepicker('getDate').getTime();
+        }
+	    $location
+	        .search('channelIds', channelIds.join(',') )
+	        .search('personId', personId.join(',') )
+	        .search('startTime', startTime)
+	        .search('endTime', endTime)
+	        .search('query', $scope.field);
+	    $scope.$emit('QuoteGridCtrl.query', tags, channelIds, personId, startTime, endTime );
 	};
-			
+	$('input#query').focus();
 			
 }]);
