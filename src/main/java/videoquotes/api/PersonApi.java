@@ -22,14 +22,21 @@ public class PersonApi
 {
     @Autowired
     PersonRepository personRepository;
-        
-    
-    @RequestMapping(value = "/find", method = RequestMethod.GET)
-    @ApiOperation(value = "Search for people by name", notes = "Search for people by name [offset|limit]")
-    public @ResponseBody List<Person> findByName(
-	    @RequestParam String name,
-	    @RequestParam(required = false, defaultValue = "0") int page,
-	    @RequestParam(required = false, defaultValue = "50") int size) {
-	return personRepository.findByName(name, new PageRequest(page, size)).getContent();
-    }
+
+
+	@RequestMapping(value = "/find", method = RequestMethod.GET)
+	@ApiOperation(value = "Search for people by name", notes = "Search for people by name [offset|limit]")
+	public @ResponseBody List<Person> findByName(
+			@RequestParam String name,
+			@RequestParam(required = false, defaultValue = "0") int page,
+			@RequestParam(required = false, defaultValue = "50") int size) {
+		return personRepository.findByName(name, new PageRequest(page, size)).getContent();
+	}
+
+	@RequestMapping(value = "/findById", method = RequestMethod.GET)
+	@ApiOperation(value = "Search for people by name", notes = "Search for people by name [offset|limit]")
+	public @ResponseBody Person findById(
+			@RequestParam String id) {
+		return personRepository.findOne(id);
+	}
 }
