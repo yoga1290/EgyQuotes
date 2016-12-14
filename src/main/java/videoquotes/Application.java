@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @PropertySource("videoquotes.properties")
-@PropertySource("file:oauth2server.properties")
+@PropertySource("oauth2server.properties")
 public class Application {
     public static void main(String[] args) {	
 	
