@@ -1,8 +1,10 @@
 target
 build
+.idea
 heroku/src
 heroku/target
 heroku/build
+heroku/.*
 /**/.DS_Store
 src/main/resources/keystore.jks
 src/main/resources/public_key.txt
