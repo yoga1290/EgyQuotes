@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,24 +35,23 @@ public class PlaylistApi {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "Search for people by name", notes = "Search for people by name [offset|limit]")
     public @ResponseBody Playlist find(
-	    @PathVariable String id,
-		Principal user) {
+	    @PathVariable String id) {
 		Playlist playlist = playlistRepository.findOne(id);
 		if (playlist.isPublic()) {
-			return playlist;
-		} else if (user.getName().equals(playlist.getCreatorId())) {
 			return playlist;
 		}
 		return null;
     }
-    
+
+	@Secured({"ROLE_USER"})
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "Search for people by name", notes = "Search for people by name [offset|limit]")
     public @ResponseBody List<Playlist> findByName(
 	    @RequestParam String name,
+		Principal user,
 	    @RequestParam(required = false, defaultValue = "0") int page,
 	    @RequestParam(required = false, defaultValue = "50") int size) {
-	return playlistRepository.findByName(name, new PageRequest(page, size)).getContent();
+	return playlistRepository.findByName(name, user.getName(), new PageRequest(page, size)).getContent();
     }
     
     @RequestMapping(method = RequestMethod.POST)

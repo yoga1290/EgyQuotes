@@ -1,12 +1,13 @@
 <jade>
 .dialog.animated.fadeInDown
 	.overlay
-	.col-md-1(style="padding:0px;")
+	.menu.col-md-1(style="padding:0px;")
 		i.edit.btn-circle.material-icons(ng-click="showEdit=!showEdit;", ng-class="{'open':showEdit}")
 		i.btn-circle.material-icons(ng-click="Favorites.add(quote)", ng-class="{'isFavorite': Favorites.isFavorites(quote)}") star
-		i.btn-circle.material-icons add_to_queue
+		i.btn-circle.material-icons(ng-click="showPlaylists=!showPlaylists") add_to_queue
 		i.btn-circle.material-icons share
-	.video-overlay.col-xs-12.col-md-offset-1.col-md-8.animated.slideInDown.ng-cloak(ng-show="showEdit||!quote")
+	add-to-playlist.video-overlay.animated.slideInDown.col-xs-12.col-md-8(ng-show="showPlaylists", ng-controller="PlaylistMenuCtrl", query="query", onchange="searchByName()", list="list")
+	.video-overlay.col-xs-12.col-md-offset-1.col-md-8.animated.slideInDown.ng-cloak(ng-show="showEdit")
 			ng-form.col-xs-12(name="quoteForm",ng-controller="QuoteEditorCtrl")
 
 				.timer.col-xs-12
@@ -37,21 +38,20 @@
 
 	.col-xs-12.col-md-8.embed-responsive.embed-responsive-16by9
 		#video
-	.col-xs-12.col-md-3
-		quote.col-xs-12(quote="quote",ng-show="quote")
-		.reaction-badge(ng-show="reactions[1].length") {{reactions[1].length}}
+	.menu.col-xs-12.col-md-3
+		quote.col-xs-12(ng-if="quote",quote="quote")
 		i.reaction.btn-circle.material-icons(ng-click="selectReaction(-1)")
-		.reaction-badge(ng-show="reactions[2].length") {{reactions[2].length}}
 		i.reaction.btn-circle.material-icons(ng-click="selectReaction(2)")
-		.reaction-badge(ng-show="reactions[3].length") {{reactions[3].length}}
 		i.reaction.btn-circle.material-icons(ng-click="selectReaction(3)")
-		.reaction-badge(ng-show="reactions[-1].length") {{reactions[-1].length}}
 		i.btn-circle.material-icons(ng-click="selectReaction(-1000)", style="color: red;border-color: red;background-color: rgb(84, 0, 0);") assistant_photo
+		.reaction-badge(ng-show="reactions[1].length") {{reactions[1].length}}
+		.reaction-badge(ng-show="reactions[2].length") {{reactions[2].length}}
+		.reaction-badge(ng-show="reactions[3].length") {{reactions[3].length}}
+		.reaction-badge(ng-show="reactions[-1].length") {{reactions[-1].length}}
 
 
 
-
-	.col-xs-12.col-md-offset-2.col-md-6
+	.col-xs-12.col-md-offset-2.col-md-6(ng-repeat="otherQuote in quotes")
 		.connector.col-md-offset-6
-		quote.clickable(ng-repeat="otherQuote in quotes", ng-hide="otherQuote.id==quote.id", quote="otherQuote", ng-click="openQuote(otherQuote)")
+		quote.clickable(ng-hide="otherQuote.id==quote.id", quote="otherQuote", ng-click="openQuote(otherQuote)")
 </jade>

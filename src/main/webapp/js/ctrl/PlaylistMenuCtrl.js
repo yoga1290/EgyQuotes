@@ -3,7 +3,7 @@ app
       function($scope, VideoSvc, ChannelSvc, PlaylistSvc) {
 
         $scope.query = '';
-        $scope.playlists = [];
+        $scope.list = [];
 
         var lastReq = {abort: function(){}};
         $scope.searchByName = function() {
@@ -11,7 +11,7 @@ app
             lastReq=
                 PlaylistSvc.searchByName($scope.query)
                 .success(function(response) {
-                    $scope.playlists = response;
+                    $scope.list = response;
                 });
         };
 
