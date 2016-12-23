@@ -11,7 +11,7 @@ import videoquotes.model.Playlist;
  */
 public interface PlaylistRepository extends BasicRecordRepository<Playlist> {
         
-    @Query("{ 'name': {$regex:?0, $options:'i'}, 'isDeleted': false }")
-    Slice<Playlist> findByName(String name, Pageable pageable);
+    @Query("{ 'name': {$regex:?0, $options:'i'}, 'creatorId': ?1, 'isDeleted': false }")
+    Slice<Playlist> findByName(String name, String creatorId, Pageable pageable);
 
 }

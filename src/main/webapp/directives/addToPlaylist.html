@@ -1,0 +1,8 @@
+<jade>
+ng-form.col-xs-12(name="playlistForm")
+	input#playlist(placeholder="{{translation.VIDEO.AUTHOR}}",name="playlistTitle",ng-model="query", ng-keyup="onchange()", required,ng-class="{'has-error': playlistForm.playlistTitle.$invalid}")
+	#playlist.col-xs-12
+		.item(ng-repeat="item in list")
+			i.material-icons add_circle_outline
+			| {{item.name}}
+</jade>
