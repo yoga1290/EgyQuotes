@@ -34,3 +34,11 @@
     left: 0px;
     float: left;
 }
+
+#search-panel {
+    position:absolute;
+    left:0px;
+    top:70px;
+    margin-top:70px;
+    min-height:250px;
+}

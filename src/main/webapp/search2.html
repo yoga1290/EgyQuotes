@@ -4,10 +4,23 @@
 	#search.stickable(style="height:0px;")
 		input(type="text",id="query",ng-model="field",ng-keyup="query();",placeholder="search")
 		i.material-icons search
-	#search-panel.col-xs-12.col-md-8.col-md-offset-2(style="position:absolute;left:0px;top:70px;margin-top:70px;")
+	#search-panel.col-xs-12.col-md-8.col-md-offset-2
 		input#startTime.col-xs-12.col-md-offset-2.col-md-4(type="text",data-provide="datepicker",placeholder="start date")
 		input#endTime.col-xs-12.col-md-4(type="text",data-provide="datepicker", placeholder="end date")
 		.col-xs-12.col-sm-4
+			.panel.panel-default
+				.panel-body
+					.col-xs-12
+						.col-xs-12(style="float:none;")
+							i.material-icons(style="font-size: 48px;") live_tv
+						.col-xs-12 {{translation.SEARCH.CHANNELS}}
+		.col-xs-12.col-sm-4
+			.panel.panel-default
+				.panel-body
+					.col-xs-12
+						.col-xs-12(style="float:none;")
+							i.material-icons(style="font-size: 48px;") face
+						.col-xs-12 {{translation.SEARCH.PEOPLE}}
 			.panel.panel-default
 				.panel-body
 					.col-xs-12

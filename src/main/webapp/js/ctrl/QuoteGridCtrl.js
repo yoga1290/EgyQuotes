@@ -1,5 +1,5 @@
-app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', '$rootScope', 
-    function($scope, $location, QuoteSvc, VideoSvc, $rootScope) {
+app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 'PersonSvc', '$rootScope',
+    function($scope, $location, QuoteSvc, VideoSvc, PersonSvc, $rootScope) {
 	
 	var fadeIndex = 0;
 	function animate() {
@@ -23,6 +23,9 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
 	    end: new Date().getTime(),
 	    personIds: []
 	};
+	$scope.getChannelLogo = function(channelId) {
+	    VideoSvc.getChannelData(channelId);
+	};
 	var offsetIndexToIncreament = 0;
 	var page = 10;
 	function searchCallback(response) {
@@ -42,7 +45,7 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
 
 		});
 	    if (response.length > 0) {
-		searchDTO.page++;   
+		    searchDTO.page++;
 	    }
 	    isBusy = false;
 	}
@@ -126,29 +129,57 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
 		isBusy = true;
 		QuoteSvc.trNgGrid(searchObj,orderByReverse,isGlobal).success(callback);
 	};
-	
+
+
+	$scope.channelData = {};
+	function updateChannelData() {
+    	$scope.channelData = {};
+    	if (!$location.search().channelIds) return;
+	    var channelIds = $location.search().channelIds.split(',');
+	    angular.forEach(channelIds, function(channelId) {
+            VideoSvc.getChannelData(channelId)
+                .success(function(response) {
+                    response.thumbnail = response.items[0].snippet.thumbnails.default.url;
+                    $scope.channelData[channelId] = response;
+                });
+        });
+	}
+	updateChannelData();
+
+	$scope.authorsData = [];
+    function updateAuthorsData() {
+        $scope.authorsData = [];
+        if (!$location.search().personId) return;
+        var personIds = $location.search().personId.split(',');
+        angular.forEach(personIds, function(personId) {
+            PersonSvc.findById(personId).success(function(response) {
+                $scope.authorsData.push(response.name);
+            });
+        });
+    }
+    updateAuthorsData();
+
 	$rootScope.$on('QuoteGridCtrl.query', function (event, tags, channelIds, personIds, start, end) {
 	    searchDTO = {
-		page: 0,
-		size:  10,
-		tags:   tags,
-		channelIds: channelIds,
-		start: start,
-		end: end,
-		personIds: personIds
-	    };
-	    $location.search('channelIds', channelIds.join(','));
-	    $location.search('personId', personIds.join(','));
+            page: 0,
+            size:  10,
+            tags:   tags,
+            channelIds: channelIds,
+            start: start,
+            end: end,
+            personIds: personIds
+        };
+	    $scope.items = [];
+	    if (channelIds && channelIds.length>0) {
+	        updateChannelData();
+	    }
+	    if (personIds && personIds.length>0) {
+	        updateAuthorsData();
+	    }
+	    if (tags && tags.length>0) {
+	    }
 	    QuoteSvc.search(searchDTO).success(searchCallback);
 	});
-	
-	$scope.more = function() {
-	    if(hasNext && !isBusy) {
-		searchObj.currentPage += searchObj.pageItems;
-		isBusy = true;
-		QuoteSvc.trNgGrid(searchObj, $scope.orderByReverse, $scope.isGlobal).success(callback);
-	    }
-	};
 	
 	var init = function() {
 		var tmp=
@@ -165,11 +196,9 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
 			var s=$('body').scrollTop();
 			if(s+h>=H && !isBusy)
 			    loadMore();
-//				$scope.more();
 		});
 	};
 	init();
-//	$scope.more();
 	isBusy = true;
 	QuoteSvc.search(searchDTO).success(searchCallback);
 }]);
