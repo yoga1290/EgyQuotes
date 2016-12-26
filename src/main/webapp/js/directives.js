@@ -23,7 +23,10 @@ app
   	scope: {
   	    query: '=query',
         list: '=list',
-        onchange: '&onchange'
+        onchange: '&onchange',
+        addToPlaylist: '&addlist',
+        newPlaylist: '&newlist',
+        quote: '=quote'
   	},
   	templateUrl: '/directives/addToPlaylist.html'
       };

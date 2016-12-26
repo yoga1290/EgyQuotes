@@ -5,13 +5,13 @@ app.service('PlaylistSvc',['$http','$q',function($http,$q) {
 	};
 	
 	var _searchByName = {};
-	this.searchByName = function(name) {
+	this.searchByName = function(name, quoteId) {
 	    if(_searchByName[name] !== undefined)
 		return _searchByName[name];
 	    var asyncTask = $q.defer();
 	    var canceller=$q.defer();
 	    $http
-		.get('/playlist', {params:{name:name},timeout:canceller.promise})
+		.get('/playlist', {params:{name:name, quoteId: quoteId},timeout:canceller.promise})
 		.success(function(response){
 		    asyncTask.resolve(response);
 		})
@@ -34,13 +34,17 @@ app.service('PlaylistSvc',['$http','$q',function($http,$q) {
 		asyncTask.promise.then(cb,cb);
 		return asyncTask.promise;
 	    };
-	    return _searchByName[name] = asyncTask.promise;
+	    //TODO: memoize by quoteId & name now?
+//	    _searchByName[name] = asyncTask.promise;
+	    return asyncTask.promise;
 	};
 	
-	this.insert = function(playlist) {
-	    return $http.post('/playlist', playlist, {params: {
-		    access_token: localStorage.getItem('access_token')
-	    }});
+	this.insert = function(name, quotes) {
+	    return $http.post('/playlist', {name: name, quotes: quotes} );
 	};
+
+	this.update = function(id, name, quotes) {
+        return $http.put('/playlist', {name: name, quotes: quotes}, {params: {id: id}} );
+    };
 	
     }]);
