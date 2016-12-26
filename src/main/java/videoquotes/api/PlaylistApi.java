@@ -46,14 +46,16 @@ public class PlaylistApi {
 	@Secured({"ROLE_USER"})
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "Search for people by name", notes = "Search for people by name [offset|limit]")
-    public @ResponseBody List<Playlist> findByName(
+    public @ResponseBody List<Playlist> findByNameExcludingQuoteId(
 	    @RequestParam String name,
+		@RequestParam String quoteId,
 		Principal user,
 	    @RequestParam(required = false, defaultValue = "0") int page,
 	    @RequestParam(required = false, defaultValue = "50") int size) {
-	return playlistRepository.findByName(name, user.getName(), new PageRequest(page, size)).getContent();
+	return playlistRepository.findByNameExcludingQuoteId(name, quoteId, user.getName(), new PageRequest(page, size)).getContent();
     }
-    
+
+	@Secured({"ROLE_USER"})
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "Search for people by name", notes = "Search for people by name [offset|limit]")
     public @ResponseBody Playlist save(PlaylistDTO dto) {
@@ -61,7 +63,8 @@ public class PlaylistApi {
 		playlist = playlistRepository.save(playlist);
 		return playlist;
     }
-    
+
+	@Secured({"ROLE_USER"})
     @RequestMapping(method = RequestMethod.PUT)
     @ApiOperation(value = "Search for people by name", notes = "Search for people by name [offset|limit]")
     public @ResponseBody Playlist update(

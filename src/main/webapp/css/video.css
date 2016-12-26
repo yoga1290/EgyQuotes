@@ -97,6 +97,9 @@ i.material-icons#author {
     width: 48.5%;
     min-height: 50px;
 }
+.timer i.material-icons {
+    font-size: 45px;
+}
 .timer i.left.material-icons {
     position: absolute;
     left: 20px;
@@ -175,6 +178,7 @@ i.material-icons#author {
 .connector {
     height: 20px;
     border-left: 10px solid;
+    border-color: white;
 }
 
 
