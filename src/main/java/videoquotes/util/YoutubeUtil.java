@@ -1,6 +1,7 @@
 package videoquotes.util;
 
 import java.text.SimpleDateFormat;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -81,6 +82,18 @@ public class YoutubeUtil {
 	//*/
     	return 0;
     }
+
+	public String getVideoPreview(String videoId)
+	{
+		String txt=url.readText("https://www.googleapis.com/youtube/v3/videos?part=snippet&id="+videoId+"&key="+ API_KEY);
+		return new JSONObject(txt)
+				.getJSONArray("items")
+				.getJSONObject(0)
+				.getJSONObject("snippet")
+				.getJSONObject("thumbnails")
+				.getJSONObject("high")
+				.getString("url");
+	}
     
 //    public static String isChannelTrusted(String videoId)
 //    {
