@@ -1,0 +1,16 @@
+<jade>
+.dialog.animated.fadeIn(ng-show="response.isVisible", style="z-index: 5;")
+	.overlay
+	.animated.shake.col-xs-12.col-sm-offset-3.col-sm-6.panel.panel-default.quote(style="top: 70px;")
+		.panel-body
+			.col-xs-12.col-sm-6
+				h1 {{response.status}}
+			.col-xs-12.col-sm-6
+				p {{response.config.method}}
+			.col-xs-12
+				p(style="overflow-x: scroll") {{response.config.url}}
+			.col-xs-12.col-sm-12
+				h3 {{translation.ERROR[response.status]}}
+			.col-xs-12
+				.btn-box(ng-click="response.isVisible = false") Close
+</jade>

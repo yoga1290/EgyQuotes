@@ -3,8 +3,9 @@ app.service('ResponseDialog', [function(){
     this.status = 0;
     this.config = {}; // in case of starting new request
     var _this = this;
+    this.isVisible = false;
     this.show = function() {
-	window.location.href = '#/ResponseDialog/' + _this.status;
+        _this.isVisible = true;
     };
 }]);
 

@@ -2,7 +2,7 @@
 ng-form.col-xs-12(name="playlistForm")
 	input#playlist(placeholder="{{translation.VIDEO.AUTHOR}}",name="playlistTitle",ng-model="query", ng-keyup="onchange(query, quote)", required,ng-class="{'has-error': playlistForm.playlistTitle.$invalid}")
 	#playlist.col-xs-12
-		.item(ng-repeat="item in list", ng-show="list.length", ng-click="addToPlaylist(item, quote)")
+		.item(ng-repeat="item in list", ng-show="list.length", ng-click="addPlaylist(item, quote)")
 			i.material-icons add_circle_outline
 			| {{item.name}}
 		.item(ng-hide="list.length")

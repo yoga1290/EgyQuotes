@@ -16,10 +16,10 @@ app
         };
 
         $scope.newPlaylist = function(quote) {
-            PlaylistSvc.insert($scope.query, [quote]);
+           PlaylistSvc.insert($scope.query, [quote]);
         };
 
-        $scope.addToPlaylist = function(playlist, quote) {
+        $scope.addPlaylist = function(playlist, quote) {
             PlaylistSvc.update(playlist.id, playlist.name, playlist.quotes.append(quote) );
         };
 

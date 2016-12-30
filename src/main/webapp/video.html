@@ -6,7 +6,7 @@
 		i.btn-circle.material-icons(ng-click="Favorites.add(quote)", ng-class="{'isFavorite': Favorites.isFavorites(quote)}") star
 		i.btn-circle.material-icons(ng-click="showPlaylists=!showPlaylists") add_to_queue
 		i.btn-circle.material-icons share
-	add-to-playlist.video-overlay.animated.slideInDown.col-xs-12.col-md-8(ng-show="showPlaylists", ng-controller="PlaylistMenuCtrl", query="query", onchange="onchange", list="list", addlist="addToPlaylist", newlist="newPlaylist", quote="quote")
+	add-to-playlist.video-overlay.animated.slideInDown.col-xs-12.col-md-8(ng-show="showPlaylists", query="query", quote="quote")
 	.video-overlay.col-xs-12.col-md-offset-1.col-md-8.animated.slideInDown.ng-cloak(ng-show="showEdit")
 			ng-form.col-xs-12(name="quoteForm",ng-controller="QuoteEditorCtrl")
 

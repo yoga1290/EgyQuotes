@@ -12,22 +12,43 @@ app
       return {
   	restrict: 'E',
   	scope: {
-  	    response: '=response'
+  	    // response: '=response'
   	},
+    controller: ['$scope', 'ResponseDialog', function($scope, ResponseDialog) {
+      $scope.response = ResponseDialog;
+    }],
   	templateUrl: '/directives/errorDialog.html'
       };
   })
-.directive('addToPlaylist', function() {
+  .directive('addToPlaylist', function() {
       return {
   	restrict: 'E',
   	scope: {
-  	    query: '=query',
-        list: '=list',
-        onchange: '&onchange',
-        addToPlaylist: '&addlist',
-        newPlaylist: '&newlist',
         quote: '=quote'
   	},
+    controller: 'PlaylistMenuCtrl',
   	templateUrl: '/directives/addToPlaylist.html'
       };
-  });
+  })
+  .directive('quoteEditor', function() {
+        return {
+    	restrict: 'E',
+    	scope: {
+        // 'onDecreasePlaybackRate': '&',
+        // 'onIncreasePlaybackRate': '&',
+        // 'onPause': '&',
+        // 'onStartTimeChange': '&',
+        // 'onEndTimeChange': '&',
+        // 'onSelectAuthor': '&',
+        // 'onSave': '&',
+        //TODO: YTPlayer is not accessable here?
+        'YTPlayer': '=',
+        'startTime': '=',
+        'endTime': '=',
+        'authorName': '=',
+        'quote': '='
+    	},
+      controller: 'QuoteEditorCtrl',
+    	templateUrl: '/directives/quoteEditor.html'
+        };
+    });
