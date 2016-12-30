@@ -7,6 +7,7 @@ app
 }])
 .directive('pageLoader', function() {
     return {
+      controller: 'PageLoaderCtrl',
 	    templateUrl: 'page-loader.html'
     };
 })
