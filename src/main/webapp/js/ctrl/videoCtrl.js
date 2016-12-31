@@ -53,33 +53,6 @@ app
 	});
     }
 
-    sp.selectReaction = function(reaction) {
-	ReactionSvc
-	    .insert($routeParams.quoteId, reaction)
-	    .success(function(response) {
-		updateReactions();
-	    });
-    };
-    sp.reactions = [];
-    function updateReactions() {
-	ReactionSvc
-	    .findByQuoteId($routeParams.quoteId)
-	    .success(function(response) {
-		console.log(response);
-		//TODO:
-    		sp.reactions = {};
-        angular.forEach(response, function(reaction) {
-          if (sp.reactions[reaction.reaction] === undefined) {
-            sp.reactions[reaction.reaction] = [reaction];
-          } else {
-            sp.reactions[reaction.reaction].push(reaction);
-          }
-        });
-        console.log('reactions:',reactions);
-	    });
-    }
-    updateReactions();
-
     sp.$routeParams = $routeParams;
     if($routeParams.quoteId !== undefined) {
 	QuoteSvc.findById($routeParams.quoteId)

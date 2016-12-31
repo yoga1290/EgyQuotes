@@ -51,4 +51,14 @@ app
       controller: 'QuoteEditorCtrl',
     	templateUrl: '/directives/quoteEditor.html'
         };
+    })
+    .directive('quoteReaction', function() {
+        return {
+        restrict: 'E',
+        scope: {
+        'quote': '='
+        },
+        controller: 'QuoteReactionCtrl',
+        templateUrl: '/directives/quoteReaction.html'
+        };
     });
