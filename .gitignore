@@ -1,0 +1,16 @@
+
+*.xml
+
+*.json
+
+*.sh
+
+*.properties
+
+*.java
+
+target
+
+config
+
+build
