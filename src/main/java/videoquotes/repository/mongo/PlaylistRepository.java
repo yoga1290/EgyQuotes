@@ -14,4 +14,8 @@ public interface PlaylistRepository extends BasicRecordRepository<Playlist> {
     @Query("{ 'name': {$regex:?0, $options:'i'}, 'creatorId': ?1, 'isDeleted': false }")
     Slice<Playlist> findByName(String name, String creatorId, Pageable pageable);
 
+    @Query("{ 'name': {$regex:?0, $options:'i'}, 'quotes.$id': {$ne: ?1}, 'creatorId': ?2, 'isDeleted': false }")
+    Slice<Playlist> findByNameExcludingQuoteId(String name, String quoteId, String creatorId, Pageable pageable);
+
+
 }
