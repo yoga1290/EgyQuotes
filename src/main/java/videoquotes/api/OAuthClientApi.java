@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import videoquotes.repository.mongo.UserRepository;
 import videoquotes.util.FacebookUtil;
 import videoquotes.util.GoogleUtil;
+import videoquotes.util.MailUtil;
 import videoquotes.util.URLUtil;
 
 
@@ -58,6 +59,18 @@ public class OAuthClientApi
 	 return "/";
     }
     
+	@Autowired
+	MailUtil mailUtil;
+
+	@RequestMapping("/email")
+	@ApiOperation(value = "Login/Sign via Email", notes = "RO Password flow")
+	public String email(@RequestParam String email, HttpServletResponse response) throws Exception {
+		String tokenResponse = URLUtil.sendPost(BASE_URL + "/oauth/token?grant_type=password&username=email:" + email + "&password=&client_id=h5&scope=openid", "");
+		String access_token = new JSONObject(tokenResponse).getString("access_token");
+		mailUtil.send(email, access_token);
+		return "/";
+	}
+
     @RequestMapping("/google/")
     @ApiOperation(value = "Login/Sign via Google", notes = "RO Password flow")
     public String google2JWT(@RequestParam String code, HttpServletResponse response) throws Exception {

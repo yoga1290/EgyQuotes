@@ -14,5 +14,8 @@ public interface UserRepository extends BasicRecordRepository<User> {
     
     @Query("{ 'name': {$regex:?0, $options:'i'} }")
     User findOneByName(String name);
+
+    @Query("{ 'email': ?0 }")
+    User findOneByEmail(String email);
     
 }

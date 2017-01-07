@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User extends BasicRecord {
     
     private @Getter @Setter String name;
+    private @Getter @Setter String email;
     private @Getter @Setter String facebookId;
     private @Getter @Setter boolean enabled;
     private @Getter @Setter boolean accountNonExpired;

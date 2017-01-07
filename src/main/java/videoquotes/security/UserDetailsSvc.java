@@ -50,6 +50,10 @@ public class UserDetailsSvc implements UserDetailsService {
 	    return findUserDetailsByGoogleAccessToken(username.substring(3));
 	}
 	return findUserDetailsByUsername(username);//*/
+	if (username.indexOf("email:") == 0) {
+		return findUserDetailsByEmail(username.substring(6));
+	}
+	return findUserDetailsById(username);//*/
     }
 
     private UserDetails findUserDetailsByFacebookAccessToken(String accessToken) {
@@ -72,6 +76,21 @@ public class UserDetailsSvc implements UserDetailsService {
 	}
 	return new UserDetailsImpl(user);
     }
+
+	private UserDetails findUserDetailsByEmail(String email) {
+		User user = userRepository.findOneByEmail(email);
+		if (user == null) {
+			user = new User();
+			user.setEnabled(true);
+			user.setAccountNonExpired(true);
+			user.setAccountNonLocked(true);
+			List<String> authority = new LinkedList<>();
+			authority.add("ROLE_USER");
+			user.setGrantedAuthorities(authority);
+			userRepository.save(user);
+		}
+		return new UserDetailsImpl(user);
+	}
     
     private UserDetails findUserDetailsByGoogleAccessToken(String accessToken) {
 	System.out.println("\n\n\n\n\n\n\n\n\n\n findUserDetailsByFacebookAccessToken");
