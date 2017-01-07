@@ -21,12 +21,19 @@ keytool -genkeypair -alias $APP_NAME -keyalg RSA -keypass $PASSWORD -keystore $K
 keytool -list -rfc --keystore $KEYSTORE -storepass $PASSWORD | openssl x509 -inform pem -pubkey | head -9 >$PUBLIC_KEY;
 
 # Update oauth2server.properties:
-echo 'oauth2.storepass='$PASSWORD'\noauth2.key='$APP_NAME >oauth2server.properties;
+echo 'oauth2.storepass='$PASSWORD'\noauth2.key='$APP_NAME >src/main/resources/oauth2server.properties;
 
+# Copy configuration
+cp config/prod/*.properties src/main/resources;
 
 #####################################################
 # Clean, Build and push to Heroku as Git Repository #
 #####################################################
+#
+cp -R src heroku;
+cp pom.xml heroku;
+cd heroku;
+#####################
 
 mvn clean package;
 
