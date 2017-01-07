@@ -1,13 +1,11 @@
 package videoquotes.model.repository;
 
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import videoquotes.model.Tag;
 import videoquotes.model.TagName;
+import videoquotes.repository.mongo.BasicRecordRepository;
 
 /**
  *
