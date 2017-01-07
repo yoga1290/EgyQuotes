@@ -42,18 +42,16 @@ public class UserDetailsSvc implements UserDetailsService {
 
 		return new UserDetailsImpl(testUser); //*/
 //*/
-	System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n loadUserByUsername:" + username + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-	if (username.indexOf("fb:") == 0) {
-	    return findUserDetailsByFacebookAccessToken(username.substring(3));
-	}
-	if (username.indexOf("g:") == 0) {
-	    return findUserDetailsByGoogleAccessToken(username.substring(3));
-	}
-	return findUserDetailsByUsername(username);//*/
-	if (username.indexOf("email:") == 0) {
-		return findUserDetailsByEmail(username.substring(6));
-	}
-	return findUserDetailsById(username);//*/
+		if (username.indexOf("fb:") == 0) {
+			return findUserDetailsByFacebookAccessToken(username.substring(3));
+		}
+		if (username.indexOf("g:") == 0) {
+			return findUserDetailsByGoogleAccessToken(username.substring(3));
+		}
+		if (username.indexOf("email:") == 0) {
+			return findUserDetailsByEmail(username.substring(6));
+		}
+		return findUserDetailsByUsername(username);//*/
     }
 
     private UserDetails findUserDetailsByFacebookAccessToken(String accessToken) {
