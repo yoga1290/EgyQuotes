@@ -25,6 +25,9 @@ public class OpenGraphApi
 	@Autowired
 	YoutubeUtil youtubeUtil;
 
+	@Value("${videoquotes.baseUrl}")
+	String BASE_URL;
+
 	@Value("${videoquotes.oauth.facebook.appId}")
 	String APP_ID;
 
@@ -46,7 +49,7 @@ public class OpenGraphApi
 				"<meta property=\"og:title\"              content=\"" + quote.getQuote() + "\" />\n" +
 				"<meta property=\"og:description\"        content=\"" + quote.getPerson().getName() + "\" />\n" +
 				"<meta property=\"og:image\"              content=\"" + logo + "\" />\n" +
-				"</head><body><script>window.location.href = 'https://videoquotes.herokuapp.com/#/quote/" + id + "'; </script></body></html>";
+				"</head><body><script>window.location.href = '" + BASE_URL + "/#/quote/" + id + "'; </script></body></html>";
     }
 
 }
