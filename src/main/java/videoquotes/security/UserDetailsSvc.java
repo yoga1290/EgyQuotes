@@ -80,6 +80,7 @@ public class UserDetailsSvc implements UserDetailsService {
 		if (user == null) {
 			user = new User();
 			user.setEnabled(true);
+			user.setEmail(email);
 			user.setAccountNonExpired(true);
 			user.setAccountNonLocked(true);
 			List<String> authority = new LinkedList<>();
