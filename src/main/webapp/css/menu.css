@@ -25,6 +25,15 @@ i.material-icons.login:hover {
   color: #37beff;
   background-color: #0b346f;
 }
+
+.menu i.material-icons {
+    font-size: 64px;
+}
+
+.menu img.img-circle {
+    max-width: 74px;
+    max-height: 74px;
+}
 /*.menu-overlay {
     transition: 2s cubic-bezier(0.86, 0, 0.07, 1);
     top: -50%;
