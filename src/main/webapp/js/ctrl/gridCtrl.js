@@ -4,13 +4,13 @@ app.controller('gridCtrl',
 		    sp.quotes=[];
 		    sp.PageLoader = PageLoader;
 		    sp.ResponseDialog = ResponseDialog;
-		    
-		    var onload=(function(){
-			if(location.href.indexOf("access_token=")>0) {
-			    localStorage.setItem('access_token',location.href.substring(location.href.indexOf("access_token=")+13,location.href.indexOf('&expires')));
-			}
-		    }());
-		    
+
+//		    var onload=(function(){
+//			if(location.href.indexOf("access_token=")>0) {
+//			    localStorage.setItem('access_token',location.href.substring(location.href.indexOf("access_token=")+13,location.href.indexOf('&expires')));
+//			}
+//		    }());
+
 		    sp.onQuoteClick=function(quote) {
 			$location.path('/quote/' + quote.id);
 		    };

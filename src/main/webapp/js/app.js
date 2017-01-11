@@ -96,22 +96,35 @@ app.config(['$routeProvider','$httpProvider', function($routeProvider, $httpProv
     return {
       // optional method
       'request': function(config) {
-        // do something on success
+        // same domain only:
         if (config.url.indexOf('/') === 0) {
           if (config.headers['Authentication'] !== undefined) {
             window.localStorage.setItem('access_token', config.headers['Authentication']);
           }
 
-          window.document.cookie.split(';').map(function(cookie) {
-           cookie = cookie.split('=');
-           if (cookie[0].indexOf('access_token') > -1) {
-             config.headers['Authorization'] = 'Bearer ' + cookie[1];
-             window.localStorage.setItem('access_token', cookie[1]);
-           }
-          });
 
           if (window.localStorage.getItem('access_token') !== undefined && window.localStorage.getItem('access_token') !== null) {
             config.headers['Authorization'] = 'Bearer ' + window.localStorage.getItem('access_token');
+            if (config.param) {
+                config.param['access_token'] = window.localStorage.getItem('access_token');
+            } else {
+                config.param = { access_token: window.localStorage.getItem('access_token') };
+            }
+          }
+          else {
+            // fallback to cookies:
+            window.document.cookie.split(';').map(function(cookie) {
+               cookie = cookie.split('=');
+               if (cookie[0].indexOf('access_token') > -1) {
+                 config.headers['Authorization'] = 'Bearer ' + cookie[1];
+                 if (config.param) {
+                     config.param['access_token'] = cookie[1];
+                 } else {
+                     config.param = { access_token: cookie[1]};
+                 }
+                 window.localStorage.setItem('access_token', cookie[1]);
+               }
+            });
           }
         }
 
@@ -138,8 +151,8 @@ app.config(['$routeProvider','$httpProvider', function($routeProvider, $httpProv
        if (rejection.status === 401) {
          window.localStorage.removeItem('access_token');
          document.cookie = 'access_token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-	 window.location.href = '/';
-//	 return rejection.config;
+//TODO: login page
+//	 window.location.href = '/';
        }
         // do something on error
         return $q.reject(rejection);
