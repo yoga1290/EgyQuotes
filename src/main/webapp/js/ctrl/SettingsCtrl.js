@@ -17,7 +17,7 @@ function($scope,QuoteSvc,TagSvc, ChannelSvc, VideoSvc) {
 		    if(o >= total)
 			Base64.download(JSON.stringify(exported),'quotes.json');
 		    else
-			QuoteSvc.list(o,Math.min(total-o,page)).success(function(response){
+			QuoteSvc.list(o, page).success(function(response){
 			    angular.forEach(response,function(quote,i){
 				TagSvc.findByQuoteId(quote.id).success(function(tags){
 				    quote.tags=tags;
@@ -25,7 +25,7 @@ function($scope,QuoteSvc,TagSvc, ChannelSvc, VideoSvc) {
 
 				})
 				.finally(function(){
-				    if(i === response.length-1) load(o+page);
+				    if(i === response.length-1) load(o+1);
 				});
 				
 			    });
