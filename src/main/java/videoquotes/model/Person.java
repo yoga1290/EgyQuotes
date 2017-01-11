@@ -5,15 +5,18 @@
  */
 package videoquotes.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  *
  * @author yoga1290
  */
-//@Document
+@Document
 public class Person extends BasicRecord {
-    
+
+	@Getter @Setter
     private String name;
 
     public Person(String name) {
@@ -26,12 +29,5 @@ public class Person extends BasicRecord {
 	    name=name.replace("إ","ا");
 	super.setId(name);
     }
-    
-    public String getName() {
-	return name;
-    }
 
-    public void setName(String name) {
-	this.name = name;
-    }
 }
