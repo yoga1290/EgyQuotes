@@ -120,7 +120,8 @@ app.controller('SearchCtrl', ['$scope', '$location', 'TagSvc', 'TagNameSvc', 'Pe
 	        .search('personId', personId.join(',') )
 	        .search('startTime', startTime)
 	        .search('endTime', endTime)
-	        .search('query', $scope.field);
+//	        .search('query', $scope.field)
+	        ;
 	    $scope.$emit('QuoteGridCtrl.query', tags, channelIds, personId, startTime, endTime );
 	};
 	$('input#query').focus();
