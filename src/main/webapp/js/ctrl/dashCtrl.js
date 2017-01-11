@@ -1,6 +1,6 @@
 app
-    .controller('dashCtrl',['$scope','facebookSvc','QuoteSvc','VideoSvc','ChannelSvc','Favorites',
-function($scope,facebookSvc,QuoteSvc,VideoSvc,ChannelSvc, Favorites) {
+    .controller('dashCtrl',['$scope', '$rootScope','QuoteSvc','VideoSvc','ChannelSvc','Favorites', '$location',
+function($scope,$rootScope,QuoteSvc,VideoSvc,ChannelSvc, Favorites, $location) {
 	$scope.Favorites = Favorites;
 	$scope.page = -1;
 	$scope.isAuthenticated=false;
@@ -49,9 +49,10 @@ function($scope,facebookSvc,QuoteSvc,VideoSvc,ChannelSvc, Favorites) {
 	    if(videoId !== null) {
 		var i = 1;
 		if(videoId[i]===undefined) i++;
-		if(videoId[i]!==undefined)  window.location.href = "#/new/" + videoId[i];
+		if(videoId[i]!==undefined)  $location.path("/new/" + videoId[i]);
 	    } else {
-		window.location.href = '#/search/' + $scope.videoURL;
+		    $location.path('/search').search('query', $scope.videoURL);
+		
 	    }
 	    $scope.videoURL = '';
 	};
