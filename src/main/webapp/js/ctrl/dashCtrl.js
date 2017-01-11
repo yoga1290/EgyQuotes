@@ -4,7 +4,6 @@ function($scope,$rootScope,QuoteSvc,VideoSvc,ChannelSvc, Favorites, $location) {
 	$scope.Favorites = Favorites;
 	$scope.page = -1;
 	$scope.isAuthenticated=false;
-	$scope.picture='';
 	$scope.login=function(){
 	    location.href=config.OAuth.facebook.login;
 	};

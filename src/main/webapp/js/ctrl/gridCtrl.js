@@ -10,9 +10,9 @@ app.controller('gridCtrl',
 //		    }());
 
 		    sp.onQuoteClick=function(quote) {
-			$location.path('/quote/' + quote.id);
+    			$location.path('/quote/' + quote.id);
 		    };
-		    
+
 		    var tags=[],personId=[];
 		    if($routeParams.tags !== undefined) {
 			angular.forEach($routeParams.tags.split(','), function(tag){
@@ -25,11 +25,10 @@ app.controller('gridCtrl',
 			});
 		    }
 		    if(tags.length >0 || personId.length>0) {
-			sp.search.selected.people = personId;
-			sp.search.selected.tags = tags;
-//			sp.quoteLoader.setQuery(tags,personId);
+                sp.search.selected.people = personId;
+                sp.search.selected.tags = tags;
 		    }
-		    
+
 		    sp.search=(function(sp){
 			var self={};
 			return self={
@@ -37,7 +36,7 @@ app.controller('gridCtrl',
 				result:[],
 				backClick:true,
 				isHidden:function(){
-				    return ( self.backClick); 
+				    return ( self.backClick);
 				},
 				selected:{
 				    people:{},
@@ -49,15 +48,15 @@ app.controller('gridCtrl',
 				lastPersonReq:null,
 				query:function(){
 				    if(self.field.length<=0) return;
-				    
+
 				    self.tags=[];
 				    self.people=[];
-				    
+
 				    if(self.lastReq!==null) self.lastReq.abort();
 				    self.lastReq=
 					TagSvc
 					.find(self.field)
-					.success(function(response){ 
+					.success(function(response){
 					    self.tags=response;
 					});
 				    self.people=[];
@@ -68,7 +67,7 @@ app.controller('gridCtrl',
 					.success(function(response){
 					    self.people=response;
 					});
-					
+
 //					sp.$emit('QuoteGridCtrl.query', 0, 10, '', {}, 'airedTime', false);
 				},
 				selectTag:function(tag){
@@ -100,7 +99,7 @@ app.controller('gridCtrl',
 				}
 			};
 		    }(sp));
-		    
+
 		    sp.parseInt = parseInt;
 		    sp.to2Digit=function(x){
 			x=parseInt(x)+'';
@@ -122,7 +121,7 @@ app.controller('gridCtrl',
 		    sp.click=function(){
 			sp.childClick=true;
 		    };
-		    
+
 		    sp.getChannelLogoByVideoId = function(videoId) {
 			var url={url:''};
 			console.log(videoId);
@@ -134,4 +133,14 @@ app.controller('gridCtrl',
 			});
 			return url.url;
 		    };
-    }]); 
+
+
+
+		    UserSvc.getUser().success(function(response) {
+                sp.user = response;
+            });
+
+            UserSvc.getPicture().success(function(pictureURL) {
+                sp.picture = pictureURL;
+            });
+    }]);
