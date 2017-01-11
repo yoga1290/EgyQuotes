@@ -1,0 +1,51 @@
+<jade>
+.dialog.animated.fadeInDown
+	.overlay
+	.menu.col-md-1(style="padding:0px;")
+		i.edit.btn-circle.material-icons(ng-click="showEdit=!showEdit;", ng-class="{'open':showEdit}")
+		i.btn-circle.material-icons(ng-click="showPlaylists=!showPlaylists") add_to_queue
+		a(ng-href="http://facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvideoquotes.herokuapp.com/og/q/{{quote.id+'&'}}app_id=504291066443321", target="_blank")
+			i.btn-circle.material-icons share
+	add-to-playlist.video-overlay.animated.slideInDown.col-xs-12.col-md-8(ng-show="showPlaylists", query="query", quote="quote")
+	.video-overlay.col-xs-12.col-md-offset-1.col-md-8.animated.slideInDown.ng-cloak(ng-show="showEdit")
+		ng-form.col-xs-12(name="quoteForm", ng-controller="QuoteEditorCtrl")
+
+			.timer.col-xs-12
+				i.material-icons.btn-circle(ng-click="onDecreasePlaybackRate()") directions_walk
+				i.material-icons.btn-circle(ng-click="onIncreasePlaybackRate()") directions_run
+				i.material-icons.btn-circle(ng-click="onPause()") pause
+			.timer.col-xs-12
+				i.left.material-icons subdirectory_arrow_right
+				input(type="tel",name="startTime",ng-model="startTime",ng-keyup="onStartTimeChange()",ng-class="{'has-error': (quoteForm.startTime.$invalid)}",ng-pattern="[/d]{1-2}[:]+[/d]{2}")
+				i.right.material-icons(style="position:absolute; top:50%;") subdirectory_arrow_left
+				input(type="tel",name="endTime",ng-model="endTime",ng-keyup="onEndTimeChange()",ng-class="{'has-error': (quoteForm.endTime.$invalid)}",ng-pattern="[/d]{1-2}[:]+[/d]{2}")
+
+			.col-xs-12
+				i.material-icons#author face
+				input#author(placeholder="{{translation.VIDEO.AUTHOR}}",name="author",ng-model="authorName", ng-keyup="onAuthorNameChange()",required,ng-class="{'has-error': quoteForm.author.$invalid}")
+				#author-list(ng-show="suggestedAuthors.length")
+					.author(ng-repeat="author in suggestedAuthors", ng-click="onSelectAuthor(author)") {{author.name}}
+			.col-xs-12(style="padding:0px;")
+				#edit-tip
+				textarea#quote.col-xs-12(placeholder="{{translation.VIDEO.QUOTE}}",name="quote",ng-class="{'has-error': (quoteForm.quote.$invalid)}",ng-model="quote.quote")
+				i.material-icons.quote.right(style="position: absolute;position: absolute;margin-left: -45px;z-index: 5;color: rgba(98, 98, 98, 0.6);") format_quote
+				i.material-icons.quote.left(style="margin-top: 70px;left: 0px;z-index: 5;color: rgba(98, 98, 98, 0.6);") format_quote
+			.btn-box.col-xs-12.col-sm-3.gray(ng-click="onSave()", ng-disabled="quoteForm.$invalid")
+				i.material-icons save
+				| {{translation.VIDEO.SAVE}}
+	.playlist.video-overlay.col-xs-12.col-md-offset-1.col-md-8.animated.slideInDown.ng-cloak(ng-show="false")
+			ng-form.col-xs-12(name="playlistForm", ng-controller="PlaylistMenuCtrl")
+				input(type="text", ng-model="query", ng-keyup="searchByName()")
+
+	.col-xs-12.col-md-8.embed-responsive.embed-responsive-16by9
+		#video
+	.menu.col-xs-12.col-md-3
+		quote.col-xs-12(ng-if="quote", quote="quote")
+		quote-reaction(ng-if="false", quote="quote")
+
+
+
+	.col-xs-12.col-md-offset-2.col-md-6(ng-repeat="otherQuote in quotes")
+		.connector.col-md-offset-6
+		quote.clickable(ng-hide="otherQuote.id==quote.id", quote="otherQuote", ng-click="openQuote(otherQuote)")
+</jade>

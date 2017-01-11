@@ -1,0 +1,8 @@
+<jade>
+.dialog
+	.overlay
+	.container(style="width:200%")
+		.col-sm-offset-2.col-sm-3.col-xs-12
+			.panel.panel-default(ng-repeat="(videoId, video) in videos",style="background-image: url('{{video.thumbnail}}'); min-height: 200px;",ng-click="onclick(videoId)")
+				.panel-body(style="background-color: rgba(64, 240, 108, 0.7)") {{video.title}}
+</jade>

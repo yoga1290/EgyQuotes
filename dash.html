@@ -1,0 +1,23 @@
+<jade>
+.col-xs-12(ng-controller="dashCtrl",style="padding:0px;")
+	.hidden-xs(style="height: 500px;")
+	#dash-field.col-xs-12.stickable
+		#overlay
+			.fadeToggle
+				i.material-icons search
+				| {{translation.DASH.SEARCH_QUOTES}}
+			.fadeToggle
+				i.material-icons live_tv
+				| {{translation.DASH.YOUTUBE_URL}}
+		input.col-xs-12.col-sm-8.col-sm-offset-2(type="text",ng-model="videoURL",ng-keyup="onVideoURLChange()")
+
+	.col-xs-12.visible-xs
+		.col-xs-12.col-sm-offset-2.col-sm-8
+			.col-xs-12.col-sm-5
+				#facebook-sign-in.btn-box.blue(ng-hide="isAuthenticated",ng-click="login()") {{translation.DASH.FACEBOOK_SIGIN}}
+			.col-xs-12.col-sm-7(ng-controller="MenuCtrl")
+				img.img-circle(style="width: 72px; height: 72; float:left;",ng-show="isAuthenticated",src="{{picture}}")
+				i.watch_later.material-icons.btn-circle(ng-click="goToRoute('/WatchLater')")
+				i.material-icons.btn-circle(ng-click="page=0") language
+				i.favorites.material-icons.btn-circle(ng-click="goToRoute('/Favorites')")
+</jade>

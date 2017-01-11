@@ -1,0 +1,7 @@
+<jade>
+#errorDialog.animated.fadeInDown(ng-show="response.isVisible")
+	h3
+		| {{translation.ERROR[response.status] || response.status}}
+		| {{response.config.method + ' ' + response.config.url}}
+	i.clickable.material-icons(ng-click="response.isVisible = false") close
+</jade>
