@@ -5,7 +5,7 @@ app
 	scope: {
 	    quote: '=quote'
 	},
-	templateUrl: '/directives/quote.html'
+	templateUrl: 'directives/quote.html'
     };
 })
 .directive('errorDialog', function() {
@@ -17,7 +17,7 @@ app
     controller: ['$scope', 'ResponseDialog', function($scope, ResponseDialog) {
       $scope.response = ResponseDialog;
     }],
-  	templateUrl: '/directives/errorDialog.html'
+  	templateUrl: 'directives/errorDialog.html'
       };
   })
   .directive('addToPlaylist', function() {
@@ -27,7 +27,7 @@ app
         quote: '=quote'
   	},
     controller: 'PlaylistMenuCtrl',
-  	templateUrl: '/directives/addToPlaylist.html'
+  	templateUrl: 'directives/addToPlaylist.html'
       };
   })
   .directive('quoteEditor', function() {
@@ -49,7 +49,7 @@ app
         'quote': '='
     	},
       controller: 'QuoteEditorCtrl',
-    	templateUrl: '/directives/quoteEditor.html'
+    	templateUrl: 'directives/quoteEditor.html'
         };
     })
     .directive('quoteReaction', function() {
@@ -59,6 +59,6 @@ app
         'quote': '='
         },
         controller: 'QuoteReactionCtrl',
-        templateUrl: '/directives/quoteReaction.html'
+        templateUrl: 'directives/quoteReaction.html'
         };
     });

@@ -57,7 +57,7 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
 	}
 	
 	$scope.totalItems = 0;
-	$scope.pageItems = 5;
+	$scope.pageItems = 20;
 	$scope.items = [];
 	$scope.selected = [];
 	
@@ -188,9 +188,9 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
 			.css('visibility','hidden')
 			.css('height','100%')
 			.appendTo('body');
-		var h=tmp.height();
+		var h = window.screen.height || tmp.height();
 			tmp.css('display','none').remove();
-		$(document).scroll(function(){
+		$(document).scroll(function() {
 
 			var H=$(document).height()-100;
 			var s=$('body').scrollTop();
