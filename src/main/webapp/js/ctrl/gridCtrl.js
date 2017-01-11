@@ -1,9 +1,7 @@
 app.controller('gridCtrl',
-	    ['$scope', '$location', 'QuoteSvc','TagSvc','PersonSvc','VideoSvc','$timeout','$routeParams', 'PageLoader', 'ResponseDialog',
-	    function(sp, $location, QuoteSvc,TagSvc,PersonSvc,VideoSvc,to,$routeParams, PageLoader, ResponseDialog){
+	    ['$scope', '$location', 'QuoteSvc','TagSvc','PersonSvc','VideoSvc','$timeout','$routeParams', 'UserSvc',
+	    function(sp, $location, QuoteSvc,TagSvc,PersonSvc,VideoSvc,to,$routeParams, UserSvc){
 		    sp.quotes=[];
-		    sp.PageLoader = PageLoader;
-		    sp.ResponseDialog = ResponseDialog;
 
 //		    var onload=(function(){
 //			if(location.href.indexOf("access_token=")>0) {
