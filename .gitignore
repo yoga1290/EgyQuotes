@@ -11,3 +11,5 @@ src/main/resources/public_key.txt
 src/main/resources/*.properties
 src/main/webapp/app.js
 src/main/webapp/style.css
+videoquotes.heroku.iml
+videoquotes.iml
