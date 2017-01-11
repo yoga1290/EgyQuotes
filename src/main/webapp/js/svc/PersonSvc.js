@@ -73,8 +73,7 @@ app.service('PersonSvc',['$http','$q', function($http,$q) {
 	this.insert=function(name){
 	    var chain=
 		    $http.post('/person','',{params:{
-			    name:name,
-			    access_token: localStorage.getItem('access_token')
+			    name:name
 			}
 		    });
 	    return chain;

@@ -39,8 +39,7 @@ app.service('ChannelSvc',['$http','$q',function($http,$q) {
 	
 	this.insert = function(channelId) {
 	    return $http.get('/channel/insert', {params: {
-		    id:channelId,
-		    access_token: localStorage.getItem('access_token')
+		    id:channelId
 	    }});
 	};
 	
