@@ -15,7 +15,7 @@ app.service('Favorites', function() {
     };
     
     this.isFavorites = function(quote) {
-	return (_this.list[quote.id] !== undefined && _this.list[quote.id] !== null);
+	    return (quote && _this.list[quote.id] !== undefined && _this.list[quote.id] !== null);
     };
     
     this.remove = function(quote) {
