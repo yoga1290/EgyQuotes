@@ -72,4 +72,9 @@ public class FacebookUtil {
 	return new JSONObject(facebookId).getString("id");
     }
 
+	public String getProfilePicture(String facebookId) {
+		String data = url.readText("https://graph.facebook.com/" + facebookId + "/picture?type=large&redirect&access_token=" + APP_ACCESS_TOKEN);
+		return new JSONObject(data).getJSONObject("data").getString("url");
+	}
+
 }

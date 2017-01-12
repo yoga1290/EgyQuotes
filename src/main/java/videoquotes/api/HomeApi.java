@@ -28,12 +28,6 @@ public class HomeApi
   //    return "/index.html";
   // }
 
-  @Secured({"ROLE_USER"})
-  @RequestMapping("/user")
-  public @ResponseBody Principal user(Principal u) {
-     return u;
-  }
-
   @RequestMapping("/anonymous")
   public @ResponseBody Principal anonymous(Principal u) {
      return u;
