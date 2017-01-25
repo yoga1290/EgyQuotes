@@ -1,0 +1,7 @@
+<jade>
+.quote.fadeInUp.animated.clickable(ng-if="quote",style="background-image: url('{{quote.thumbnail}}');", ng-click="onClick(quote)")
+	i.material-icons.quote.right format_quote
+	p.body {{quote.quote}}
+	i.material-icons.quote.left format_quote
+	img.logo.img-circle.col-xs-3(ng-src="{{quote.logo}}")
+</jade>

@@ -61,4 +61,29 @@ app
         controller: 'QuoteReactionCtrl',
         templateUrl: 'directives/quoteReaction.html'
         };
+    })
+    .directive('quoteMenu', function() {
+        return {
+        restrict: 'E',
+        scope: {
+//                'quote': '='
+        },
+//            controller: 'QuoteReactionCtrl',
+        templateUrl: 'directives/quoteMenu.html'
+        };
+    })
+    .directive('gridQuote', function() {
+        return {
+        restrict: 'E',
+        scope: {
+            'quote': '='
+        },
+//            controller: 'QuoteReactionCtrl',
+        controller: ['$scope', '$location', function($scope, $location) {
+          $scope.onClick = function(quote) {
+                $location.path('/quote/' + quote.id);
+          };
+        }],
+        templateUrl: 'directives/gridQuote.html'
+        };
     });

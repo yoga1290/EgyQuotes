@@ -21,38 +21,22 @@
 
 
 .col-md-11.col-sm-9.col-xs-12.section(ng-controller="QuoteGridCtrl", style="padding:0px;")
-	img.img-circle(ng-repeat="channel in channelData", ng-src="{{channel.thumbnail}}")
+	.clickable(ng-repeat="channel in channelData track by $index")
+		div(ng-show="selectedChannel==$index",ng-mouseout="selectedChannel=-1",style=" position: absolute; border-radius: 50%; width: 88px; height: 88px; background-color: rgba(0, 0, 0, 0.5);")
+			i.material-icons(style="font-size:88px;color:white;") close
+		img.img-circle(ng-src="{{channel.thumbnail}}", ng-mouseover="selectedChannel=$index")
 	.btn-circle(ng-repeat="author in authorsData") {{author}}
 
 	#quoteLoader
 		.hidden-xs.col-md-3.col-sm-6.col-xs-12.clickable(style="padding:0px; border-left: 3px solid white;")
-			.quote.fadeInUp.animated.clickable(ng-repeat="quote in items track by $index", ng-if="$index%4==0", style="background-image: url('{{quote.thumbnail}}');",ng-click="onQuoteClick(quote)")
-				i.material-icons.quote.right format_quote
-				.body {{quote.quote}}
-				i.material-icons.quote.left format_quote
-				img.logo.img-circle.col-xs-3(ng-src="{{quote.logo}}")
+			grid-quote(ng-repeat="quote in items track by $index", ng-if="$index%4==0", quote="quote")
 		.hidden-xs.col-md-3.col-sm-6.col-xs-12.clickable(style="padding:0px; border-left: 3px solid white;")
-			.quote.fadeInUp.animated.clickable(ng-repeat="quote in items track by $index", ng-if="$index%4==1", style="background-image: url('{{quote.thumbnail}}');",ng-click="onQuoteClick(quote)")
-				i.material-icons.quote.right format_quote
-				.body {{quote.quote}}
-				i.material-icons.quote.left format_quote
-				img.logo.img-circle.col-xs-3(ng-src="{{quote.logo}}")
+			grid-quote(ng-repeat="quote in items track by $index", ng-if="$index%4==1", quote="quote")
 		.hidden-xs.col-md-3.col-sm-6.col-xs-12.clickable(style="padding:0px; border-left: 3px solid white;")
-			.quote.fadeInUp.animated.clickable(ng-repeat="quote in items track by $index", ng-if="$index%4==2", style="background-image: url('{{quote.thumbnail}}');",ng-click="onQuoteClick(quote)")
-				i.material-icons.quote.right format_quote
-				p.body {{quote.quote}}
-				i.material-icons.quote.left format_quote
-				img.logo.img-circle.col-xs-3(ng-src="{{quote.logo}}")
+			grid-quote(ng-repeat="quote in items track by $index", ng-if="$index%4==2", quote="quote")
 		.hidden-xs.col-md-3.col-sm-6.col-xs-12.clickable(style="padding:0px; border-left: 3px solid white;")
-			.quote.fadeInUp.animated.clickable(ng-repeat="quote in items track by $index", ng-if="$index%4==3", style="background-image: url('{{quote.thumbnail}}');",ng-click="onQuoteClick(quote)")
-				i.material-icons.quote.right format_quote
-				.body {{quote.quote}}
-				i.material-icons.quote.left format_quote
-				img.logo.img-circle.col-xs-3(ng-src="{{quote.logo}}")
+			grid-quote(ng-repeat="quote in items track by $index", ng-if="$index%4==3", quote="quote")
 		.visible-xs.col-md-3.col-sm-6.col-xs-12.clickable(style="padding:0px; border-left: 3px solid white;")
-			.quote.fadeInUp.animated.clickable(ng-repeat="quote in items track by $index", style="background-image: url('{{quote.thumbnail}}');",ng-click="onQuoteClick(quote)")
-				i.material-icons.quote.right format_quote
-				.body {{quote.quote}}
-				i.material-icons.quote.left format_quote
-				img.logo.img-circle.col-xs-3(ng-src="{{quote.logo}}")
+			grid-quote(ng-repeat="quote in items track by $index", quote="quote")
+			quote-menu
 </jade>
