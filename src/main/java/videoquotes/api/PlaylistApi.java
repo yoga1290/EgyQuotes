@@ -58,9 +58,12 @@ public class PlaylistApi {
 	@Secured({"ROLE_USER"})
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "Search for people by name", notes = "Search for people by name [offset|limit]")
-    public @ResponseBody Playlist save(PlaylistDTO dto) {
-		Playlist playlist = new Playlist(dto.getName(), dto.getQuotes());
-		playlist = playlistRepository.save(playlist);
+    public @ResponseBody Playlist save(@RequestBody PlaylistDTO dto) {
+		Playlist playlist = new Playlist();
+		playlist.setName(dto.getName());
+		playlist.setQuotes(dto.getQuotes());
+		playlist.setPublic(false);
+		playlistRepository.save(playlist);
 		return playlist;
     }
 
@@ -79,4 +82,14 @@ public class PlaylistApi {
 	}
 	throw new Unauthorized();
     }
+
+	@Secured({"ROLE_USER"})
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ApiOperation(value = "List Playlists for a given user", notes = "List Playlists for a given user [page|size]")
+	public @ResponseBody List<Playlist> list(
+			Principal user,
+			@RequestParam(required = false, defaultValue = "0") int page,
+			@RequestParam(required = false, defaultValue = "50") int size) {
+		return playlistRepository.findByCreatorId(user.getName(), new PageRequest(page, size)).getContent();
+	}
 }

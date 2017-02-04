@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
  * @author yoga1290
  */
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 public class Playlist extends BasicRecord {
 
     @Getter @Setter
@@ -20,15 +20,8 @@ public class Playlist extends BasicRecord {
 
     @Getter @Setter
     private boolean isPublic;
-    
-    @DBRef
-    @Getter @Setter
-    private List<Quote> quotes;
 
-    public Playlist(String name, List<Quote> quotes) {
-        this.name = name;
-        this.quotes = quotes;
-        this.isPublic = false;
-    }
+    @Getter @Setter
+    private List<String> quotes;
     
 }

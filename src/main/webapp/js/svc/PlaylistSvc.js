@@ -40,11 +40,19 @@ app.service('PlaylistSvc',['$http','$q',function($http,$q) {
 	};
 	
 	this.insert = function(name, quotes) {
-	    return $http.post('/playlist', {name: name, quotes: quotes} );
+	    var quoteId = [];
+	    quotes.forEach(function(quote) {
+	        quoteId.push(quote.id);
+	    });
+	    return $http.post('/playlist', {name: name, quotes: quoteId} );
 	};
 
 	this.update = function(id, name, quotes) {
         return $http.put('/playlist', {name: name, quotes: quotes}, {params: {id: id}} );
+    };
+
+    this.list = function(page, size) {
+        return $http.get('/playlist/list', {params: {page: page, size: size}} );
     };
 	
     }]);

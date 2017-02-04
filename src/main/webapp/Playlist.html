@@ -1,16 +1,56 @@
 <jade>
 .dialog
 	.overlay
-		.col-sm-2.hidden-xs
+		.col-sm-1.hidden-xs
 		.col-sm-10.col-xs-12
 			.col-xs-12(style="margin-top: 20px;font-size: 32px;margin-bottom: 20px;padding-bottom: 10px; border-bottom: solid white 5px; color: white;")
 				| Playlist
-			.col-xs-12.col-sm-6.embed-responsive.embed-responsive-16by9(style="min-height:500px;")
-				#playlist-video
-			.fadeInUp.animated.col-xs-12.col-sm-5(ng-repeat="quote in playlist track by $index")
-				quote(quote="quote", style="background-image: url('{{quote.thumbnail}}'); background-position-x: 50%;background-position-y: 50%; min-height: 200px;position: relative;margin-top: 50px;", ng-click="onQuoteClick(quote)")
-				div(style="position:absolute;left:100px;top: -50px;")
-					i.material-icons.btn-circle(ng-click="swapeUp($index)") keyboard_arrow_up
-					i.material-icons.btn-circle(ng-click="swapeDown($index)") keyboard_arrow_down
-					i.material-icons.btn-circle(ng-click="delete($index)") delete_forever
+
+			.visible-xs
+				.col-xs-12.fadeInUp.animated(ng-repeat="playlist in playlists track by $index")
+					.col-xs-12(style="margin-top: 20px;font-size: 24px;padding-bottom: 10px; border-bottom: solid white 5px; color: white;")
+						| {{playlist.name}}
+					.col-xs-12(style="overflow-x: auto; overflow-y: hidden;", ng-repeat="quote in playlist.quotes track by $index")
+						.connector
+						grid-quote(quote="quote")
+
+			.visible-sm
+				.col-sm-6
+					.fadeInUp.animated(ng-repeat="playlist in playlists track by $index", , ng-if="$index%2==0")
+						.col-xs-12(style="margin-top: 20px;font-size: 24px;padding-bottom: 10px; border-bottom: solid white 5px; color: white;")
+							| {{playlist.name}}
+						.col-xs-12(style="overflow-x: auto; overflow-y: hidden;", ng-repeat="quote in playlist.quotes track by $index")
+							.connector
+							grid-quote(quote="quote")
+				.col-sm-6
+					.fadeInUp.animated(ng-repeat="playlist in playlists track by $index", , ng-if="$index%2==1")
+						.col-xs-12(style="margin-top: 20px;font-size: 24px;padding-bottom: 10px; border-bottom: solid white 5px; color: white;")
+							| {{playlist.name}}
+						.col-xs-12(style="overflow-x: auto; overflow-y: hidden;", ng-repeat="quote in playlist.quotes track by $index")
+							.connector
+							grid-quote(quote="quote")
+
+			.hidden-xs.hidden-sm
+				.col-md-4
+					.fadeInUp.animated(ng-repeat="playlist in playlists track by $index", ng-if="$index%3==0")
+						.col-xs-12(style="margin-top: 20px;font-size: 24px;padding-bottom: 10px; border-bottom: solid white 5px; color: white;")
+							| {{playlist.name}}
+						.col-xs-12(style="overflow-x: auto; overflow-y: hidden;", ng-repeat="quote in playlist.quotes track by $index")
+							.connector
+							grid-quote(quote="quote")
+				.col-md-4
+					.fadeInUp.animated(ng-repeat="playlist in playlists track by $index", ng-if="$index%3==1")
+						.col-xs-12(style="margin-top: 20px;font-size: 24px;padding-bottom: 10px; border-bottom: solid white 5px; color: white;")
+							| {{playlist.name}}
+						.col-xs-12(style="overflow-x: auto; overflow-y: hidden;", ng-repeat="quote in playlist.quotes track by $index")
+							.connector
+							grid-quote(quote="quote")
+				.col-md-4
+					.fadeInUp.animated(ng-repeat="playlist in playlists track by $index", ng-if="$index%3==2")
+						.col-xs-12(style="margin-top: 20px;font-size: 24px;padding-bottom: 10px; border-bottom: solid white 5px; color: white;")
+							| {{playlist.name}}
+						.col-xs-12(style="overflow-x: auto; overflow-y: hidden;", ng-repeat="quote in playlist.quotes track by $index")
+							.connector
+							grid-quote(quote="quote")
+
 </jade>

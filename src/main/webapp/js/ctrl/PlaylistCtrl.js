@@ -1,49 +1,45 @@
 app
-    .controller('PlaylistCtrl',['$scope', '$location','Favorites', 'YTPlayer',
-function($scope, $location, Favorites, YTPlayer) {
+    .controller('PlaylistCtrl',['$scope', 'YTPlayer', 'PlaylistSvc', 'QuoteSvc',
+function($scope, YTPlayer, PlaylistSvc, QuoteSvc) {
 
-    $scope.playlist = [];
+    $scope.playlists = [];
     $scope.YTPlayer = YTPlayer;
-    for (var k in Favorites.list) {
-	$scope.playlist.push(Favorites.list[k]);
-    }
-    
+
     var save = function() {
-	//TODO
-	var nList = {};
-	$scope.playlist.forEach(function(quote) {
-	    nList[quote.id] = quote;
-	});
-	Favorites.list = nList;
-	localStorage.setItem('Favorites', JSON.stringify(nList) );
-	$scope.YTPlayer.init('playlist-video');
-	$scope.YTPlayer.playQuotes($scope.playlist);
+        //TODO
+        var nList = {};
+        $scope.playlist.forEach(function(quote) {
+            nList[quote.id] = quote;
+        });
+        $scope.YTPlayer.init('playlist-video');
+        $scope.YTPlayer.playQuotes($scope.playlist);
     };
-    
-    $scope.onQuoteClick=function(quote) {
-	$location.path( '/quote/' + quote.id );
-    };
-    
-    $scope.swapeUp = function($index) {
-	var quote = $scope.playlist.splice($index, 1)[0];
-	if ($index <= 0) {
-	    $index = $scope.playlist.length + 1;
-	}
-	$scope.playlist.splice($index-1, 0, quote);
-	save();
-    };
-    
-    $scope.swapeDown = function($index) {
-	var quote = $scope.playlist.splice($index, 1)[0];
-	if ($index + 1 < $scope.playlist.length) {
-	    $scope.playlist.splice($index+1, 0, quote);
-	}
-	save();
-    };
-    
-    $scope.delete = function($index) {
-	$scope.playlist.splice($index, 1);
-	    save();
-    };
+
+
+    PlaylistSvc.list(0, 10).success(function(playlists) {
+        $scope.playlists = [];
+        playlists.forEach(function(playlist) {
+            var quotes = [];
+            var quotesLoadedCount = 0;
+            console.log(playlist);
+
+            angular.forEach(playlist.quotes, function(quoteId) {
+                console.log(quoteId);
+                QuoteSvc.findById(quoteId).success(function(quote) {
+                    quotes.push(quote);
+                    quotesLoadedCount++;
+                    console.log(quotes);
+                    if(quotesLoadedCount === playlist.quotes.length) {
+                        playlist.quotes = quotes;
+                        $scope.playlists.push(playlist);
+                        console.log(playlist);
+                    }
+                });
+            });
+
+        });
+    });
+
+
 
 }]);
