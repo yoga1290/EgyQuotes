@@ -31,16 +31,16 @@ public class OpenGraphApi
 	@Value("${videoquotes.oauth.facebook.appId}")
 	String APP_ID;
 
-    @RequestMapping(value = "/q/{id}", method = RequestMethod.GET)
-    @ApiOperation(value = "find Quote by id", notes = "find Quote by id")
-    public @ResponseBody String findOne(
-    		HttpServletResponse response,
-	    @PathVariable String id) {
+	@RequestMapping(value = "/q/{id}", method = RequestMethod.GET)
+	@ApiOperation(value = "find Quote by id", notes = "find Quote by id")
+	public @ResponseBody String findOne(
+			HttpServletResponse response,
+			@PathVariable String id) {
 		Quote quote = quoteRepository.findOne(id);
 		String logo = youtubeUtil.getVideoPreview( quote.getVideo().getId() );
 		// see https://developers.facebook.com/docs/sharing/webmasters#markup
 		return "<html prefix=\"og: http://ogp.me/ns#\"><head>\n"+
-				"<link rel=\"opengraph\" href=\"https://videoquotes.herokuapp.com/#/quote/" + id + "\"/>" +
+				"<link rel=\"opengraph\" href=\"" + BASE_URL + "/#/quote/" + id + "\"/>" +
 
 				"<meta property=\"og:type\"               content=\"article\" />\n" +
 				"<meta property=\"fb:app_id\"               content=\"" + APP_ID + "\" />\n" +
@@ -50,6 +50,6 @@ public class OpenGraphApi
 				"<meta property=\"og:description\"        content=\"" + quote.getPerson().getName() + "\" />\n" +
 				"<meta property=\"og:image\"              content=\"" + logo + "\" />\n" +
 				"</head><body><script>window.location.href = '" + BASE_URL + "/#/quote/" + id + "'; </script></body></html>";
-    }
+	}
 
 }
