@@ -42,7 +42,7 @@ cd VideoQuotes;
 
 You'll need to change properties in the following files:
 
-+ [credentials.properties](https://github.com/yoga1290/VideoQuotes/blob/master/credentials.properties)
++ [videoquotes.properties](https://github.com/yoga1290/VideoQuotes/blob/master/videoquotes.properties)
 + [application.properties](https://github.com/yoga1290/VideoQuotes/blob/master/src/main/resources/application.properties)
 + [deploy.sh](https://github.com/yoga1290/VideoQuotes/blob/master/deploy.sh)
 
@@ -51,7 +51,7 @@ You'll need to change properties in the following files:
 As simple as:
 
 ```bash
-sh deploy.sh
+sh ci/deploy/heroku.sh
 ```
 
 ----------------------------------
