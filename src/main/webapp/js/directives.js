@@ -69,6 +69,23 @@ app
 //                'quote': '='
         },
 //            controller: 'QuoteReactionCtrl',
+        controller: ['$scope', '$timeout', function($scope, $timeout) {
+          $scope.quote; //TODO;
+          $scope.visible = false;
+          window.document.addEventListener('contextmenu', function(e) {
+
+            var isParent = e.target.parentNode.className.match(/quotemenu/);
+            var isCurrent = e.target.className.match(/quotemenu/);
+            if(isCurrent || isParent) {
+                $timeout(function() {
+                    $scope.visible = true;
+                });
+                if(isCurrent) e.target.appendChild($('#quote-menu')[0]);
+                if(isParent) e.target.parentNode.appendChild($('#quote-menu')[0]);
+                e.preventDefault();
+            }
+          });
+        }],
         templateUrl: 'directives/quoteMenu.html'
         };
     })
