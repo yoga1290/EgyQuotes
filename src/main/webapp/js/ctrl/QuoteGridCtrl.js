@@ -16,13 +16,14 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
 	
 	var searchDTO = {
 	    page: 0,
-	    size:  10,
+	    size:  30,
 	    tags:   [],
 	    channelIds: [],
 	    start: 0,
 	    end: new Date().getTime(),
 	    personIds: []
 	};
+
 	$scope.getChannelLogo = function(channelId) {
 	    VideoSvc.getChannelData(channelId);
 	};
@@ -31,17 +32,6 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
 	function searchCallback(response) {
 	    angular.forEach(response, function(quote, i) {
 
-		    VideoSvc.getChannelId(quote.video.id).success(function(response) {
-			quote.thumbnail = response.items[0].snippet.thumbnails.high.url;
-			VideoSvc.getChannelData(response.items[0].snippet.channelId).success(function(data) {
-			    if (data.items.length === 0 ) {
-				console.error('No thumbnails for channelId#', response.items[0].snippet.channelId);
-			    } else {
-				quote.logo = data.items[0].snippet.thumbnails.high.url;
-				$scope.items.push(quote);
-			    }
-			});
-		    });
 
 		});
 	    if (response.length > 0) {
@@ -112,13 +102,13 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
 		};
 		if(isGlobal)
 			searchObj.filterByFields = {
-                
+
                 personId: filterBy,
                 quote: filterBy
 			};
 		else
 			searchObj.filterByFields = {
-				
+
                 personId: filterByFields['personId'],
                 quote: filterByFields['quote']
 			};
@@ -140,11 +130,27 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
             VideoSvc.getChannelData(channelId)
                 .success(function(response) {
                     response.thumbnail = response.items[0].snippet.thumbnails.default.url;
+                    response.name = response.items[0].snippet.title;
+                    response.id = channelId;
                     $scope.channelData[channelId] = response;
                 });
         });
 	}
 	updateChannelData();
+    $scope.removeChannel = function(channelId) {
+        if (!$location.search().channelIds) return;
+        var nChannelIds = [];
+        angular.forEach( $location.search().channelIds.split(','), function(id) {
+            if (channelId !== id) {
+                nChannelIds.push(id);
+            }
+        });
+        $location.search('channelIds', nChannelIds.join(',') );
+        updateChannelData();
+        searchDTO.channelIds = nChannelIds;
+        searchDTO.page = 0;
+        QuoteSvc.search(searchDTO).success(searchCallback);
+    }
 
 	$scope.authorsData = [];
     function updateAuthorsData() {
@@ -153,16 +159,30 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
         var personIds = $location.search().personId.split(',');
         angular.forEach(personIds, function(personId) {
             PersonSvc.findById(personId).success(function(response) {
-                $scope.authorsData.push(response.name);
+                $scope.authorsData.push(response);
             });
         });
+    }
+    $scope.removeAuthor = function(authorId) {
+        if (!$location.search().channelIds) return;
+        var personIds = [];
+        angular.forEach( $location.search().personId.split(','), function(id) {
+            if (authorId !== id) {
+                personIds.push(id);
+            }
+        });
+        $location.search('personId', personIds.join(',') );
+        updateAuthorsData();
+        searchDTO.personIds = personIds;
+        searchDTO.page = 0;
+        QuoteSvc.search(searchDTO).success(searchCallback);
     }
     updateAuthorsData();
 
 	$rootScope.$on('QuoteGridCtrl.query', function (event, tags, channelIds, personIds, start, end) {
 	    searchDTO = {
             page: 0,
-            size:  10,
+            size:  30,
             tags:   tags,
             channelIds: channelIds,
             start: start,
@@ -197,6 +217,10 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
 			if(s+h>=H && !isBusy)
 			    loadMore();
 		});
+
+		if ($location.search().channelIds || $location.search().personIds) {
+		    QuoteSvc.search(searchDTO).success(searchCallback);
+		}
 	};
 	init();
 	isBusy = true;

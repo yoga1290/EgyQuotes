@@ -2,6 +2,10 @@ app.controller('SearchCtrl', ['$scope', '$location', 'TagSvc', 'TagNameSvc', 'Pe
     function($scope, $location, TagSvc, TagNameSvc, PersonSvc, ChannelSvc, VideoSvc) {
 		
 	$scope.field = $location.search().query;
+	$('#dash-field').keyup(function() {
+        $('#dash-field').blur();
+        $('#query').focus();
+    });
 	$scope.result = [];
 	$scope.selected = {
 	    people:{},
