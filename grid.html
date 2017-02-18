@@ -1,0 +1,33 @@
+<jade>
+.col-md-11.col-sm-9.col-xs-12.section(ng-controller="QuoteGridCtrl", style="padding:0px;")
+	.col-xs-12.col-sm-offset-5
+		.col-xs-12(style="border-left: 5px solid black;color:black;cursor:pointer;", ng-repeat="channel in channelData track by $index",ng-click="removeChannel(channel.id)")
+			i.material-icons(style="font-size:24px;color:black;") close
+			| {{channel.name}}
+		.col-xs-12(style="border-left: 5px solid black;color:black;cursor:pointer;", ng-repeat="author in authorsData track by $index",ng-click="removeAuthor(author.id)")
+			i.material-icons(style="font-size:24px;color:black;") close
+			| {{author.name}}
+	.clickable(style="display:none")
+		div(ng-show="selectedChannel==$index",ng-mouseout="selectedChannel=-1",style=" position: absolute; border-radius: 50%; width: 88px; height: 88px; background-color: rgba(0, 0, 0, 0.5);")
+			i.material-icons(style="font-size:88px;color:white;") close
+		img.img-circle(ng-src="{{channel.thumbnail}}", ng-mouseover="selectedChannel=$index")
+
+	#quoteLoader.col-sm-offset-1
+		.hidden-xs.hidden-sm
+			.col-md-3.clickable(style="padding:0px; border-left: 3px solid white;")
+				grid-quote(ng-repeat="quote in items track by $index", ng-if="$index%4==0", quote="quote")
+			.col-md-3.clickable(style="padding:0px; border-left: 3px solid white;")
+				grid-quote(ng-repeat="quote in items track by $index", ng-if="$index%4==1", quote="quote")
+			.col-md-3.clickable(style="padding:0px; border-left: 3px solid white;")
+				grid-quote(ng-repeat="quote in items track by $index", ng-if="$index%4==2", quote="quote")
+			.col-md-3.clickable(style="padding:0px; border-left: 3px solid white;")
+				grid-quote(ng-repeat="quote in items track by $index", ng-if="$index%4==3", quote="quote")
+		.visible-sm
+			.col-xs-6.clickable(style="padding:0px; border-left: 3px solid white;")
+				grid-quote(ng-repeat="quote in items track by $index", ng-if="$index%2==0", quote="quote")
+			.col-xs-6.clickable(style="padding:0px; border-left: 3px solid white;")
+				grid-quote(ng-repeat="quote in items track by $index", ng-if="$index%2==1", quote="quote")
+		.visible-xs.col-xs-12.clickable(style="padding:0px; border-left: 3px solid white;")
+			grid-quote(ng-repeat="quote in items track by $index", quote="quote")
+		quote-menu
+</jade>

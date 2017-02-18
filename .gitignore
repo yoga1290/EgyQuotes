@@ -1,4 +1,3 @@
-
 *.xml
 
 *.json
@@ -14,3 +13,9 @@ target
 config
 
 build
+
+src
+
+heroku
+
+\.idea/
