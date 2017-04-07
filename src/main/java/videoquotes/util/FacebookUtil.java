@@ -55,19 +55,16 @@ public class FacebookUtil {
     	return 0;
     }
 
-    public String getAccessToken(String code){
+    public String getAccessToken(String code) {
 	// see https://developers.facebook.com/docs/marketing-api/authentication
 	// see https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow#confirm
 	String url = "https://graph.facebook.com/oauth/access_token?client_id=" + APP_ID + "&redirect_uri="+ REDIRECT_URL + "&client_secret=" + APP_SECRET + "&code="+code;
-	System.out.println("\n\n\n\n\n\n\n\n\nURL: "+ url+"\n\n\n\n\n\n\n\n");
 	String access_token = URLUtil.readText(url);
-	System.out.println("\n\n\n\n\n\n\n\n\n\nextracting access_token:" + access_token+"\n\n");
-	access_token = access_token.split("=")[1].split("&")[0];
-	return access_token;
+//	access_token = access_token.split("=")[1].split("&")[0];
+	return new JSONObject(access_token).getString("access_token");
     }
 
     public static String getFacebookId(String access_token) {
-	System.out.println("FacebookUtil.getFacebookId\n\n\n\n\n\n\n");
 	String facebookId = url.readText("https://graph.facebook.com/me?access_token="+access_token);
 	return new JSONObject(facebookId).getString("id");
     }
@@ -75,6 +72,11 @@ public class FacebookUtil {
 	public String getProfilePicture(String facebookId) {
 		String data = url.readText("https://graph.facebook.com/" + facebookId + "/picture?type=large&redirect&access_token=" + APP_ACCESS_TOKEN);
 		return new JSONObject(data).getJSONObject("data").getString("url");
+	}
+
+	public String getEmail(String facebookId) {
+		String data = url.readText("https://graph.facebook.com/v2.8/" + facebookId + "?fields=email&access_token=" + APP_ACCESS_TOKEN);
+		return new JSONObject(data).getString("email");
 	}
 
 }
