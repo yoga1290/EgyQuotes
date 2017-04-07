@@ -62,6 +62,16 @@ app
         templateUrl: 'directives/quoteReaction.html'
         };
     })
+    .directive('header', function() {
+        return {
+        restrict: 'E',
+        scope: {
+        'translation': '=translation'
+        },
+        controller: 'MenuCtrl',
+        templateUrl: 'directives/header.html'
+        };
+    })
     .directive('quoteMenu', function() {
         return {
         restrict: 'E',
