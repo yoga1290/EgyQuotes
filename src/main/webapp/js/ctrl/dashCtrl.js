@@ -1,50 +1,53 @@
 app
-    .controller('dashCtrl',['$scope', '$rootScope','QuoteSvc','VideoSvc','ChannelSvc','Favorites', '$location',
-function($scope,$rootScope,QuoteSvc,VideoSvc,ChannelSvc, Favorites, $location) {
-	$scope.Favorites = Favorites;
+    .controller('dashCtrl',['$scope', '$rootScope','QuoteSvc','VideoSvc','ChannelSvc', '$location', '$interval',
+function($scope,$rootScope,QuoteSvc,VideoSvc,ChannelSvc, $location, $interval) {
 	$scope.page = -1;
-	$scope.isAuthenticated=false;
-	$scope.login=function(){
-	    location.href=config.OAuth.facebook.login;
-	};
-	
-	$scope.topLikedQuotes=[];
-	$scope.topLikesPage=5;
-	$scope.loadTopLikes=function(){
-	    QuoteAnalyticsSvc.findByTopLikes($scope.topLikedQuotes.length,$scope.topLikesPage)
-		    .success(function(quoteAny){
-			
-			angular.forEach(quoteAny,function(o,i){
-			    QuoteSvc.findById(o.quoteId)
-			    .success(function(quote){
-				quote.likes=o.likes;
-				$scope.topLikedQuotes.push(quote);
-			    });
-			});
-			    
-		    });
-	};
-	$scope.topSharesQuotes=[];
-	$scope.topSharesPage=5;
-	$scope.loadTopShares=function(){
-	    QuoteAnalyticsSvc.findByTopShares($scope.topSharesQuotes.length,$scope.topSharesPage)
-		    .success(function(quoteAny){
-			
-			angular.forEach(quoteAny,function(o,i){
-			    QuoteSvc.findById(o.quoteId)
-			    .success(function(quote){
-				quote.shares=o.shares;
-				$scope.topSharesQuotes.push(quote);
-			    });
-			});
-			
-		    });
-	};
-//	$scope.loadTopShares();
-	
+
+	$scope.listing = [];
+	var startUnixTime = new Date().getTime() - 7 * 24 * 60 * 60 * 1000;
+	var endUnixTime = new Date().getTime();
+
+	$scope.showsByChannelId = {};
+	$scope.channelLogoByChannelId = {};
+
+	$scope.hero = [{
+	    channelId: 'UC30ditU5JI16o5NbFsHde_Q',
+	    image: 'hero/dw.png',
+	    quoteId: ['585e9e41a066470004d3e090'],
+	    quotes: []
+	}, {
+        channelId: 'UC30ditU5JI16o5NbFsHde_Q',
+        image: 'hero/bbc.png',
+        quoteId: ['585e9e2aa066470004d3dfe8'],
+        quotes: []
+    }
+//    , {
+//       channelId: 'UC30ditU5JI16o5NbFsHde_Q',
+//       image: 'hero/sada.jpg',
+//       quoteId: ['58b009daae340f00044180ef', '585e9e2ea066470004d3e00d'],
+//       quotes: []
+//   }
+   ];
+
+	$scope.heroTime = 0;
+    var heroInterval = $interval(function() {
+        $scope.heroTime++;
+        $scope.heroTime %= $scope.hero.length;
+    }, 3000);
+    $scope.$on('$destroy', function() {
+        heroInterval();
+    });
+    angular.forEach($scope.hero, function(hero) {
+        angular.forEach(hero.quoteId, function(quoteId) {
+            QuoteSvc.findById(quoteId).success(function(quote) {
+                hero.quotes.push(quote);
+            });
+        });
+    });
+
 	$scope.videoURL='';
 	$scope.onVideoURLChange = function() {
-	    var videoId = $scope.videoURL.match(/(?:v\=)+(.*)|(?:youtu\.be\/)+(.*)|(?:channel\/)(.*)/);
+	    var videoId = $scope.videoURL.match(/(?:v\=)+([^&,^?]*)|(?:youtu\.be\/)+([^&,^?]*)|(?:channel\/)([^&,^?]*)/);
 	    if(videoId !== null) {
 		var i = 1;
 		if(videoId[i]===undefined) i++;
@@ -58,14 +61,6 @@ function($scope,$rootScope,QuoteSvc,VideoSvc,ChannelSvc, Favorites, $location) {
 	
 	$scope.channels=[];
 	$scope.loadChannels=function(){
-	    ChannelSvc.list(0,100).success(function(channels){
-		angular.forEach(channels,function(channel,i){
-		    VideoSvc.getChannelData(channel.channelId)
-			.success(function(data){
-//			    $scope.channels.push(data.items[0].snippet.thumbnails.default.url);
-			});
-		});
-	    });
 	};
 	$scope.loadChannels();
 	$scope.openQuote = function(quote) {
