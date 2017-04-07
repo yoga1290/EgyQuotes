@@ -13,7 +13,7 @@ function($scope,QuoteSvc,TagSvc, ChannelSvc, VideoSvc) {
 		var total = parseInt(count);
 		var page = 10;
 		var load = function(o) {
-		    $scope.exportProgress = parseInt( o*100 / total );
+		    $scope.exportProgress = parseInt( o*page*100 / total );
 		    if(o >= total)
 			Base64.download(JSON.stringify(exported),'quotes.json');
 		    else
@@ -80,11 +80,16 @@ function($scope,QuoteSvc,TagSvc, ChannelSvc, VideoSvc) {
 	};
 	
 	$scope.insertChannelByVideoURL = function(videoURL) {
-	    var videoId = $scope.videoURL.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?)(?:ebc=[\w|\s|\w|-]*\&v=|v=|\/)([^\s]+)+/);
+	    var videoId = $scope.videoURL.match(/(?:v\=)+([^&,^?]*)|(?:youtu\.be\/)+([^&,^?]*)|(?:channel\/)([^&,^?]*)/);
 	    if(videoId !== null) {
-		VideoSvc.getChannelId(videoId[1]).success(function(response) {
-		    ChannelSvc.insert(response.items[0].snippet.channelId);
-		});
+    	    var i = 1;
+            if(videoId[i]===undefined) i++;
+            if(videoId[i]!==undefined) {
+                VideoSvc.getChannelId(videoId[1]).success(function(response) {
+                    ChannelSvc.insert(response.items[0].snippet.channelId);
+                    alert('channel#' + response.items[0].snippet.channelId + ' is marked as trusted source');
+                });
+            }
 	    }
 	};
     }]);

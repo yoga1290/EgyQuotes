@@ -7,7 +7,8 @@
     },
     "MENU": {
       "LOGIN": "Login",
-      "FAVORITES": "Favorites",
+      "PLAYLIST": "Playlist",
+	  "SEARCH": "Search",
       "WATCH_LATER": "Watch list",
       "RECENT_SHOWS": "Recent shows"
     },

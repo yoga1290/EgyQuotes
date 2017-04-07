@@ -2,8 +2,8 @@ var app=angular.module('app',['ngRoute']);
 app
     .directive('jade',['$compile', function($compile){
 	return{
-	    transclude: true,
-	    template: '<div ng-transclude></div>',
+//	    transclude: true,
+//	    template: '<div ng-transclude></div>',
 	    restrict: 'E',
 	    link: function(scope, element){
 		element
@@ -16,7 +16,7 @@ app
 				)
 			)(scope)
 		    )
-		    .remove();
+		    .remove(); //remove the <jade> element
 	    }
 	};
     }]);
@@ -26,59 +26,44 @@ app.config(['$routeProvider','$httpProvider', function($routeProvider, $httpProv
 	    controller: 'gridCtrl'
 	})
 	.when('/browse', {
-	    templateUrl: '/browse.html',
+	    templateUrl: 'browse.html',
 	    controller: 'BrowseCtrl'
 	})
 	.when('/search', {
 	    controller: 'SearchCtrl',
-	    templateUrl: '/search2.html'
-	})
-	.when('/search/:query', {
-	    controller: 'SearchCtrl',
-	    templateUrl: '/search2.html'
-	})
-	.when('/ResponseDialog/:status', {
-	    templateUrl: '/ErrorDialog.html'
+	    templateUrl: 'search2.html'
 	})
 	.when('/quote/:quoteId', {
-	    templateUrl: '/video.html',
+	    templateUrl: 'video.html',
 	    controller: 'videoCtrl'
 	})
 	.when('/s=:s', {
-	    templateUrl: '/video.html',
+	    templateUrl: 'video.html',
 	    controller: 'videoCtrl'
 	})
 	.when('/v=:v', {
-	    templateUrl: '/video.html',
+	    templateUrl: 'video.html',
 	    controller: 'videoCtrl'
 	})
 	.when('/new/:videoId', {
-	    templateUrl: '/video.html',
-	    controller: 'videoCtrl'
-	})
-	.when('/story?:story', {
-	    templateUrl: '/video.html',
+	    templateUrl: 'video.html',
 	    controller: 'videoCtrl'
 	})
 	.when('/settings', {
 	    templateUrl: '/settings.html',
 	    controller: 'SettingsCtrl'
 	})
-	.when('/error/:code', {
-	    templateUrl: '/error.html',
-	    controller: 'AlertCtrl'
-	})
   .when('/WatchLater', {
-	    templateUrl: '/WatchLater.html',
+	    templateUrl: 'WatchLater.html',
 	    controller: 'WatchLaterCtrl'
 	})
-  .when('/Favorites', {
-	    templateUrl: '/Playlist.html',
+  .when('/playlist', {
+	    templateUrl: 'Playlist.html',
 	    controller: 'PlaylistCtrl'
 	})
 	.when('/favorites', {
-	    templateUrl: '/favorites.html',
-	    controller: 'FavoritesCtrl'
+	    templateUrl: 'Playlist.html',
+	    controller: 'PlaylistCtrl'
 	})
   .otherwise('/');
 }])
@@ -101,6 +86,7 @@ app.config(['$routeProvider','$httpProvider', function($routeProvider, $httpProv
           if (config.headers['Authentication'] !== undefined) {
             window.localStorage.setItem('access_token', config.headers['Authentication']);
           }
+
 
 
           if (window.localStorage.getItem('access_token') !== undefined && window.localStorage.getItem('access_token') !== null) {
@@ -126,6 +112,7 @@ app.config(['$routeProvider','$httpProvider', function($routeProvider, $httpProv
                }
             });
           }
+   //       config.url = 'https://videoquotes.herokuapp.com' + config.url;
         }
 
         return config;
@@ -161,8 +148,3 @@ app.config(['$routeProvider','$httpProvider', function($routeProvider, $httpProv
   }]);
 }]);
 
-app.run(['$rootScope', function($rootScope) {
-    $rootScope.$on('$routeChangeSuccess', function() {
-	$(document).scrollTop(0);
-    });
-}]);

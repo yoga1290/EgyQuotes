@@ -25,10 +25,23 @@
     content: "close";
 }
 
+.search.btn-circle.material-icons:before {
+    content: "search";
+}
+.search.btn-circle.material-icons {
+    border-color: #298343;
+    color: #298343;
+    font-size: 64px;
+}
+.search.btn-circle.material-icons:hover {
+    background-color: #13a93e;
+    color: white;
+}
 
 .favorites.btn-circle.material-icons {
     border-color: rgb(254, 164, 0);
     color: rgb(254, 164, 0);
+    font-size: 64px;
 }
 .favorites.btn-circle.material-icons:hover {
     background-color: rgb(252, 139, 0);

@@ -73,12 +73,16 @@ app
     } else if($routeParams.videoId !== undefined) {
 	VideoSvc.getChannelId($routeParams.videoId)
 	    .success(function(response){
+
 console.log('getChannelId:', response);
 		ChannelSvc.findByChannelId(response.items[0].snippet.channelId)
 		.success(function() {
 		    //TODO: check response?
 		    YTPlayer.playlist=[];
 		    YTPlayer.load($routeParams.videoId);
+		    VideoSvc
+                .findById($routeParams.videoId)
+                .success(getVideoQuotes);
 		});
 
 	    });

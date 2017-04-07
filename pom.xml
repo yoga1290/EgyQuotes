@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>yoga1290.videoquotes</groupId>
-    <artifactId>videoquotes.heroku</artifactId>
+    <artifactId>videoquotes</artifactId>
     <packaging>jar</packaging>
     <version>0.1.0</version>
 
@@ -17,7 +17,7 @@
         <java.version>1.8</java.version>
 	<!-- The main class to start by executing java -jar -->
 	<start-class>videoquotes.Application</start-class>
-	<skipMinify>true</skipMinify>
+	<skipMinify>false</skipMinify>
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -177,11 +177,11 @@
 	      <configuration>
 		<appName>videoquotes</appName>
 		<processTypes>
-		    <web>java -Dserver.port=$PORT $JAVA_OPTS -jar target/videoquotes.heroku-0.1.0.jar</web>
+		    <web>java -Dserver.port=$PORT $JAVA_OPTS -jar target/videoquotes-0.1.0.jar</web>
 		</processTypes>
 		<includeTarget>false</includeTarget>
 		<includes>
-		  <include>target/videoquotes.heroku-0.1.0.jar</include>
+		  <include>target/videoquotes-0.1.0.jar</include>
 		</includes>
 	      </configuration>
 	    </plugin>

@@ -1,6 +1,6 @@
 app.controller('gridCtrl',
-	    ['$scope', 'UserSvc',
-	    function(sp, UserSvc){
+	    ['$scope', 'UserSvc', '$location',
+	    function(sp, UserSvc, $location){
 
 		    sp.parseInt = parseInt;
 		    sp.to2Digit=function(x){
@@ -10,11 +10,7 @@ app.controller('gridCtrl',
 			return x;
 		    };
 
-		    UserSvc.getUser().success(function(response) {
-                sp.user = response;
-            });
-
-            UserSvc.getPicture().success(function(pictureURL) {
-                sp.picture = pictureURL;
-            });
+            sp.isScrollHidden = function() {
+                return $location.path() !== '/';
+            };
     }]);

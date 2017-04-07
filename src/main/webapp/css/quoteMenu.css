@@ -1,0 +1,13 @@
+#quote-menu {
+    bottom: 0px;
+    position: relative;
+}
+
+#quote-menu i.material-icons {
+    font-size: 60px;
+    color: #ccc;
+}
+
+#quote-menu i.material-icons:hover {
+    color: #999;
+}

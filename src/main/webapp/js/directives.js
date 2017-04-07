@@ -16,6 +16,9 @@ app
   	},
     controller: ['$scope', 'ResponseDialog', function($scope, ResponseDialog) {
       $scope.response = ResponseDialog;
+      $scope.login = function() {
+        window.open(config.OAuth.facebook.login, '_blank');
+      };
     }],
   	templateUrl: 'directives/errorDialog.html'
       };

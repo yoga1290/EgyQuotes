@@ -1,0 +1,19 @@
+#hero {
+    margin-bottom: -20px;
+}
+
+#hero quote {
+    margin-left: 80px;
+    margin-top: 70px;
+}
+#hero quote .panel {
+    background-color: transparent;
+}
+
+#hero quote .panel i.material-icons {
+    z-index: 1;
+}
+
+#hero quote .panel-body {
+    background-color: rgba(202, 202, 202, 0.5);
+}

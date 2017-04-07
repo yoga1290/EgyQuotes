@@ -6,6 +6,8 @@
 		i.btn-circle.material-icons(ng-click="showPlaylists=!showPlaylists") add_to_queue
 		a(ng-href="http://facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvideoquotes.herokuapp.com/og/q/{{quote.id+'&'}}app_id=504291066443321", target="_blank")
 			i.btn-circle.material-icons share
+		a(href="#/")
+			i.btn-circle.material-icons close
 	add-to-playlist.video-overlay.animated.slideInDown.col-xs-12.col-md-8(ng-show="showPlaylists", query="query", quote="quote")
 	.video-overlay.col-xs-12.col-md-offset-1.col-md-8.animated.slideInDown.ng-cloak(ng-show="showEdit")
 		ng-form.col-xs-12(name="quoteForm", ng-controller="QuoteEditorCtrl")

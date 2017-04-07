@@ -31,8 +31,7 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
 	var page = 10;
 	function searchCallback(response) {
 	    angular.forEach(response, function(quote, i) {
-
-
+            $scope.items.push(quote);
 		});
 	    if (response.length > 0) {
 		    searchDTO.page++;
@@ -149,6 +148,7 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
         updateChannelData();
         searchDTO.channelIds = nChannelIds;
         searchDTO.page = 0;
+        $scope.items = [];
         QuoteSvc.search(searchDTO).success(searchCallback);
     }
 
@@ -164,7 +164,7 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
         });
     }
     $scope.removeAuthor = function(authorId) {
-        if (!$location.search().channelIds) return;
+        if (!$location.search().personId) return;
         var personIds = [];
         angular.forEach( $location.search().personId.split(','), function(id) {
             if (authorId !== id) {
@@ -175,6 +175,7 @@ app.controller('QuoteGridCtrl', ['$scope', '$location', 'QuoteSvc', 'VideoSvc', 
         updateAuthorsData();
         searchDTO.personIds = personIds;
         searchDTO.page = 0;
+        $scope.items = [];
         QuoteSvc.search(searchDTO).success(searchCallback);
     }
     updateAuthorsData();

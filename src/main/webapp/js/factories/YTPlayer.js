@@ -55,19 +55,24 @@ function YTPlayer(to) {
 		load(quotes[0].video.id,quotes[0].start,quotes[0].end);
 	    };
 	    
-	    var onReady = function(event) {};
+	    var onReady = function(event) {
+	        console.log('onReady');
+	    };
 	    var onStateChange = function(event) {
+	    console.log('onStateChange');
 		if(event.data===YT.PlayerState.PLAYING && needProgressUpdate)
 		{
+		    console.log('onStateChange1');
 		    needProgressUpdate=false;
 		    duration = player.getDuration();
 		}
 		if(event.data===YT.PlayerState.ENDED
 			&& currentPlayingIndex+1 < playlist.length)
 		{
+		    console.log('onStateChange2');
 			currentPlayingIndex++;
 			load(
-				playlist[currentPlayingIndex].videoId,
+				playlist[currentPlayingIndex].video.id,
 				playlist[currentPlayingIndex].start,
 				playlist[currentPlayingIndex].end
 			);
@@ -86,53 +91,75 @@ function YTPlayer(to) {
 		    console.log('YTPlayer.load...', videoId, start, end);
 		    needProgressUpdate=true;
 		video.execAfterReady(function(){
-		    to(function(){
-			_onload();
-		    });
+//		    to(function(){
+//			_onload();
+//		    });
+//load(quotes[0].video.id,quotes[0].start,quotes[0].end);
 		    console.log('YTPlayer.load', videoId, start, end);
-		    var param={'autoplay': 1,'suggestedQuality': 'small','videoId': videoId,'suggestedQuality': 'small','origin':config.BASE_URL};
-		    var playerVars={ 'autoplay': 1,'videoId': videoId,'suggestedQuality': 'small','origin':config.BASE_URL};
-		    if((location.href.indexOf('#e=')>-1))
-			    playerVars.end=param.endSeconds=parseInt(
-				    location.href.substring(
-				    location.href.indexOf('e=')+2,
-				    location.href.indexOf('s=')) );
-		    if((location.href.indexOf('s=')>-1))
-			    playerVars.start=param.startSeconds=parseInt(
-				    location.href.substring(
-				    location.href.indexOf('s=')+2,
-				    location.href.indexOf('v=')) );
-		    if(start!==undefined)
-			    playerVars.start=param.startSeconds=parseInt(start);
-		    if(end!==undefined)
-			    playerVars.end=param.endSeconds=parseInt(end);
+		    var playerVars = {
+                    'autoplay': 1,
+                    'videoId': videoId,
+                    'start': start,
+                    'end': end,
+                    'suggestedQuality': 'small',
+                    'loop': 1,
+                    'fs': 0,
+                    'showinfo': 0,
+                    'cc_load_policy': 0,
+                    'iv_load_policy': 3,
+                    'ref': 0,
+                    'origin':config.BASE_URL
+            };
+//		    if((location.href.indexOf('#e=')>-1))
+//			    playerVars.end=param.endSeconds=parseInt(
+//				    location.href.substring(
+//				    location.href.indexOf('e=')+2,
+//				    location.href.indexOf('s=')) );
+//		    if((location.href.indexOf('s=')>-1))
+//			    playerVars.start=param.startSeconds=parseInt(
+//				    location.href.substring(
+//				    location.href.indexOf('s=')+2,
+//				    location.href.indexOf('v=')) );
+//		    if(start!==undefined)
+//			    playerVars.start=param.startSeconds=parseInt(start);
+//		    if(end!==undefined)
+//			    playerVars.end=param.endSeconds=parseInt(end);
 
 
-		    if(player===null || player===undefined)
+//		    if(player===null || player===undefined)
 			    player=new YT.Player(elementId, {
 				height: '390',
 				width: '640',
 				videoId: videoId,
+				suggestedQuality: 'small',
 				playerVars: playerVars,
 				events: {
-				  'onReady': onReady,
-				  'onStateChange': onStateChange
+//				  'onReady': function(e) {
+//                  console.log('onReady');
+//                    onReady();
+//                  },
+//				  'onStateChange': function(event) {
+//				        if(
+//				        event.data===YT.PlayerState.ENDED
+//                        			&&
+//                        			 currentPlayingIndex+1 < playlist.length)
+//                        		{
+//                        		    console.log('onStateChange');
+//                        			currentPlayingIndex++;
+//                        			load(
+//                        				playlist[currentPlayingIndex].video.id,
+//                        				playlist[currentPlayingIndex].start,
+//                        				playlist[currentPlayingIndex].end
+//                        			);
+//                        		}
+//				  }
 				}
 			    });
-		    else
-		    {
-//			_this.player.loadVideoById(param);
-			player = new YT.Player(elementId, {
-				height: '390',
-				width: '640',
-				videoId: videoId,
-				playerVars: playerVars,
-				events: {
-				  'onReady': onReady,
-				  'onStateChange': onStateChange
-				}
-			    });
-		    }
+//		    else
+//		    {
+//		    console.log(player);
+//		        player.loadVideoById(playerVars);
+//		    }
 		});
 	    }
 	    

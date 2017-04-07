@@ -52,17 +52,17 @@ app
 		endUnixTime = endUnixTime.getTime();
 
 	    var callback = function(response) {
-		$scope.pageToken = response.nextPageToken;
-		angular.forEach(response.items, function(item) {
-		    $scope.result.push({
-			title: item.snippet.title,
-			videoId: item.id.videoId,
-			thumbnail: item.snippet.thumbnails.high.url
-		    });
-		});
+            $scope.pageToken = response.nextPageToken;
+            angular.forEach(response.items, function(item) {
+                $scope.result.push({
+                title: item.snippet.title,
+                videoId: item.id.videoId,
+                thumbnail: item.snippet.thumbnails.high.url
+                });
+            });
 	    };
 
-	    var videoId = $scope.URL.match(/(?:v\=)+(.*)|(?:youtu\.be\/)+(.*)|(?:channel\/)(.*)/);
+	    var videoId = $scope.URL.match(/(?:v\=)+([^&,^?]*)|(?:youtu\.be\/)+([^&,^?]*)|(?:channel\/)([^&,^?]*)/);
 	    if(videoId !== null) {
 		var i = 1;
 		if(videoId[i]===undefined) i=2;

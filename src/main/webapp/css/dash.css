@@ -24,6 +24,11 @@ button#facebook{
 #dash-field input:focus {
     background-color: white;
 }
+#dash-field.stick input
+{
+    width: 100%;
+    margin: 0px;
+}
 #dash-field #overlay {
     position: absolute;
     left: 50%;
