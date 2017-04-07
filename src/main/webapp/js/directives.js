@@ -96,10 +96,20 @@ app
             'quote': '='
         },
 //            controller: 'QuoteReactionCtrl',
-        controller: ['$scope', '$location', function($scope, $location) {
+        controller: ['$scope', '$location', 'VideoSvc', function($scope, $location, VideoSvc) {
           $scope.onClick = function(quote) {
                 $location.path('/quote/' + quote.id);
           };
+              VideoSvc.getChannelId($scope.quote.video.id).success(function(response) {
+                  $scope.quote.thumbnail = response.items[0].snippet.thumbnails.high.url;
+                  VideoSvc.getChannelData(response.items[0].snippet.channelId).success(function(data) {
+                      if (data.items.length === 0 ) {
+                          console.error('No thumbnails for channelId#', response.items[0].snippet.channelId);
+                      } else {
+                          $scope.quote.logo = data.items[0].snippet.thumbnails.high.url;
+                      }
+                  });
+            });
         }],
         templateUrl: 'directives/gridQuote.html'
         };
