@@ -1,4 +1,4 @@
-require('../js/1_jquery.js')
+window.$ = require('jquery')
 var Vue = require('vue')
 var App = require('./app.vue')
 
