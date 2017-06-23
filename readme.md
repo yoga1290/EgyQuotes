@@ -19,11 +19,28 @@ Interesting sites like [BrainyQuote](http://www.brainyquote.com), [grabyo](http:
 
 ------------------------
 
-## Install, Configure & Heroku deploy
+## Configure
+
+You'll need to change properties in the following files:
+
++ [videoquotes.properties](https://github.com/yoga1290/VideoQuotes/blob/master/videoquotes.properties)
++ [application.properties](https://github.com/yoga1290/VideoQuotes/blob/master/src/main/resources/application.properties)
++ [deploy/heroku.sh](https://github.com/yoga1290/VideoQuotes/blob/master/ci/deploy/heroku.sh)
+
+## Docker:
+
++ build image: `docker build -t videoquotes .`
++ run container: `docker run -p 8080:8080 --name videoquotes-container videoquotes`
++ remove image: `docker rmi videoquotes`
++ remove container: `docker rm videoquotes-container`
+
+
+## Deploy to Heroku
 
 #### Install
 
 + Form Unix/OS X systems, if you do have Java JDK installed, then you can just run this script in terminal:
+
 ```bash
 #download Maven
 curl -O http://mirror.nexcess.net/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.zip;
@@ -49,14 +66,6 @@ git clone https://github.com/yoga1290/VideoQuotes.git;
 # change directory to the repository
 cd VideoQuotes;
 ```
-
-#### Configure
-
-You'll need to change properties in the following files:
-
-+ [videoquotes.properties](https://github.com/yoga1290/VideoQuotes/blob/master/videoquotes.properties)
-+ [application.properties](https://github.com/yoga1290/VideoQuotes/blob/master/src/main/resources/application.properties)
-+ [deploy/heroku.sh](https://github.com/yoga1290/VideoQuotes/blob/master/ci/deploy/heroku.sh)
 
 #### Deploy
 
