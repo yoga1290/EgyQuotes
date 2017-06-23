@@ -29,11 +29,33 @@ You'll need to change properties in the following files:
 
 ## Docker:
 
+#### Build
 + build image: `docker build -t videoquotes .`
+
++ build w env variables:
+
+```bash
+docker build \
+    --build-arg db_username=*** \
+    --build-arg db_password=*** \
+    --build-arg db_host=*** \
+    --build-arg db_port=*** \
+    --build-arg db_database=*** \
+    --build-arg mail_host=*** \
+    --build-arg mail_port=*** \
+    --build-arg mail_username=*** \
+    --build-arg mail_token=*** \
+    -t videoquotes .
+```
+
+##### Run
+
 + run container: `docker run -p 8080:8080 --name videoquotes-container videoquotes`
+
+#### Remove
+
 + remove image: `docker rmi videoquotes`
 + remove container: `docker rm videoquotes-container`
-
 
 ## Deploy to Heroku
 
