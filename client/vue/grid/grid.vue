@@ -1,6 +1,32 @@
-<script>
-import gridQuote from './quote/gridQuote.vue'
+<template lang="jade">
+#grid.col-md-11.col-sm-9.col-xs-12.section
+	page-loader-header
+	.col-sm-offset-1.col-sm-11(:class="{noscroll: show}")
+		.hidden-xs.hidden-sm(v-if="screen.other")
+			.col-1.col-md-3.clickable
+				grid-quote(v-for="quote, $index in items", v-if="$index%4==0", :quote="quote", :click="onQuoteSelect")
+			.col-2.col-md-3.clickable
+				grid-quote(v-for="quote, $index in items", v-if="$index%4==1", :quote="quote", :click="onQuoteSelect")
+			.col-3.col-md-3.clickable
+				grid-quote(v-for="quote, $index in items", v-if="$index%4==2", :quote="quote", :click="onQuoteSelect")
+			.col-4.col-md-3.clickable
+				grid-quote(v-for="quote, $index in items", v-if="$index%4==3", :quote="quote", :click="onQuoteSelect")
+		.visible-sm(v-if="screen.sm")
+			.col-1.col-xs-6.clickable
+				grid-quote(v-for="quote, $index in items", v-if="$index%2==0", :quote="quote", :click="onQuoteSelect")
+			.col-2.col-xs-6.clickable
+				grid-quote(v-for="quote, $index in items", v-if="$index%2==1", :quote="quote", :click="onQuoteSelect")
+		.visible-xs.col-xs-12.clickable(v-if="screen.xs")
+			grid-quote(v-for="quote, $index in items", :quote="quote", :click="onQuoteSelect")
+	page-loader-footer
+</template>
 
+<script>
+import pageLoaderHeader from './page-loader-header.vue'
+import pageLoaderFooter from './page-loader-footer.vue'
+import gridQuote from './quote/gridQuote.vue'
+//import YtVideo from '../video/video.vue'
+// 		yt-video(v-if="show", :quote="selectedQuote", :close="closeVideo")
 var v = {}
 var $props = {}
 var $set = (k, v)=>{}
@@ -14,9 +40,12 @@ function detectScreenWidth() {
   }
 }
 
+
 module.exports = {
   data () {
     return {
+			show: false,
+			selectedQuote: undefined,
       screen: detectScreenWidth()
     }
   },
@@ -30,20 +59,35 @@ module.exports = {
   },
 
   updated () {
-    console.log('grid.updated', $props.items)
-    $set('screen', detectScreenWidth())
+    //console.log('grid.updated', $props.items)
+    //$set('screen', detectScreenWidth())
   },
   mounted () {
-    console.log($props.items)
+    //console.log($props.items)
   },
 
   methods: {
+/*
+		onQuoteSelect (quote) {
+			//console.log('grid', quote)
+			this.$set(this.$data, 'selectedQuote', quote)
+			this.$set(this.$data, 'show', true)
+			$set('show', true)
+		},//*/
+
+		/*closeVideo () {
+			//console.log('grid')
+			$set('show', false)
+		}//*/
   },
 
   computed: {
   },
 
   components: {
+		//YtVideo,
+		pageLoaderHeader,
+		pageLoaderFooter,
     gridQuote
   },
 
@@ -53,40 +97,18 @@ module.exports = {
           default () {
             return [];
           }
-      }
+      },
+      onQuoteSelect: {
+          type: Function,
+          default () {
+            return ()=>{};
+          }
+      }//*/
   }//*/
 }
 </script>
 
-<template lang="jade">
-.col-md-11.col-sm-9.col-xs-12.section(style="padding:0px;")
-	#quoteLoader.col-sm-offset-1
-		{{screen}}
-		.hidden-xs.hidden-sm(v-if="screen.other")
-			.col-md-3.clickable
-				grid-quote(v-for="quote, $index in items", v-if="$index%4==0", :quote="quote")
-			.col-md-3.clickable
-				grid-quote(v-for="quote, $index in items", v-if="$index%4==1", :quote="quote")
-			.col-md-3.clickable
-				grid-quote(v-for="quote, $index in items", v-if="$index%4==2", :quote="quote")
-			.col-md-3.clickable
-				grid-quote(v-for="quote, $index in items", v-if="$index%4==3", :quote="quote")
-		.visible-sm(v-if="screen.sm")
-			.col-xs-6.clickable
-				grid-quote(v-for="quote, $index in items", v-if="$index%2==0", :quote="quote")
-			.col-xs-6.clickable
-				grid-quote(v-for="quote, $index in items", v-if="$index%2==1", :quote="quote")
-		.visible-xs.col-xs-12.clickable(v-if="screen.xs")
-			grid-quote(v-for="quote, $index in items", :quote="quote")
-</template>
-
 <style lang="stylus" scoped>
-#map
-  z-index: 2;
-  position: absolute;
-  top: 0px;
-  width: 100%;
-  height: 100%;
 .title
   broder-bottom: 1px solid gray;
   margin-bottom: 5px;
@@ -106,5 +128,12 @@ button#start
 .visible-sm *,
 .visible-xs
   padding:0px;
-  border-left: 3px solid white;
+  border-left: 3px solid #606060;
+
+#grid, #grid *
+  padding: 0px;
+
+.noscroll
+	/*position: fixed;*/
+
 </style>

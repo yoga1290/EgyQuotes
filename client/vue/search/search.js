@@ -2,17 +2,17 @@ var PersonSvc = require('../svc/PersonSvc.js')
 var ChannelSvc = require('../svc/ChannelSvc.js')
 
 // import {PersonSvc2, ChannelSvc2} from '../svc'
-// console.log(PersonSvc2, ChannelSvc2)
+// //console.log(PersonSvc2, ChannelSvc2)
 var PeopleList = require('./people.vue')
 var ChannelsList = require('./channels.vue')
 
 // https://vuejs.org/v2/guide/events.html#Key-Modifiers
 // https://vuejs.org/v2/guide/render-function.html#Event-amp-Key-Modifiers
 function closeSearchOverlay() {
-  $('#search-overlay').removeClass('visible')
+  $('#search-panel').removeClass('active')
 }
 function openSearchOverlay() {
-  $('#search-overlay').addClass('visible')
+  $('#search-panel').addClass('active')
 }
 
 function outerClick(e) {
@@ -21,7 +21,7 @@ function outerClick(e) {
     if(p.id === 'search') {
       pass = false;
     }
-    // console.log(p)
+    // //console.log(p)
   });
   if (pass) {
     closeSearchOverlay()
@@ -52,19 +52,31 @@ function updateDTO() {
   $set('searchDTO', searchDTO)
 }
 
+// people list callback
 function setPeople(personIds) {
   searchDTO.personIds = personIds
+  personIds.forEach((personId) => {
+    selectedPersonById[personId] = personById[personId]
+  })
+  $set('selectedPersonById', selectedPersonById)
   updateDTO()
 }
 
+// channel list callback
 function setChannels(channelIds) {
   searchDTO.channelIds = channelIds
+  channelIds.forEach((channelId) => {
+    selectedChannelById[channelId] = channelById[channelId]
+  })
+  $set('selectedChannelById', selectedChannelById)
   updateDTO()
 }
 
 var lastPersonReq = {xhr: { abort () {} }}
 var lastChannelReq = {xhr: { abort () {} }}
-function query(str) {
+var channelById = {}
+var personById = {}
+function query(v, str) {
 
   // cancel old requests
   lastPersonReq.xhr.abort()
@@ -72,43 +84,51 @@ function query(str) {
 
   lastPersonReq = PersonSvc.findByName(str)
   .success((people)=>{
-    $set('people', people)
-    var personById = {}
+    v.$set(v.$data, 'people', people)
+    personById = {} //TODO: unless it's selected
     people.forEach((person)=>{
       personById[person.id] = person
-      console.log(person)
+      //console.log(person)
     })
-    $set('personById', personById)
   })
 
   lastChannelReq = ChannelSvc.searchByName(str, 0, 10)
   .success((channels)=>{
-      $set('channels', channels)
-      var channelById = {}
+      v.$set(v.$data, 'channels', channels)
+      channelById = {} //TODO: unless it's selected
       channels.forEach((channel)=>{
         channelById[channel.id] = channel
       })
-      $set('channelById', channelById)
   })
 
   $('#search-overlay').addClass('visible')
 
 }
 
-function selectChannel(channelId) {
+var selectedChannelById = {}
+function selectChannel(v, channelId) {
   var i = v.searchDTO.channelIds.indexOf(channelId)
+  selectedChannelById[channelId] = channelById[channelId]
 
   if (i > -1) {
     v.searchDTO.channelIds.splice(i, 1)
+    delete selectedChannelById[channelId]
   }
+  v.$set(v.$data, 'selectedChannelById', selectedChannelById)
 }
 
-function selectPerson(personId) {
+var selectedPersonById = {}
+function selectPerson(v, personId) {
   var i = v.searchDTO.personIds.indexOf(personId)
+  // console.log(personById[personId])
+  selectedPersonById[personId] = personById[personId]
 
   if (i > -1) {
     v.searchDTO.personIds.splice(i, 1)
+    delete selectedPersonById[personId]
   }
+  // console.log(selectedPersonById, v.selectedPersonById)
+  v.$set(v.$data, 'selectedPersonById', selectedPersonById)
 }
 
 
@@ -116,9 +136,9 @@ module.exports = {
   data () {
     return {
       searchDTO: searchDTO,
-      setPeople: setPeople,
-      channelById: {},
-      personById: {},
+      //setPeople: setPeople,
+      selectedChannelById: {},
+      selectedPersonById: {},
       field: '',
       translation: {
         SEARCH: {CHANNELS: 'channels'}
@@ -137,14 +157,25 @@ module.exports = {
 
   methods: {
     onFocus() {
-      console.log('onFocus')
+      //console.log('onFocus')
       openSearchOverlay()
     },
 
     onKeypress(e) {
 
-      console.log(e.target.value)
-      query(e.target.value)
+      //console.log(e.target.value)
+      var videoId = e.target.value.match(/(?:v\=)+([^&,^?]*)|(?:youtu\.be\/)+([^&,^?]*)|(?:channel\/)([^&,^?]*)/);
+      if(videoId !== null) {
+        var i = 1;
+        if(videoId[i]===undefined) i++;
+        if(videoId[i]!==undefined)  {
+          closeSearchOverlay()
+          e.target.value = ''
+          this.onYoutubeVideoIdDetected(videoId[i])
+        }
+      } else {
+        query(this, e.target.value)
+      }
 
     },
 
@@ -153,10 +184,10 @@ module.exports = {
     },
 
     selectChannel (id) {
-      selectChannel(id)
+      selectChannel(this, id)
     },
     selectPerson (id) {
-      selectPerson(id)
+      selectPerson(this, id)
     },
 
     setChannels (id) {
@@ -184,6 +215,12 @@ module.exports = {
           }
       },
       onQueryChange: {
+          type: Function,
+          default () {
+            return '';
+          }
+      },
+      onYoutubeVideoIdDetected: {
           type: Function,
           default () {
             return '';

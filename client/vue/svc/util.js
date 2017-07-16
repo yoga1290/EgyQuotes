@@ -1,34 +1,51 @@
 
 window.httpCount = window.httpCount | 0;
+// XMLHttpRequest.setRequestHeader(header, value)
+var accessToken = window.localStorage.getItem('access_token')
 
 function onRequest() {
   window.httpCount++;
-  console.log(window.httpCount);
   if (window.httpCount > 0) {
     $('#page-loader').addClass('active');
   }
 }
 function onResponse() {
   window.httpCount--;
-  console.log(window.httpCount);
   if (window.httpCount <= 0) {
     $('#page-loader').removeClass('active');
   }
 }
 
-function wrap(xhr, data) {
+function wrap(xhr, data, noauth=false) {
   var successCallback = function() {};
   var errorCallback = function() {};
 
-  xhr.onload = function() {
-    if (xhr.readyState === 4) {
-      successCallback(JSON.parse(xhr.responseText));
-    } else {
-      console.log(xhr);
-      errorCallback(); //TODO
-    }
-    onResponse();
+  var error = false;
+  var onerror = (e) => {
+    error = true;
+    console.log('$http.error', e)
+    errorCallback();
   };
+
+  xhr.addEventListener("readystatechange", () => {
+
+    if (xhr.readyState === XMLHttpRequest.DONE && !error) {
+      successCallback(JSON.parse(xhr.responseText));
+    } else if (xhr.readyState === XMLHttpRequest.HEADERS_RECEIVED && xhr.status === 401) {
+      accessToken = null
+      window.localStorage.removeItem('access_token')
+      // TODO
+    }
+  });
+  xhr.addEventListener("loadend", onResponse)
+
+  if (accessToken && !noauth) {
+    xhr.setRequestHeader("Authorization", 'bearer ' + accessToken)
+  }
+  //xhr.addEventListener("abort", onResponse)
+  // https://developer.mozilla.org/en-US/docs/Web/Events/loadend
+  xhr.addEventListener("loadend", onResponse)
+  xhr.addEventListener("error", onerror)
   onRequest();
   xhr.send(data);
 
@@ -51,10 +68,10 @@ function wrap(xhr, data) {
   return chain;
 }
 
-function get(url, callback) {
+function get(url, noauth) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', url);
-  return wrap(xhr);
+  return wrap(xhr, undefined ,noauth);
 }
 
 function post(url, data) {

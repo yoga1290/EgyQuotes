@@ -1,7 +1,7 @@
 <template lang="jade">
 .col-xs-12.col-sm-6
 	.title.col-xs-12
-		i.material-icons(style="font-size: 48px;") live_tv
+		i.icon(style="font-size: 48px;")
 		| Channels
 	.entity.col-xs-12(v-for="channel in channels", @click="selectChannel(channel.id)")
 		| {{channel.name}}
@@ -72,13 +72,14 @@ module.exports = {
 </script>
 
 <style lang="stylus" scoped>
-i.material-icons
+i.icon
   font-size: 48px;
   margin-top: 0px;
   z-index: 5;
   position: relative;
   float: right;
-
+i.icon:after
+	content: '\e6e5';
 .title
   border-bottom: 5px solid white;
   font-size: 32px;

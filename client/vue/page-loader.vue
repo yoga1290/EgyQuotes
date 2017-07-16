@@ -1,7 +1,7 @@
 <template lang="jade">
 #page-loader
 	.overlay
-	i.animated.material-icons wifi
+	i.animated.icon signal
 </template>
 
 <style lang="stylus" scoped>
@@ -13,14 +13,14 @@
 #page-loader
 	text-align: center;
 
-#page-loader > i.material-icons
+#page-loader > i.icon
 	font-size: 200px;
 	-webkit-animation: fadeInUp 1s ease;
 	animation: fadeInUp 1s ease;
 	-webkit-animation-iteration-count: infinite;
 	animation-iteration-count: infinite;
 	position: fixed;
-	z-index: 6;
+	z-index: 10;
 	top: 30%;
 	height: 100%;
 	left: 0px;
@@ -35,7 +35,7 @@
 	position: fixed;
 	width: 100%;
 	height: 100%;
-	z-index: 6;
+	z-index: 10;
 </style>
 
 <script>

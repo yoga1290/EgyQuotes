@@ -1,8 +1,8 @@
 <template lang="jade">
 .col-xs-12.col-sm-6
 	.title.col-xs-12
-		i.material-icons(style="font-size: 48px;") face
-		| YOYO
+		i.icon(style="font-size: 48px;") user
+		| People
 	.entity.col-xs-12(v-for="person in people", @click="selectPerson(person.id)")
 		| {{person.name}}
 </template>
@@ -42,7 +42,7 @@ module.exports = {
   created () {
     v = this;
     $set = function(key, value) {
-      v.$set(v.$data, key, value);
+      this.$set(this.$data, key, value);
     }
   },
 
@@ -74,7 +74,7 @@ module.exports = {
 </script>
 
 <style lang="stylus" scoped>
-i.material-icons
+i.icon
   font-size: 48px;
   margin-top: 0px;
   z-index: 5;
