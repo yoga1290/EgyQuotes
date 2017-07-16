@@ -13,3 +13,17 @@ src/main/webapp/app.js
 src/main/webapp/style.css
 videoquotes.heroku.iml
 videoquotes.iml
+
+client/public/Vaadin-Icons\.eot
+
+client/public/Vaadin-Icons\.svg
+
+client/public/Vaadin-Icons\.ttf
+
+client/public/aadin-Icons\.woff
+
+client/public/animate\.min\.css
+
+client/public/bootstrap\.min\.css
+
+client/public/app\.js

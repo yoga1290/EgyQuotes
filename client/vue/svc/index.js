@@ -1,0 +1,5 @@
+module.exports = {
+  PersonSvc: require('./PersonSvc.js'),
+  ChannelSvc: require('./ChannelSvc.js'),
+  QuoteSvc: require('./quoteSvc.js')
+}
