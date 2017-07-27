@@ -22,7 +22,7 @@ function detectScreenWidth() {
 }
 
 
-module.exports = {
+export default {
   data () {
     return {
       author: {
@@ -108,7 +108,6 @@ module.exports = {
 
 <style lang="stylus" scoped>
 .menu
-    background-color: #474747;
     padding: 0px;
 .clickable
   color: #b2b2b2;

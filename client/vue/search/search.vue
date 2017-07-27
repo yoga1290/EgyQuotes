@@ -1,5 +1,6 @@
 <script>
-module.exports = require('./search.js')
+import Search from './search.js'
+export default Search
 </script>
 
 <template lang="jade">
@@ -25,22 +26,22 @@ module.exports = require('./search.js')
   z-index: 9;
   width: 100%;
 #search input
-  text-align: center;
-  font-size: 32px;
-  /*border: none;*/
-  border: 1px solid #b2b2b2;
-  border-radius: 5px;
-  position: relative;
-  z-index: 9;
-  background-color: rgba(255, 255, 255, 0);
-  width:100%;
+	text-align: center;
+	font-size: 32px;
+	background-color: #606060;
+	color: #ccc;
+	border: 1px solid #b2b2b2;
+	border-radius: 5px;
+	position: relative;
+	z-index: 9;
+	width:100%;
 
 #search-overlay::before
   position: relative;
   width: 0;
   content: '';
   border-right: 20px solid transparent;
-  border-bottom: 20px solid #ccc;
+  border-bottom: 20px solid #b2b2b2;
   /* margin-bottom: -3px; */
   border-left: 20px solid transparent;
   border-radius: 5px;
@@ -51,7 +52,7 @@ module.exports = require('./search.js')
   display: none;
   margin-top: 15px;
   background: #b2b2b2; //rgba(0, 0, 0, 0.7);
-  border: 1px solid white;
+  border: 1px solid #ccc;
   position: absolute;
   border-radius: 10px;
   -moz-box-shadow: 0 0 15px #b2b2b2;
@@ -60,9 +61,6 @@ module.exports = require('./search.js')
 
 #search-panel.active #search-overlay
   display: block;
-
-#search input
-  background-color: rgba(255, 255, 255, 0.5);
 
 #search i.icon
   font-size: 48px;

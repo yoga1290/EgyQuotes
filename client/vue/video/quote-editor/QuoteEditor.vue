@@ -12,8 +12,8 @@ form.col-xs-12(name="quoteForm")
   .col-xs-12(style="padding:0px;")
     #edit-tip
     textarea#quote.col-xs-12(:placeholder="translation.VIDEO.QUOTE",name="quote", v-model="quoteText", ng-class="{'has-error': (quoteForm.quote.$invalid)}")
-    i.icon.quote.right(style="position: absolute;position: absolute;margin-left: -45px;z-index: 5;color: rgba(98, 98, 98, 0.6);")
-    i.icon.quote.left(style="margin-top: 70px;left: 0px;z-index: 5;color: rgba(98, 98, 98, 0.6);")
+    i.icon.quote.right
+    i.icon.quote.left
   .btn-box.col-xs-12.col-sm-3.gray(@click="save()", ng-disabled="quoteForm.$invalid")
     i.icon paperplane
     | {{translation.VIDEO.SAVE}}
@@ -21,8 +21,8 @@ form.col-xs-12(name="quoteForm")
 <script>
 import AuthorSelector from './selector-author.vue'
 import QuoteTimer from './timer.vue'
-var PersonSvc = require('../../svc/PersonSvc.js')
-var QuoteSvc = require('../../svc/quoteSvc.js')
+import PersonSvc from '../../svc/PersonSvc.js'
+import QuoteSvc from '../../svc/quoteSvc.js'
 
 //var Player = require('./player.js')
 var Player = {}
@@ -55,7 +55,7 @@ function onTimerChange(startTime, endTime) {
 
 var selectedAuthor = {}
 
-module.exports = {
+export default {
   data () {
     return {
       quote: {
@@ -98,9 +98,7 @@ module.exports = {
   },
 
   methods: {
-    onTimerChange (startTime, endTime) {
-      onTimerChange(startTime, endTime)
-    },
+    onTimerChange,
 
     onSelectAuthor (author) {
       selectedAuthor = author
@@ -180,11 +178,20 @@ i.quote.icon
   font-size: 56px;
 i.quote.left.icon
   bottom: 10px;
+  margin-top: 70px;
+  left: 0px;
+  z-index: 5;
+  color: rgba(98, 98, 98, 0.6);
 i.quote.left.icon:after
   content: '\e6c2'
 
 i.quote.right.icon
   top: 13px;
+  position: absolute;
+  position: absolute;
+  margin-left: -45px;
+  z-index: 5;
+  color: rgba(98, 98, 98, 0.6);
   right: 3px;
 i.quote.right.icon:after
   content: '\e6c3'

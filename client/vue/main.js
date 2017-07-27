@@ -1,11 +1,10 @@
-window.$ = require('jquery')
-window.YTPlayer = require('./player.js')
-// require('bootstrap/dist/css/bootstrap.css')
-// require('bootstrap/less/bootstrap.less')
-var Vue = require('vue')
-var App = require('./app.vue')
+import jQuery from 'jquery'
+import Vue from 'vue'
+import App from './app.vue'
 
-window.document.body.style.cssText = 'background-color: #606060';
+window.$ = jQuery
+// window.document.body.style.cssText = 'background-color: #606060';
+window.document.body.style.cssText = 'background-color: #ccc';
 /*
 const views = {
   video: require('./video/video.vue'),
@@ -29,7 +28,7 @@ new Vue({
 
   methods: {
     getQueryStringObj () {
-      result = {}
+      let result = {}
       window.location.search.substring(1).split('&').forEach((q)=>{
         q = q.split('=')
         result[q[0]] = decodeURIComponent(q[1])

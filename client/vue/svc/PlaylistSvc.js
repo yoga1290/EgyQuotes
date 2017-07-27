@@ -1,16 +1,17 @@
-var $http = require('./util.js');
+import $http from './http.js'
+import CONFIG from '../config.js'
 
-module.exports = {
+export default {
 
   findByNameAndExcludedQuoteId (name, quoteId) {
-    return $http.get('https://videoquotes.herokuapp.com/playlist?name=' + encodeURIComponent(name) + '&quoteId=' + encodeURIComponent(quoteId) );
+    return $http.get(CONFIG.BASE_URL + '/playlist?name=' + encodeURIComponent(name) + '&quoteId=' + encodeURIComponent(quoteId) );
   },
 
   insert (name, quoteId) {
-    return $http.post('https://videoquotes.herokuapp.com/playlist', {name: name, quotes: quoteId});
+    return $http.post(CONFIG.BASE_URL + '/playlist', {name: name, quotes: quoteId});
   },
 
   list (page, size) {
-    return $http.get('https://videoquotes.herokuapp.com/playlist/list?page=' + page + '&size=' + size );
+    return $http.get(CONFIG.BASE_URL + '/playlist/list?page=' + page + '&size=' + size );
   }
 }

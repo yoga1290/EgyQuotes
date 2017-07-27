@@ -11,7 +11,7 @@
 <script>
 // import quoteMenu from './quote/menu.vue'
 
-var quoteSvc =  require('../../svc/quoteSvc.js')
+import quoteSvc from '../../svc/quoteSvc.js'
 
 var v = {}
 var $set = (k, v)=>{}
@@ -39,7 +39,7 @@ function getThumbnailAndLogo(v, quote) {
   });
 }
 
-module.exports = {
+export default {
   data () {
     return {
       date: '',
@@ -106,7 +106,7 @@ module.exports = {
      background-position-y: 50%;
 
      position: relative;
-     border-bottom: 3px solid #606060;
+     border-bottom: 3px solid #ccc; /*#606060;*/
      font-size: 32px;
      color: rgb(202, 202, 202);
      background-color: #fff;
@@ -124,7 +124,6 @@ module.exports = {
     -moz-box-shadow: 2px 0px  10px black;
     -webkit-box-shadow: 2px 0px  10px black;
 .quote:hover, .active.quote
-    color: white;
     background: rgb(96, 96, 96) !important;
 .quote .icon:hover, .active.quote .icon
     border: none;

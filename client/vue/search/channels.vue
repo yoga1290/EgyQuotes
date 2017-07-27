@@ -31,7 +31,7 @@ function selectChannel(channelId) {
 }
 
 
-module.exports = {
+export default {
   data () {
     return {
     }

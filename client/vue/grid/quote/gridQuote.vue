@@ -8,8 +8,6 @@
 import Quote from './quote.vue'
 import YtVideo from '../../video/video.vue'
 
-var quoteSvc =  require('../../svc/quoteSvc.js')
-
 var v = {}
 var $set = (k, v)=>{}
 var init = {
@@ -21,7 +19,7 @@ var init = {
   }
 }
 
-module.exports = {
+export default {
   data () {
     return {
       show: false
