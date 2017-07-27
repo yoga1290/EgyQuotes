@@ -1,26 +1,25 @@
-var $http = require('./util.js');
+import $http from './http.js'
+import CONFIG from '../config.js'
 
-var YTKey = 'AIzaSyB4a9Vy_HoHuSFNIT8XUunQii_nla4YQvs';
-
-module.exports = {
+export default {
   list (offset, limit) {
-    return $http.get('https://videoquotes.herokuapp.com/Quote/list?offset=' + offset + '&limit=' + limit);
+    return $http.get(CONFIG.BASE_URL + '/Quote/list?offset=' + offset + '&limit=' + limit);
   },
 
   findById (quoteId) {
-    return $http.get('https://videoquotes.herokuapp.com/Quote?id=' + quoteId);
+    return $http.get(CONFIG.BASE_URL + '/Quote?id=' + quoteId);
   },
 
   search (searchDTO) {
-    return $http.post('https://videoquotes.herokuapp.com/Quote/search', searchDTO);
+    return $http.post(CONFIG.BASE_URL + '/Quote/search', searchDTO);
   },
 
   insert (quote) {
-    return $http.post('https://videoquotes.herokuapp.com/Quote/insert', quote);
+    return $http.post(CONFIG.BASE_URL + '/Quote/insert', quote);
   },
 
   getVideoData (videoId) {
-    var req = $http.get('https://www.googleapis.com/youtube/v3/videos?part=snippet&key='+YTKey+'&id='+videoId, true);
+    var req = $http.get('https://www.googleapis.com/youtube/v3/videos?part=snippet&key=' + CONFIG.GOOGLE.YT_KEY + '&id=' + videoId, true);
 
     return {
       success: function(callback) {
@@ -39,7 +38,7 @@ module.exports = {
 
   getChannelData (channelId) {
 
-    var req = $http.get('https://www.googleapis.com/youtube/v3/channels?part=snippet&key='+YTKey+'&id='+channelId, true);
+    var req = $http.get('https://www.googleapis.com/youtube/v3/channels?part=snippet&key=' + CONFIG.GOOGLE.YT_KEY + '&id=' + channelId, true);
     return {
       success: function(callback) {
         req.success(function(response) {

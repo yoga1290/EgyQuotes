@@ -24,17 +24,27 @@ function wrap(xhr, data, noauth=false) {
   var onerror = (e) => {
     error = true;
     console.log('$http.error', e)
+    var xhr = e.target
+
+    if (parseInt(xhr.status/100) === 4 || parseInt(xhr.status/100) === 0) {
+      $('#error-dialog .error').removeClass('active')
+      $('#error-dialog .error.c0').addClass('active')
+      $('#error-dialog').addClass('active')
+    }
     errorCallback();
   };
 
   xhr.addEventListener("readystatechange", () => {
 
-    if (xhr.readyState === XMLHttpRequest.DONE && !error) {
-      successCallback(JSON.parse(xhr.responseText));
-    } else if (xhr.readyState === XMLHttpRequest.HEADERS_RECEIVED && xhr.status === 401) {
+    if (xhr.readyState === XMLHttpRequest.HEADERS_RECEIVED && xhr.status === 401) {
       accessToken = null
       window.localStorage.removeItem('access_token')
       // TODO
+      $('#error-dialog .error').removeClass('active')
+      $('#error-dialog .error.c401').addClass('active')
+      $('#error-dialog').addClass('active')
+    } else if (xhr.readyState === XMLHttpRequest.DONE && !error) {
+      successCallback(JSON.parse(xhr.responseText));
     }
   });
   xhr.addEventListener("loadend", onResponse)
@@ -81,7 +91,7 @@ function post(url, data) {
   return wrap(xhr, JSON.stringify(data));
 }
 
-module.exports = {
-  get: get,
-  post: post
+export default {
+  get,
+  post
 }

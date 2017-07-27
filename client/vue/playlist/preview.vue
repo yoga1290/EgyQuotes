@@ -5,10 +5,8 @@
 
 <script>
 import Quote from '../grid/quote/quote.vue'
-
-
-var PlaylistSvc = require('../svc/PlaylistSvc.js')
-var QuoteSvc =  require('../svc/quoteSvc.js')
+import PlaylistSvc from '../svc/PlaylistSvc.js'
+import QuoteSvc from '../svc/quoteSvc.js'
 
 var v = {}
 var $props = {}
@@ -26,7 +24,7 @@ function update(v, playlist) {
 	}
 }
 
-module.exports = {
+export default {
   data () {
     return {
 			quotes: []

@@ -27,3 +27,11 @@ client/public/animate\.min\.css
 client/public/bootstrap\.min\.css
 
 client/public/app\.js
+
+client/node_modules/
+
+client/public/Vaadin-Icons\.woff
+
+client/public/bootstrap\.min\.css\.map
+
+client/vue/config\.js

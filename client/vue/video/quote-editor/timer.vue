@@ -76,7 +76,7 @@ function formattedStringToSeconds(formattedString) {
   return seconds
 }
 
-module.exports = {
+export default {
   data () {
     return {
       startTime: '',

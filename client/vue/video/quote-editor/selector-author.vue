@@ -5,22 +5,22 @@
   #author-list(v-if="suggestedAuthors.length && suggestedAuthors.length>0")
     .author(v-for="author in suggestedAuthors", @click="onSelectAuthor(author)") {{author.name}}
   {{suggestedAuthors.length}}
-  #author-list(v-if="suggestedAuthors.length === 0 && authorName.length > 0")
+  #author-list(v-if="suggestedAuthors.length === 0 && authorName.length > 0 && !authorSelected")
     .author(@click="newAuthor(authorName)")
       i.icon.new-author
       | {{authorName}}
 </template>
 
 <script>
-var PersonSvc = require('../../svc/PersonSvc.js')
+import PersonSvc from '../../svc/PersonSvc.js'
 
-var v = {}
+let v = {}
 var $props = {}
 var $set = (k, v)=>{}
 
 var lastReq = {xhr: {abort () {}}}
 function onAuthorNameChange(authorName) {
-
+  v.authorSelected = false
   lastReq.xhr.abort()
   lastReq = PersonSvc.findByName(authorName)
     .success((response) => {
@@ -30,17 +30,22 @@ function onAuthorNameChange(authorName) {
 }
 
 function newAuthor(authorName, callback) {
+  v.authorSelected = true
+  callback(authorName)
+  /*
   PersonSvc.insert(authorName)
     .success((author) => {
       callback(author)
     })
+  //*/
 }
 
 
-module.exports = {
+export default {
   data () {
     return {
       authorName: '',
+      authorSelected: false,
       suggestedAuthors: [],
       translation: {
         VIDEO: {
