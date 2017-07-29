@@ -8,7 +8,7 @@
 	i.icon.search(@click="openSearch()", v-on:mouseover="hover=2")
 	.overlay(v-if="!screen.xs && hover==3")
 		.menu-tooltip My account
-	i.icon.user(v-on:mouseover="hover=3")
+	i.icon.user(@click="onLogin", v-on:mouseover="hover=3")
 </template>
 
 <script>
@@ -27,7 +27,7 @@ function detectScreenWidth() {
   }
 }
 
-module.exports = {
+export default {
   data () {
     return {
 			screen: detectScreenWidth()
@@ -73,6 +73,12 @@ module.exports = {
 					return ()=>{};
 				}
 		},
+		onLogin: {
+				type: Function,
+				default () {
+					return ()=>{};
+				}
+		}
   }
 }
 </script>
@@ -97,11 +103,9 @@ module.exports = {
 i.icon
 	font-size: 46px;
 	padding: 10px;
-	border-radius: 64px;
-	border: solid #474747 5px;
 	cursor: pointer;
 	margin-bottom: 10px;
-	margin-right: 10px;
+	border-bottom: 5px solid #ccc;
 	transition: .3s cubic-bezier(0.86, 0, 0.07, 1)
 i.icon:hover
 	color: white;

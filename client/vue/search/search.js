@@ -1,10 +1,9 @@
-var PersonSvc = require('../svc/PersonSvc.js')
-var ChannelSvc = require('../svc/ChannelSvc.js')
-
+import PersonSvc from '../svc/PersonSvc.js'
+import ChannelSvc from '../svc/ChannelSvc.js'
 // import {PersonSvc2, ChannelSvc2} from '../svc'
 // //console.log(PersonSvc2, ChannelSvc2)
-var PeopleList = require('./people.vue')
-var ChannelsList = require('./channels.vue')
+import PeopleList from './people.vue'
+import ChannelsList from './channels.vue'
 
 // https://vuejs.org/v2/guide/events.html#Key-Modifiers
 // https://vuejs.org/v2/guide/render-function.html#Event-amp-Key-Modifiers
@@ -16,7 +15,7 @@ function openSearchOverlay() {
 }
 
 function outerClick(e) {
-  pass = true
+  let pass = true
   Array.from($(e.target).parents()).forEach((p)=>{
     if(p.id === 'search') {
       pass = false;
@@ -132,7 +131,7 @@ function selectPerson(v, personId) {
 }
 
 
-module.exports = {
+export default {
   data () {
     return {
       searchDTO: searchDTO,

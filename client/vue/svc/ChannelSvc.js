@@ -1,13 +1,11 @@
-var $http = require('./util.js');
-
-var domain = 'https://videoquotes.herokuapp.com';
+import $http from './http.js'
+import CONFIG from '../config.js'
 
 function searchByName(name, page, size) {
-  return $http.get(domain + '/channel/searchByName?name=' + encodeURIComponent(name) +'&page=' + page + '&size=' + size);
+  return $http.get(CONFIG.BASE_URL + '/channel/searchByName?name=' + encodeURIComponent(name) +'&page=' + page + '&size=' + size);
 }
 
-//
 
-module.exports = {
-  searchByName: searchByName
+export default {
+  searchByName
 }

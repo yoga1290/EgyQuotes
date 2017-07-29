@@ -1,22 +1,30 @@
 <template lang="jade">
-#app
-  .visible-print-block
-  mmenu(:onPlaylistClick="onPlaylistClick")
+#app(role='main')
+  error-dialog(:onLogin="onLogin")
+  mmenu(:onPlaylistClick="onPlaylistClick", :onLogin="onLogin")
   search.hidden-print(:onQueryChange="onQueryChange", :onYoutubeVideoIdDetected="onYoutubeVideoIdDetected")
   video-player.hidden-print(v-if="showVideo", :quote="selectedQuote", :close="closeVideo", :videoId="videoId")
   playlist(v-if="showPlaylist", :onQuoteSelect="onSelectQuote")
+  page-loader-header(:onload="loadLess", :enable="scroll", v-if="searchDTO.page > 0", :class="{hide: !scroll}")
   grid(:items="items", :onQuoteSelect="onSelectQuote", :class="{noscroll: !scroll}")
-  pageLoader.hidden-print
+  page-loader-footer(:onload="loadMore", :enable="scroll", v-if="items.length > 0", :class="{hide: !scroll}")
+  login(:close="cancelLogin")
+  page-loader.hidden-print
 </template>
 
 <script>
 import mmenu from './menu.vue'
+import login from './login.vue'
 import grid from './grid/grid.vue'
 import search from './search/search.vue'
 import pageLoader from './page-loader.vue'
 import VideoPlayer from './video/video.vue'
 import Playlist from './playlist/playlist.vue'
-var quoteSvc =  require('./svc/quoteSvc.js')
+import quoteSvc from './svc/quoteSvc.js'
+import ErrorDialog from './error-dialog.vue'
+import PageLoaderHeader from './page-loader-header.vue'
+import PageLoaderFooter from './page-loader-footer.vue'
+import CONFIG from './config.js'
 
 // https://vuejs.org/v2/guide/list.html#Caveats
 // https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats
@@ -25,10 +33,21 @@ var $set = (k, v) => {}
 
 var req = {xhr: { abort () {} }}
 
+function updateH5URI() {
+  //TODO
+  var pref = window.location.origin.match(/github.io/) ? '/VideoQuotes' : ''
+  var newQueryString = pref + '/?channelIds=' + searchDTO.channelIds.join(',')
+    + '&start=' + searchDTO.start
+    + '&end=' + searchDTO.end
+    + '&personIds=' + searchDTO.personIds.join(',');
+  window.history.replaceState(null, null, newQueryString);
+}
+
 var isLoading = false
-function onQueryChange(searchDTO) {
+function onQueryChange(searchDTO, cb = ()=>{}) {
   req.xhr.abort()
   isLoading = true
+  $set('scroll', false)
   req = quoteSvc.search(searchDTO)
           .success((response) => {
             //console.log(response)
@@ -38,86 +57,61 @@ function onQueryChange(searchDTO) {
               quote.person = {name: 'author'};
             })//*/
             $set('items', response)
+            $set('searchDTO', searchDTO)
+
+            $set('showPlaylist', false)
+            $set('showVideo', false)
+            $set('scroll', true)
             //closeVideo()
 
-            window.scrollTo(1,1)
+            window.scrollTo(1,1) //TODO
             isLoading = false
+            cb()
 
-            var newQueryString = '/?channelIds=' + searchDTO.channelIds.join(',')
-              + '&start=' + searchDTO.start
-              + '&end=' + searchDTO.end
-              + '&personIds=' + searchDTO.personIds.join(',');
-            //window.history.replaceState(null, null, newQueryString);
+            updateH5URI()
           })
 
 }
 
-function loadMore() {
+function loadMore(cb) {
   //TODO: use offset = pageSize * 1.5
+  if (isLoading) return;
   searchDTO.page++
-  onQueryChange(searchDTO)
+  onQueryChange(searchDTO, cb)
 }
 
-function loadLess() {
+function loadLess(cb) {
   //TODO: use offset = pageSize * -1.5
-  if (searchDTO.page <= 1) return;
+  if (isLoading) return;
+  if (searchDTO.page <= 0) return;
   searchDTO.page--
-  onQueryChange(searchDTO)
+  onQueryChange(searchDTO, cb)
 }
-
-/*
-var tmp=
-  $('<div>')
-  .css('top','0px')
-  .css('visibility','hidden')
-  .css('height','100%')
-  .appendTo('body');
-var windowH = window.screen.height || tmp.height();
-  tmp.css('display','none').remove();
-console.log('windowH', windowH)
-
-$(document).scroll(function() {
-
-  if (isLoading) return;
-
-  var H=$(document).height();
-  var scrollTop=$(document).scrollTop();
-
-  console.log('scrollBottom', scrollTop+windowH)
-  console.log('H', H)
-  if(scrollTop+windowH>H) {
-    loadMore();
-  } else if (scrollTop<0) {
-    loadLess();
-  }
-});
-// */
-
-$(document).scroll(function() {
-  if (isLoading) return;
-
-  if(document.body.scrollTop === 0) {
-    console.log('TOP');
-    loadLess();
-  } else if( document.body.scrollTop + window.screen.height - document.body.scrollHeight > 100) {
-    console.log('BOTTOM');
-    loadMore();
-  }
-});
 
 function onSelectQuote(quote) {
   //console.log('app.onSelectQuote', quote)
   $set('scroll', false)
   $set('selectedQuote', quote)
   $set('showVideo', true)
+  window.history.replaceState(null, null, CONFIG.OPEN_GRAPH.QUOTE + quote.id);
+}
 
-//  window.history.replaceState(null, null, '/#/quote/' + quote.id);
-//  window.history.replaceState(null, null, '/og/q/' + quote.id);
+function onLogin() {
+  $set('showPlaylist', false)
+  $set('showVideo', false)
+  $set('scroll', false)
+  $('#login').addClass('active')
+}
+function cancelLogin() {
+  $set('showPlaylist', false)
+  $set('showVideo', false)
+  $set('scroll', true)
 }
 
 function closeVideo() {
   $set('scroll', true)
   $set('showVideo', false)
+  updateH5URI()
 }
 
 var searchDTO = {
@@ -130,7 +124,7 @@ var searchDTO = {
   personIds: []
 };
 
-module.exports = {
+export default {
   data () {
     return {
       showVideo: false,
@@ -145,19 +139,13 @@ module.exports = {
   },
 
   methods: {
-    onQueryChange (searchDTO) {
-      onQueryChange(searchDTO)
-    },
-
-    onSelectQuote (quote) {
-      onSelectQuote(quote)
-    },
-
-    closeVideo () {
-      //$set('scroll', true)
-      //$set('showVideo', false)
-      closeVideo()
-    },
+    onQueryChange,
+    onSelectQuote,
+    cancelLogin,
+    closeVideo,
+    loadMore,
+    loadLess,
+    onLogin,
 
     onPlaylistClick () {
       //this.showPlaylist = true
@@ -228,7 +216,7 @@ module.exports = {
       }
   },
 
-  created () {
+  mounted () {
     //console.log('grid.created')
     v = this;
     $set = (key, value) => {
@@ -242,7 +230,7 @@ module.exports = {
 
     searchDTO = {
       page: v.page || 0,
-      size:  v.size || 30,
+      size:  v.size || 50,
       tags:   v.tags ? v.tags.split(','):[],
       channelIds: v.channelIds ? v.channelIds.split(','):[],
       start: v.start || 0,
@@ -256,18 +244,22 @@ module.exports = {
 
   components: {
     grid,
+    login,
     mmenu,
     search,
     Playlist,
     pageLoader,
-    VideoPlayer
+    VideoPlayer,
+    ErrorDialog,
+    PageLoaderHeader,
+    PageLoaderFooter
   }
 }
 </script>
 
 <style lang="stylus">
 #app
-  background-color: #606060;
+  background-color: #ccc; /*#606060;*/
   height: 100%;
   width:100%;
 /*

@@ -20,8 +20,7 @@
 <script>
 //import gridQuote from './quote/gridQuote.vue'
 import Preview from './preview.vue'
-
-var PlaylistSvc = require('../svc/PlaylistSvc.js')
+import PlaylistSvc from '../svc/PlaylistSvc.js'
 
 var v = {}
 var $props = {}
@@ -37,7 +36,7 @@ function detectScreenWidth() {
 }
 
 
-module.exports = {
+export default {
   data () {
     return {
 			items: [],

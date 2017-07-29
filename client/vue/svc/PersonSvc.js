@@ -1,6 +1,7 @@
-var $http = require('./util.js');
+import $http from './http.js'
+import config from '../config.js'
 
-module.exports = {
+export default {
   findByName (name) {
     return $http.get('https://videoquotes.herokuapp.com/person/find?name=' + encodeURIComponent(name));
   },

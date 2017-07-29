@@ -7,7 +7,7 @@ function onYouTubeIframeAPIReady() {
 var isReady = false
 var player
 var Q = []
-run = (x) => {
+let run = (x) => {
   if(x !== undefined) {
     Q.push(x);
   }
@@ -20,7 +20,7 @@ run = (x) => {
 }
 
 // https://developers.google.com/youtube/player_parameters
-configure = (videoId, start, end) => {
+let configure = (videoId, start, end) => {
   return {
     'autoplay': 1,
     'videoId': videoId,
@@ -42,7 +42,7 @@ configure = (videoId, start, end) => {
 
 var startTime = 0
 var endTime = 1<<20
-playAt = (start = 0, end = 1<<20) => {
+let playAt = (start = 0, end = 1<<20) => {
 	run((player) => {
 		//console.log('playAt', start, end)
 	  startTime = start
@@ -52,14 +52,14 @@ playAt = (start = 0, end = 1<<20) => {
 	})
 }
 
-onTimeChangeCallback = () => {}
-onTimeChange = (callback) => {
+let onTimeChangeCallback = () => {}
+let onTimeChange = (callback) => {
 	onTimeChangeCallback = callback
 }
 
-onTimeChangeIntervalId = -1
+let onTimeChangeIntervalId = -1
 
-onStateChange = (event) => {
+let onStateChange = (event) => {
 	//console.log('player.onStateChange', startTime, endTime)
   if(event.data === YT.PlayerState.PLAYING) {
 
@@ -77,7 +77,7 @@ onStateChange = (event) => {
 	}
 }
 
-load = (elementId, videoId, start, end) => {
+let load = (elementId, videoId, start, end) => {
 	//console.log('player.load', elementId, videoId, start, end)
 	startTime = start
 	endTime = end
@@ -106,15 +106,15 @@ load = (elementId, videoId, start, end) => {
   })
 }
 
-init = (elementId, videoId, start, end) => {
+let init = (elementId, videoId, start, end) => {
 	//console.log('player.init', elementId, videoId, start, end)
   run(() => {
     load(elementId, videoId, start, end)
   })
 }
 
-playbackRate = 1
-increasePlaybackRate = () => {
+let playbackRate = 1
+let increasePlaybackRate = () => {
   run(() => {
     playbackRate *= 2
     playbackRate = Math.min(playbackRate, 8)
@@ -123,13 +123,13 @@ increasePlaybackRate = () => {
   })
 }
 
-getCurrentVideoId = (callback) => {
+let getCurrentVideoId = (callback) => {
 	run((player) => {
 		callback(player.getVideoData().video_id)
 	})
 }
 
-decreasePlaybackRate = () => {
+let decreasePlaybackRate = () => {
   run(() => {
     playbackRate /= 2
     playbackRate = Math.max(playbackRate, 0.25)
@@ -138,13 +138,19 @@ decreasePlaybackRate = () => {
   })
 }
 
-stopVideo = () => {
+let stopVideo = () => {
 	run((player) => {
     player.pauseVideo()
   })
 }
 
-getCurrentTime = (callback) => {
+let destroy = () => {
+	run((player) => {
+		player.destroy()
+  })
+}
+
+let getCurrentTime = (callback) => {
 	run((player) => {
 		callback(parseInt(player.getCurrentTime()))
   })
@@ -152,13 +158,14 @@ getCurrentTime = (callback) => {
 
 window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady
 
-module.exports = {
-  init: init,
-  playAt: playAt,
-	stopVideo: stopVideo,
-	onTimeChange: onTimeChange,
-	getCurrentTime: getCurrentTime,
-	getCurrentVideoId: getCurrentVideoId,
-  increasePlaybackRate: increasePlaybackRate,
-  decreasePlaybackRate: decreasePlaybackRate
+export default {
+  init,
+  playAt,
+	destroy,
+	stopVideo,
+	onTimeChange,
+	getCurrentTime,
+	getCurrentVideoId,
+  increasePlaybackRate,
+  decreasePlaybackRate
 }

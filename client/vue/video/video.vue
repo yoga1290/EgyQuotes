@@ -23,11 +23,12 @@ import addToPlaylist from './addToPlaylist.vue'
 import QuoteEditor from './quote-editor/QuoteEditor.vue'
 import videoMenu from './video-menu.vue'
 
-var Player = window.YTPlayer //require('./player.js')
+import Player from '../player.js'
+//let Player = window.YTPlayer //require('./player.js')
 
-var v = {}
-var $props = {}
-var $set = (k, v)=>{}
+let v = {}
+let $props = {}
+let $set = (k, v)=>{}
 
 function detectScreenWidth() {
   var width = $('body').width();
@@ -39,7 +40,7 @@ function detectScreenWidth() {
 }
 
 
-module.exports = {
+export default {
   data () {
     return {
       Player: Player,
@@ -64,12 +65,16 @@ module.exports = {
     v = this
     $props = this.$props
     $set = (key, value) => {
-      v.$set(v.$data, key, value);
+      this.$set(this.$data, key, value);
     }
 		window.scrollTo(0, 0)
     //console.log('video', $props)
     //console.log('video.created', this.videoId)
   },
+
+	beforeDestroy () {
+		Player.destroy()
+	},
 
 	updated () {
 		//console.log('video.updated')
@@ -150,17 +155,25 @@ module.exports = {
 </script>
 
 <style lang="stylus" scoped>
+@media (min-width:768px)
+	.dialog
+		margin-left: 70px;
 .dialog
-	position: relative;
+	/*position: relative;*/
 	/* top: 0; */
 	padding: 0px;
 	z-index: 8;
+	background-color: #333;/*#474747;*/
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 100%;
 
 .dialog .video-container
 	position: absolute;
 	width: 100%;
+	background-color: #333;/*#474747;*/
 	left: 0px;
-	background-color: #474747;
 
 .video-overlay
 	padding: 0px;

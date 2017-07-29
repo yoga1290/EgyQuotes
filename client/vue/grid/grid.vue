@@ -1,7 +1,6 @@
 <template lang="jade">
 #grid.col-md-11.col-sm-9.col-xs-12.section
-	page-loader-header
-	.col-sm-offset-1.col-sm-11(:class="{noscroll: show}")
+	.col-xs-12(:class="{noscroll: show}")
 		.hidden-xs.hidden-sm(v-if="screen.other")
 			.col-1.col-md-3.clickable
 				grid-quote(v-for="quote, $index in items", v-if="$index%4==0", :quote="quote", :click="onQuoteSelect")
@@ -12,24 +11,21 @@
 			.col-4.col-md-3.clickable
 				grid-quote(v-for="quote, $index in items", v-if="$index%4==3", :quote="quote", :click="onQuoteSelect")
 		.visible-sm(v-if="screen.sm")
-			.col-1.col-xs-6.clickable
+			.col-1.col-sm-6.clickable
 				grid-quote(v-for="quote, $index in items", v-if="$index%2==0", :quote="quote", :click="onQuoteSelect")
-			.col-2.col-xs-6.clickable
+			.col-2.col-sm-6.clickable
 				grid-quote(v-for="quote, $index in items", v-if="$index%2==1", :quote="quote", :click="onQuoteSelect")
 		.visible-xs.col-xs-12.clickable(v-if="screen.xs")
 			grid-quote(v-for="quote, $index in items", :quote="quote", :click="onQuoteSelect")
-	page-loader-footer
 </template>
 
 <script>
-import pageLoaderHeader from './page-loader-header.vue'
-import pageLoaderFooter from './page-loader-footer.vue'
 import gridQuote from './quote/gridQuote.vue'
 //import YtVideo from '../video/video.vue'
 // 		yt-video(v-if="show", :quote="selectedQuote", :close="closeVideo")
-var v = {}
-var $props = {}
-var $set = (k, v)=>{}
+let v = {}
+let $props = {}
+let $set = (k, v)=>{}
 
 function detectScreenWidth() {
   var width = $('body').width();
@@ -41,11 +37,11 @@ function detectScreenWidth() {
 }
 
 
-module.exports = {
+export default {
   data () {
     return {
 			show: false,
-			selectedQuote: undefined,
+			// selectedQuote: undefined,
       screen: detectScreenWidth()
     }
   },
@@ -54,7 +50,7 @@ module.exports = {
     v = this
     $props = this.$props
     $set = (key, value) => {
-      v.$set(v.$data, key, value);
+      this.$set(this.$data, key, value);
     }
   },
 
@@ -86,8 +82,6 @@ module.exports = {
 
   components: {
 		//YtVideo,
-		pageLoaderHeader,
-		pageLoaderFooter,
     gridQuote
   },
 
@@ -128,10 +122,15 @@ button#start
 .visible-sm *,
 .visible-xs
   padding:0px;
-  border-left: 3px solid #606060;
+  border-left: 3px solid #ccc; /*#606060;*/
 
 #grid, #grid *
   padding: 0px;
+
+#grid .col-xs-12 .hidden-xs
+	margin-left: 70px;
+#grid .col-xs-12 .visible-sm
+	margin-left: 70px;
 
 .noscroll
 	/*position: fixed;*/

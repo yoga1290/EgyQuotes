@@ -32,7 +32,7 @@ function selectPerson(personId) {
 }
 
 
-module.exports = {
+export default {
   data () {
     return {
       selectedPeopleById: {}
