@@ -19,3 +19,7 @@ src
 heroku
 
 \.idea/
+
+client/
+
+public/
