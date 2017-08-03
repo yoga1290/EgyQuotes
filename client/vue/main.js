@@ -31,7 +31,11 @@ new Vue({
       let result = {}
       window.location.search.substring(1).split('&').forEach((q)=>{
         q = q.split('=')
-        result[q[0]] = decodeURIComponent(q[1])
+        if (q[0] === 'access_token') {
+          window.localStorage.setItem('access_token', q[1])
+        } else {
+          result[q[0]] = decodeURIComponent(q[1])          
+        }
       })
       return result
     }
