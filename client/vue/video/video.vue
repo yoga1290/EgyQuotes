@@ -1,5 +1,5 @@
 <template lang="jade">
-.dialog.animated.fadeInDown.col-sm-offset-1.col-sm-10.col-xs-12
+.dialog.animated.fadeInDown.col-sm-offset-1.col-sm-11.col-xs-12
 	.video-container
 		.overlay
 		videoMenu(:onQuoteEditor="onQuoteEditor", :onAddToPlaylist="onAddToPlaylist", :close="close")
