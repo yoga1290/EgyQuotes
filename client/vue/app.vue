@@ -2,7 +2,7 @@
 #app(role='main')
   error-dialog(:onLogin="onLogin")
   mmenu(:onPlaylistClick="onPlaylistClick", :onLogin="onLogin")
-  search.hidden-print(:onQueryChange="onQueryChange", :onYoutubeVideoIdDetected="onYoutubeVideoIdDetected")
+  search.hidden-print(:onQueryChange="search", :onYoutubeVideoIdDetected="onYoutubeVideoIdDetected")
   video-player.hidden-print(v-if="showVideo", :quote="selectedQuote", :close="closeVideo", :videoId="videoId")
   playlist(v-if="showPlaylist", :onQuoteSelect="onSelectQuote")
   page-loader-header(:onload="loadLess", :enable="scroll", v-if="searchDTO.page > 0", :class="{hide: !scroll}")
@@ -31,23 +31,39 @@ import CONFIG from './config.js'
 var v = {}
 var $set = (k, v) => {}
 
+const NUMBER_OF_QUOTES_IN_GRID = 100;
+
 var req = {xhr: { abort () {} }}
 
-function updateH5URI() {
+let searchDTO = {
+  page: 0,
+  size:  100,
+  tags:   [],
+  channelIds: [],
+  start: 0,
+  end: new Date().getTime(),
+  personIds: []
+};
+
+
+let updateH5URI = () => {
   //TODO
   var pref = window.location.origin.match(/github.io/) ? '/VideoQuotes' : ''
   var newQueryString = pref + '/?channelIds=' + searchDTO.channelIds.join(',')
     + '&start=' + searchDTO.start
     + '&end=' + searchDTO.end
     + '&personIds=' + searchDTO.personIds.join(',');
-  window.history.replaceState(null, null, newQueryString);
+
+    console.log(searchDTO, newQueryString)
+  //window.history.replaceState(null, null, newQueryString);
 }
 
 var isLoading = false
+var items = []
 function onQueryChange(searchDTO, cb = ()=>{}) {
   req.xhr.abort()
   isLoading = true
-  $set('scroll', false)
+  console.log('onQueryChange', searchDTO)
   req = quoteSvc.search(searchDTO)
           .success((response) => {
             //console.log(response)
@@ -56,7 +72,11 @@ function onQueryChange(searchDTO, cb = ()=>{}) {
             response.forEach((quote)=>{
               quote.person = {name: 'author'};
             })//*/
-            $set('items', response)
+            items.push(...response)
+            if (items.length > NUMBER_OF_QUOTES_IN_GRID) {
+              items.splice(0, NUMBER_OF_QUOTES_IN_GRID / 2)
+            }
+            $set('items', items)
             $set('searchDTO', searchDTO)
 
             $set('showPlaylist', false)
@@ -64,7 +84,6 @@ function onQueryChange(searchDTO, cb = ()=>{}) {
             $set('scroll', true)
             //closeVideo()
 
-            window.scrollTo(1,1) //TODO
             isLoading = false
             cb()
 
@@ -83,6 +102,7 @@ function loadMore(cb) {
 function loadLess(cb) {
   //TODO: use offset = pageSize * -1.5
   if (isLoading) return;
+  items = []
   if (searchDTO.page <= 0) return;
   searchDTO.page--
   onQueryChange(searchDTO, cb)
@@ -114,22 +134,13 @@ function closeVideo() {
   updateH5URI()
 }
 
-var searchDTO = {
-  page: 0,
-  size:  100,
-  tags:   [],
-  channelIds: [],
-  start: 0,
-  end: new Date().getTime(),
-  personIds: []
-};
-
 export default {
   data () {
     return {
       showVideo: false,
       showPlaylist: false,
       selectedQuote: {},
+      NUMBER_OF_QUOTES_IN_GRID,
       //*/
       videoId: null,
       scroll: true,
@@ -146,6 +157,11 @@ export default {
     loadMore,
     loadLess,
     onLogin,
+
+    search () {
+      items = this.items = []
+      onQueryChange()
+    },
 
     onPlaylistClick () {
       //this.showPlaylist = true
