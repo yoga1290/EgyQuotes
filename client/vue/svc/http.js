@@ -3,6 +3,18 @@ window.httpCount = window.httpCount | 0;
 // XMLHttpRequest.setRequestHeader(header, value)
 var accessToken = window.localStorage.getItem('access_token')
 
+var cookie = window.document.cookie.match(/access_token=([^;]+)/)
+if (cookie != null) {
+  accessToken = cookie[1]
+  window.localStorage.setItem('access_token', cookie[1])
+}
+
+var stringQuery = window.location.search.match(/access_token=([^&]+)/)
+if (stringQuery != null) {
+  accessToken = stringQuery[1]
+  window.localStorage.setItem('access_token', stringQuery[1])
+}
+
 function onRequest() {
   window.httpCount++;
   if (window.httpCount > 0) {
