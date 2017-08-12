@@ -28,14 +28,20 @@ import CONFIG from './config.js'
 
 // https://vuejs.org/v2/guide/list.html#Caveats
 // https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats
-var v = {}
-var $set = (k, v) => {}
+let v = {}
+let $set = (k, v) => {}
 
-const NUMBER_OF_QUOTES_IN_GRID = 100;
+const NUMBER_OF_QUOTES_IN_GRID = 200;
+
+var returnFromOAuth = window.location.pathname.match(/\/OAuth\//) != null;
+if (returnFromOAuth) {
+  window.history.replaceState(null, null, '/');
+}
+
 
 var req = {xhr: { abort () {} }}
 
-let searchDTO = {
+var searchDTO = {
   page: 0,
   size:  100,
   tags:   [],
@@ -48,13 +54,13 @@ let searchDTO = {
 
 let updateH5URI = () => {
   //TODO
-  var pref = window.location.origin.match(/github.io/) ? '/VideoQuotes' : ''
-  var newQueryString = pref + '/?channelIds=' + searchDTO.channelIds.join(',')
-    + '&start=' + searchDTO.start
-    + '&end=' + searchDTO.end
-    + '&personIds=' + searchDTO.personIds.join(',');
+  // var pref = window.location.origin.match(/github.io/) ? '/VideoQuotes' : ''
+  // var newQueryString = pref + '/?channelIds=' + searchDTO.channelIds.join(',')
+  //   + '&start=' + searchDTO.start
+  //   + '&end=' + searchDTO.end
+  //   + '&personIds=' + searchDTO.personIds.join(',');
 
-    console.log(searchDTO, newQueryString)
+    // console.log(searchDTO, newQueryString)
   //window.history.replaceState(null, null, newQueryString);
 }
 
@@ -129,7 +135,7 @@ function cancelLogin() {
 }
 
 function closeVideo() {
-  $set('scroll', true)
+  $set('scroll', true) //TODO: check playlist isn't opened b4 that
   $set('showVideo', false)
   updateH5URI()
 }
@@ -158,16 +164,15 @@ export default {
     loadLess,
     onLogin,
 
-    search () {
+    search (searchDTO) {
       items = this.items = []
-      onQueryChange()
+      onQueryChange(searchDTO)
     },
 
     onPlaylistClick () {
-      //this.showPlaylist = true
       $set('showPlaylist', true)
-      closeVideo()
-
+      $set('scroll', false)
+      $set('showVideo', false)
     },
 
     onYoutubeVideoIdDetected (videoId) {
@@ -244,17 +249,24 @@ export default {
     searchDTO.personIds = v.$props.personIds
     $set('searchDTO', searchDTO)
 
-    searchDTO = {
-      page: v.page || 0,
-      size:  v.size || 50,
-      tags:   v.tags ? v.tags.split(','):[],
-      channelIds: v.channelIds ? v.channelIds.split(','):[],
-      start: v.start || 0,
-      end: v.end || new Date().getTime(),
-      personIds: v.personIds ? v.personIds.split(','):[]
+    var quoteFromURI = window.location.hash.match(/#\/quote\/(.*)/);
+    if (quoteFromURI !== null) {
+      quoteSvc.findById(quoteFromURI[1]).success((quote)=>{
+        onSelectQuote(quote)
+      })
+    } else {
+      searchDTO = {
+        page: v.page || 0,
+        size:  v.size || 50,
+        tags:   v.tags ? v.tags.split(','):[],
+        channelIds: v.channelIds ? v.channelIds.split(','):[],
+        start: v.start || 0,
+        end: v.end || new Date().getTime(),
+        personIds: v.personIds ? v.personIds.split(','):[]
+      }
+      //TODO:
+      onQueryChange(searchDTO)
     }
-    //TODO:
-    onQueryChange(searchDTO)
 
   },
 
