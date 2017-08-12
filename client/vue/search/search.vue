@@ -7,7 +7,7 @@ export default Search
 #search-panel
 	.overlay
 	#search.stickable
-		input#query(type="text", @click="onFocus()", v-on:focus="onFocus()", @keyup="onKeypress", @keyup.enter="closeSearchOverlay", v-model="field")
+		input#query(placeholder="Youtube link | Search quotes", type="text", autocomplete="off", @click="onFocus()", v-on:focus="onFocus()", @keyup="onKeypress", @keyup.enter="closeSearchOverlay", v-model="field")
 		i.icon(@click="onFocus()") search
 		#search-overlay.animated.bounceInDown.col-xs-12.col-sm-8.col-sm-offset-2
 			.badge(v-for="personId in searchDTO.personIds", @click="selectPerson(personId)")
