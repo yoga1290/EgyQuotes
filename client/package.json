@@ -6,8 +6,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "NODE_ENV=production node build.js & browserify -t [ babelify --presets [ es2015 ] ] -t vueify -g envify -e vue/main.js | uglifyjs -c -m -o public/app.js",
-    "watch": "watchify -t [ babelify --presets [ es2015 ] ] -t vueify -e vue/main.js -o public/app.js"
+    "build": "NODE_ENV=production node build.js & NODE_ENV=production browserify -t [ babelify --presets [ es2015 ] ] -t vueify -g envify -e vue/main.js | uglifyjs -c -m -o public/app.js",
+    "watch": "node build.js & watchify -t [ babelify --presets [ es2015 ] ] -t vueify -e vue/main.js -o public/app.js"
   },
   "author": "yoga1290",
   "devDependencies": {
