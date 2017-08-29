@@ -11,7 +11,7 @@
 <script>
 // import quoteMenu from './quote/menu.vue'
 
-import quoteSvc from '../../svc/quoteSvc.js'
+import { QuoteSvc } from 'services'
 
 var v = {}
 var $set = (k, v)=>{}
@@ -29,10 +29,10 @@ function getThumbnailAndLogo(v, quote) {
   d = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear()
   v.$set(v.$data, 'date', d)
 
-  quoteSvc.getVideoData(quote.video.id)
+  QuoteSvc.getVideoData(quote.video.id)
   .success(function(response) {
     v.$set(v.$data, 'thumbnail', 'url("'+ response.thumbnail + '")' )
-    quoteSvc.getChannelData(response.channelId)
+    QuoteSvc.getChannelData(response.channelId)
     .success(function(data) {
         v.$set(v.$data, 'logo', data.logo)
     });

@@ -5,8 +5,7 @@
 
 <script>
 import Quote from '../grid/quote/quote.vue'
-import PlaylistSvc from '../svc/PlaylistSvc.js'
-import QuoteSvc from '../svc/quoteSvc.js'
+import { PlaylistSvc, QuoteSvc } from 'services'
 
 var v = {}
 var $props = {}

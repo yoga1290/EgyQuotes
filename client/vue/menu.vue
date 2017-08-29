@@ -138,15 +138,16 @@ i.icon.user:hover
 
 #menu.xs
 	border-top: 5px solid #ccc;
-	padding-top: 20px;
+	padding-top: 10px;
 	width: 100%;
 	z-index: 10;
 	margin: 0;
 	position: fixed;
 	bottom: 0px;
-	padding-bottom: 10px;
+	padding-bottom: 5px;
 #menu.xs i.icon
 	border: 0px;
+	font-size: 36px;
 
 #menu.sm
 	width: 80px;

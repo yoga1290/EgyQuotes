@@ -1,5 +1,5 @@
 <template lang="jade">
-.dialog.animated.fadeInDown.col-sm-offset-1.col-sm-10.col-xs-12
+.dialog.animated.fadeInDown.col-sm-offset-1.col-sm-11.col-xs-12
 	.video-container
 		.overlay
 		videoMenu(:onQuoteEditor="onQuoteEditor", :onAddToPlaylist="onAddToPlaylist", :close="close")
@@ -22,6 +22,7 @@ import quote from '../grid/quote/quote.vue'
 import addToPlaylist from './addToPlaylist.vue'
 import QuoteEditor from './quote-editor/QuoteEditor.vue'
 import videoMenu from './video-menu.vue'
+import { QuoteSvc, VideoSvc } from 'services'
 
 import Player from '../player.js'
 //let Player = window.YTPlayer //require('./player.js')
@@ -86,6 +87,18 @@ export default {
 
 		if (this.videoId) {
 			Player.init('video', this.videoId)
+
+			VideoSvc.findById(this.videoId)
+				.success((response) => {
+						var quotes = []
+						response.quotes.forEach((quoteId)=>{
+							QuoteSvc.findById(quoteId).success((quote)=>{
+								quotes.push(quote)
+							})
+						})
+						$set('quotes', quotes)
+				})
+
 		} else if (this.quote.video) {
 			Player.init('video', this.quote.video.id, this.quote.start, this.quote.end)
 		}

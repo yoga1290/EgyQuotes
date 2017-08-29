@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import PersonSvc from '../../svc/PersonSvc.js'
+import { PersonSvc } from 'services'
 
 let v = {}
 var $props = {}

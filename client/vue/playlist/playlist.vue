@@ -1,6 +1,6 @@
 <template lang="jade">
 #playlist-panel
-	.col-xs-12.col-sm-offset-1.col-sm-11.no-padding
+	.col-xs-12.col-sm-11.no-padding
 		.playlist.col-sm-6.no-padding
 			i.icon.title
 			.item(v-for="item in items", @click="selectPlaylist(item)")
@@ -20,7 +20,7 @@
 <script>
 //import gridQuote from './quote/gridQuote.vue'
 import Preview from './preview.vue'
-import PlaylistSvc from '../svc/PlaylistSvc.js'
+import { PlaylistSvc } from 'services'
 
 var v = {}
 var $props = {}
@@ -94,6 +94,14 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@media (min-width:768px)
+	#playlist-panel .col-xs-12.col-sm-11.no-padding
+		margin-left: 80px;
+
+#playlist-panel .col-xs-12
+	background-color: #333;
+	z-index: 1;
+
 .item
 	border-bottom: 5px solid #ccc;
 	margin-bottom: 5px;

@@ -21,8 +21,7 @@ form.col-xs-12(name="quoteForm")
 <script>
 import AuthorSelector from './selector-author.vue'
 import QuoteTimer from './timer.vue'
-import PersonSvc from '../../svc/PersonSvc.js'
-import QuoteSvc from '../../svc/quoteSvc.js'
+import { QuoteSvc, PersonSvc } from 'services'
 
 //var Player = require('./player.js')
 var Player = {}

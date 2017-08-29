@@ -13,8 +13,7 @@
 </template>
 
 <script>
-//import quote from '../grid/quote/gridQuote.vue'
-import PlaylistSvc from '../svc/PlaylistSvc.js'
+import { PlaylistSvc } from 'services'
 
 var v = {}
 var $props = {}
