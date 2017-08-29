@@ -1,0 +1,26 @@
+// see https://webpack.js.org/guides/production/
+
+var path = require('path')
+var webpack = require('webpack')
+var merge = require('webpack-merge')
+var common = require('./webpack.common.js')
+
+var config = {
+  // https://webpack.js.org/configuration/plugins/#plugins
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"dev"'
+      }
+    })
+  ],
+
+  resolve: {
+    alias: {
+      'configuration': path.join(__dirname, 'config', 'dev.js')
+    }
+  },
+
+};
+
+module.exports = merge(common, config)
