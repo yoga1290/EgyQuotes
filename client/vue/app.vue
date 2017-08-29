@@ -20,12 +20,13 @@ import search from './search/search.vue'
 import pageLoader from './page-loader.vue'
 import VideoPlayer from './video/video.vue'
 import Playlist from './playlist/playlist.vue'
-import quoteSvc from './svc/quoteSvc.js'
+import { QuoteSvc } from 'services'
 import ErrorDialog from './error-dialog.vue'
 import PageLoaderHeader from './page-loader-header.vue'
 import PageLoaderFooter from './page-loader-footer.vue'
-import CONFIG from './config.js'
+import CONFIG from 'configuration'
 
+console.log('QuoteSvc', QuoteSvc)
 // https://vuejs.org/v2/guide/list.html#Caveats
 // https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats
 let v = {}
@@ -70,7 +71,7 @@ function onQueryChange(searchDTO, cb = ()=>{}) {
   req.xhr.abort()
   isLoading = true
   console.log('onQueryChange', searchDTO)
-  req = quoteSvc.search(searchDTO)
+  req = QuoteSvc.search(searchDTO)
           .success((response) => {
             //console.log(response)
             // //TODO: NEEDS FIX
@@ -251,7 +252,7 @@ export default {
 
     var quoteFromURI = window.location.hash.match(/#\/quote\/(.*)/);
     if (quoteFromURI !== null) {
-      quoteSvc.findById(quoteFromURI[1]).success((quote)=>{
+      QuoteSvc.findById(quoteFromURI[1]).success((quote)=>{
         onSelectQuote(quote)
       })
     } else {

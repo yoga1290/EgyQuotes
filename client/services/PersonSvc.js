@@ -1,5 +1,5 @@
 import $http from './http.js'
-import config from '../config.js'
+import config from 'configuration'
 
 export default {
   findByName (name) {

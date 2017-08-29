@@ -1,7 +1,4 @@
-import PersonSvc from '../svc/PersonSvc.js'
-import ChannelSvc from '../svc/ChannelSvc.js'
-// import {PersonSvc2, ChannelSvc2} from '../svc'
-// //console.log(PersonSvc2, ChannelSvc2)
+import { ChannelSvc, PersonSvc } from 'services'
 import PeopleList from './people.vue'
 import ChannelsList from './channels.vue'
 

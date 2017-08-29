@@ -1,5 +1,5 @@
 import $http from './http.js'
-import CONFIG from '../config.js'
+import CONFIG from 'configuration'
 
 export default {
   list (offset, limit) {

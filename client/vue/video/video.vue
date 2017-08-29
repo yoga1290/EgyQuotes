@@ -22,8 +22,7 @@ import quote from '../grid/quote/quote.vue'
 import addToPlaylist from './addToPlaylist.vue'
 import QuoteEditor from './quote-editor/QuoteEditor.vue'
 import videoMenu from './video-menu.vue'
-import VideoSvc from '../svc/VideoSvc.js'
-import QuoteSvc from '../svc/quoteSvc.js'
+import { QuoteSvc, VideoSvc } from 'services'
 
 import Player from '../player.js'
 //let Player = window.YTPlayer //require('./player.js')

@@ -20,7 +20,7 @@
 <script>
 //import gridQuote from './quote/gridQuote.vue'
 import Preview from './preview.vue'
-import PlaylistSvc from '../svc/PlaylistSvc.js'
+import { PlaylistSvc } from 'services'
 
 var v = {}
 var $props = {}

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import CONFIG from './config.js'
+import CONFIG from 'configuration'
 
 export default {
   data () {
