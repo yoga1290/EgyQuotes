@@ -1,6 +1,8 @@
 import jQuery from 'jquery'
 import Vue from 'vue'
 import App from './app.vue'
+import 'bootstrap.css' //webpack alias
+import 'animate.css' //webpack alias
 
 window.$ = jQuery
 // window.document.body.style.cssText = 'background-color: #606060';
