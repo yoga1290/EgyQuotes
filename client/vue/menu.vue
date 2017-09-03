@@ -1,14 +1,14 @@
 <template lang="jade">
 #menu(:class="{xs: screen.xs, sm: !screen.xs}")
-	.overlay(v-if="!screen.xs && hover==1")
+	.overlay(v-if="!screen.xs && hover==1", v-on:mouseout="hover=-1")
 		.menu-tooltip My playlists
 	i.icon.playlist(v-on:mouseover="hover=1", @click="onPlaylistClick()")
 	.overlay(v-if="!screen.xs && hover==2")
 		.menu-tooltip Search or Youtube link
-	i.icon.search(@click="openSearch()", v-on:mouseover="hover=2")
+	i.icon.search(@click="openSearch()", v-on:mouseover="hover=2", v-on:mouseout="hover=-1")
 	.overlay(v-if="!screen.xs && hover==3")
 		.menu-tooltip My account
-	i.icon.user(@click="onLogin", v-on:mouseover="hover=3")
+	i.icon.user(@click="onLogin", v-on:mouseover="hover=3", v-on:mouseout="hover=-1")
 </template>
 
 <script>
@@ -30,6 +30,7 @@ function detectScreenWidth() {
 export default {
   data () {
     return {
+			hover: -1,
 			screen: detectScreenWidth()
     }
   },
