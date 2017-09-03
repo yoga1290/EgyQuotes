@@ -2,33 +2,37 @@
 
 var path = require('path')
 var webpack = require('webpack')
+
 var VaadinIconsPath = path.join(__dirname, 'node_modules', 'vaadin-icons', 'assets', 'fonts')
 var BootstrapPath = path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css')
+var mainPath = path.join(__dirname, 'vue', 'main.js')
+
+var outputDirectories = ['public', 'electron']
+var entries = {}
+var fileLoaderUseOption = []
+Array.from(outputDirectories).forEach((outputDirectory) => {
+  entries[outputDirectory] = mainPath
+
+  fileLoaderUseOption.push({
+    loader: 'file-loader',
+    options: {
+      context: outputDirectory + path.sep,
+      name: '[name].[ext]'
+    }
+  })
+})
 
 var config = {
-  entry: [
-    path.join(__dirname, 'vue', 'main.js')
-  ],
-
-  context: path.join(__dirname, 'vue'),
-
+  entry: entries,
+  context: __dirname,
+  // context: path.join(__dirname, 'vue'),
   output: {
-    path: path.join(__dirname, 'public'),
-    filename: 'app.js'
+    path: __dirname,
+    filename: path.join('[name]','app.js')
   },
 
 // https://webpack.js.org/configuration/plugins/#plugins
   plugins: [
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'vendor',
-    //   filename: 'vendor-[hash].min.js',
-    // }),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false,
-    //     drop_console: false,
-    //   }
-    // })
   ],
 
   resolve: {
@@ -41,9 +45,9 @@ var config = {
       './Vaadin-Icons.ttf': path.join(VaadinIconsPath, 'Vaadin-Icons.ttf'),
       './Vaadin-Icons.svg': path.join(VaadinIconsPath, 'Vaadin-Icons.svg'),
 
-      './bootstrap.min.css': path.join(BootstrapPath, 'bootstrap.min.css'),
-      './bootstrap.min.css.map': path.join(BootstrapPath, 'bootstrap.min.css.map'),
-      './animate.min.css' : path.join(__dirname, 'node_modules', 'animate.css', 'animate.min.css'),
+      'bootstrap.css': path.join(BootstrapPath, 'bootstrap.min.css'),
+      'bootstrap.min.css.map': path.join(BootstrapPath, 'bootstrap.min.css.map'),
+      'animate.css' : path.join(__dirname, 'node_modules', 'animate.css', 'animate.min.css'),
 
       'services': path.join(__dirname, 'services')
       // 'configuration': path.join()
@@ -66,12 +70,7 @@ var config = {
       // copy fonts to output dir (after resolving their "alias")
       {
           test: /\.(eot|svg|ttf|woff|woff2|map|css)$/,
-          use: {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]'
-            }
-          }
+          use: fileLoaderUseOption
       },
 
       {

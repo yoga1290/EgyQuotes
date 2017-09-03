@@ -7,8 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.prod.js",
-    "watch": "node build.js & watchify -t [ babelify --presets [ es2015 ] ] -t vueify -e vue/main.js -o public/app.js",
-    "webpack": "webpack --config webpack.dev.js"
+    "watch": "webpack --config webpack.dev.js --watch"
   },
   "author": "yoga1290",
   "devDependencies": {
@@ -21,6 +20,7 @@
     "babel-preset-es2016": "^6.24.1",
     "babelify": "^7.3.0",
     "browser-sync": "^2.18.13",
+    "browser-sync-webpack-plugin": "^1.2.0",
     "browserify": "^14.3.0",
     "css-loader": "^0.28.5",
     "envify": "^4.0.0",

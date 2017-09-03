@@ -24,7 +24,11 @@ var config = {
         comments: false,
         beautify: false,
       },
-      compress: true,
+      compress: {
+        passes: 3,
+        drop_console: true,
+        drop_debugger: true
+      },
       warnings: false
     })
   ],
