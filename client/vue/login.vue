@@ -8,7 +8,7 @@
       #expire.col-xs-12.col-sm-offset-5.col-sm-3
         i.icon
         | {{expire}}
-      #social.col-xs-12.col-sm-offset-4
+      #social.col-xs-12.col-sm-offset-4.col-sm-2
         i.icon.facebook(@click="facebook()")
       #email.col-xs-12.col-sm-8.col-sm-offset-2
         i.icon.email at

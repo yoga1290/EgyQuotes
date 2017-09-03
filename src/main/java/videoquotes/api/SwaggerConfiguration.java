@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.builders.ImplicitGrantBuilder;
 import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -37,7 +38,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfiguration {
     @Bean
     public Docket VideoQuotesApi() {                
-	return new Docket(DocumentationType.SWAGGER_2)          
+	return new Docket(DocumentationType.SWAGGER_2)
+			.ignoredParameterTypes(ApiIgnore.class) //https://github.com/springfox/springfox/issues/1346#issuecomment-226948400
 	  .select()
 	  .apis(RequestHandlerSelectors.basePackage(SwaggerConfiguration.class.getPackage().getName()))
 	  .paths(PathSelectors.any())

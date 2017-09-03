@@ -13,18 +13,20 @@ var fileLoaderUseOption = []
 Array.from(outputDirectories).forEach((outputDirectory) => {
   entries[outputDirectory] = mainPath
 
-  fileLoaderUseOption.push({
-    loader: 'file-loader',
-    options: {
-      context: outputDirectory + path.sep,
-      name: '[name].[ext]'
-    }
-  })
+//TODO:fileLoaderUseOption
+  // fileLoaderUseOption.push({
+  //   loader: 'file-loader',
+  //   options: {
+  //     outputPath: outputDirectory + path.sep,
+  //     context: outputDirectory + path.sep,
+  //     name: '../[name].[ext]'
+  //   }
+  // })
 })
 
 var config = {
   entry: entries,
-  context: __dirname,
+  context: path.join(__dirname, 'vue'),
   // context: path.join(__dirname, 'vue'),
   output: {
     path: __dirname,
@@ -70,7 +72,14 @@ var config = {
       // copy fonts to output dir (after resolving their "alias")
       {
           test: /\.(eot|svg|ttf|woff|woff2|map|css)$/,
-          use: fileLoaderUseOption
+          use: [{
+            loader: 'file-loader',
+            options: {
+              outputPath: 'public' + path.sep,
+              context: '',
+              name: '../[name].[ext]'
+            }
+          }]
       },
 
       {

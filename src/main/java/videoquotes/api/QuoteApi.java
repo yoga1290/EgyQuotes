@@ -1,23 +1,23 @@
 package videoquotes.api;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
-import io.swagger.annotations.AuthorizationScope;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.*;
+
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 import videoquotes.api.dto.QuoteDTO;
 import videoquotes.api.dto.SearchDTO;
 import videoquotes.model.Person;
@@ -27,6 +27,8 @@ import videoquotes.repository.mongo.PersonRepository;
 import videoquotes.repository.mongo.QuoteRepository;
 import videoquotes.repository.mongo.VideoRepository;
 import videoquotes.repository.VideoSvc;
+
+import static com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat.DATE_TIME;
 
 
 @Controller
@@ -97,58 +99,133 @@ public class QuoteApi
 	return quote;
     }
     
-    @RequestMapping(value="/search", method=RequestMethod.POST)
+    @GetMapping("/query")
     @ApiOperation(value = "Query Quotes for the grid view", notes = "Customized query for the grid view")
-    public @ResponseBody List<Quote> search(
-	    @RequestBody SearchDTO query) throws Exception
+	// https://stackoverflow.com/a/35427093
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
+					value = "Results page you want to retrieve (0..N)"),
+			@ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+					value = "Number of records per page."),
+			@ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
+					value = "Sorting criteria in the format: property(,asc|desc). " +
+							"Default sort order is ascending. " +
+							"Multiple sort criteria are supported.")
+	})
+    public @ResponseBody
+	Page<Quote> search(
+		@ApiParam("tags")
+		@RequestParam(required = false, defaultValue = "", name = "t") List<String> tag,
+		@ApiParam("personId(s)")
+		@RequestParam(required = false, defaultValue = "", name = "p") List<String> personId,
+		@ApiParam("ChannelId(s)")
+		@RequestParam(required = false, defaultValue = "", name = "c") List<String> channelId,
+
+//		http://wiki.fasterxml.com/JacksonFAQDateHandling#Date_Deserialization
+//		@JsonFormat(shape=JsonFormat.Shape.NUMBER, pattern="s")
+//		@RequestParam(required = false, defaultValue = "0") Date start,
+		@ApiParam("Start date (unix time)")
+		@RequestParam(required = false, defaultValue = "0") Long startdate,
+		@ApiParam("End date (unix time)")
+		@RequestParam(required = false, defaultValue = Long.MAX_VALUE+"") Long enddate,
+
+		@ApiIgnore
+		Pageable pageable) throws Exception
     {
-	int page = query.getPage();
-	int size = query.getSize();
+
+		Date start = new Date(startdate);
+		Date end = new Date(enddate);
 	//TODO: search by tags
-	if (!query.getPersonIds().isEmpty()
-		&& !query.getChannelIds().isEmpty()) {
-	    System.out.println("1");
+	if (!personId.isEmpty()
+		&& !channelId.isEmpty()) {
 	    return quoteRepository
 		    .findByAuthorAndChannelIdAndTimespan(
-			query.getPersonIds(),
-			query.channelIds,
-			new Date( query.getStart()),
-			new Date( query.getEnd()),
-			new PageRequest(page, size)
-		    )
-		.getContent();
-	} else if (!query.getPersonIds().isEmpty()) {
-	    System.out.println("2");
+		    personId,
+			channelId,
+			start,
+			end,
+			pageable
+		    );
+	} else if (!personId.isEmpty()) {
 	    return quoteRepository
 		    .findByAuthorsAndTimespan(
-			query.getPersonIds(),
-			new Date( query.getStart()),
-			new Date( query.getEnd()),
-			new PageRequest(page, size)
-		    )
-		.getContent();
-	} else if (!query.getChannelIds().isEmpty()) {
-	    System.out.println("3");
+					personId,
+					start,
+			end,
+			pageable
+		    );
+	} else if (!channelId.isEmpty()) {
 	    return quoteRepository
 		    .findByAuthorsAndTimespan(
-			query.getChannelIds(),
-			new Date( query.getStart()),
-			new Date( query.getEnd()),
-			new PageRequest(page, size)
-		    )
-		.getContent();
+			channelId,
+			start,
+			end,
+			pageable
+		    );
 	} else {
-	    System.out.println("4");
 	    return quoteRepository
 		    .findWithinTimespan(
-			new Date( query.getStart()),
-			new Date( query.getEnd()),
-			new PageRequest(page, size)
-		    )
-		.getContent();
+			start,
+			end,
+			pageable
+		    );
 	}
 	
     }
+
+
+	@RequestMapping(value="/search", method=RequestMethod.POST)
+	@ApiOperation(value = "Query Quotes for the grid view", notes = "Customized query for the grid view")
+	public @ResponseBody List<Quote> osearch(
+			@RequestBody SearchDTO query) throws Exception
+	{
+		int page = query.getPage();
+		int size = query.getSize();
+		//TODO: search by tags
+		if (!query.getPersonIds().isEmpty()
+				&& !query.getChannelIds().isEmpty()) {
+			System.out.println("1");
+			return quoteRepository
+					.findByAuthorAndChannelIdAndTimespan(
+							query.getPersonIds(),
+							query.channelIds,
+							new Date( query.getStart()),
+							new Date( query.getEnd()),
+							new PageRequest(page, size)
+					)
+					.getContent();
+		} else if (!query.getPersonIds().isEmpty()) {
+			System.out.println("2");
+			return quoteRepository
+					.findByAuthorsAndTimespan(
+							query.getPersonIds(),
+							new Date( query.getStart()),
+							new Date( query.getEnd()),
+							new PageRequest(page, size)
+					)
+					.getContent();
+		} else if (!query.getChannelIds().isEmpty()) {
+			System.out.println("3");
+			return quoteRepository
+					.findByAuthorsAndTimespan(
+							query.getChannelIds(),
+							new Date( query.getStart()),
+							new Date( query.getEnd()),
+							new PageRequest(page, size)
+					)
+					.getContent();
+		} else {
+			System.out.println("4");
+			return quoteRepository
+					.findWithinTimespan(
+							new Date( query.getStart()),
+							new Date( query.getEnd()),
+							new PageRequest(page, size)
+					)
+					.getContent();
+		}
+
+	}
     
 	
 //    @RequestMapping(value = "/trNgGrid", method = RequestMethod.POST)

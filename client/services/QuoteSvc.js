@@ -10,8 +10,20 @@ export default {
     return $http.get(CONFIG.BASE_URL + '/Quote?id=' + quoteId);
   },
 
-  search (searchDTO) {
-    return $http.post(CONFIG.BASE_URL + '/Quote/search', searchDTO);
+  search (tags, personIds, channelIds, startdate, enddate, page, size, sort) {
+    let arrayString = (parameterName, ar) => {
+      return (ar && ar.length > 0) ? ar.map((e)=> (parameterName + '=' + e)).join('&') + '&' : ''
+    }
+    var query = '?'
+    query += arrayString('t', tags)
+    query += arrayString('p', personIds)
+    query += arrayString('c', channelIds)
+    query += arrayString('startdate', [startdate])
+    query += arrayString('enddate', [enddate])
+    query += arrayString('page', [page])
+    query += arrayString('size', [size])
+    query += arrayString('sort', sort)
+    return $http.get(CONFIG.BASE_URL + '/Quote/query' + query);
   },
 
   insert (quote) {
