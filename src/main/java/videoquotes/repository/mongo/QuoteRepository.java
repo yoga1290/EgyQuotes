@@ -2,6 +2,8 @@ package videoquotes.repository.mongo;
 
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.mongodb.repository.Query;
@@ -20,15 +22,15 @@ public interface QuoteRepository extends BasicRecordRepository<Quote> {
     Slice<Quote> findAllByPerson(Pageable pageable);
     
     @Query(value = "{ 'airedTime': {'$gte' : ?0, '$lte': ?1}, 'isDeleted': false }", fields = "{ 'person': 0 }")
-    Slice<Quote> findWithinTimespan(Date startTime, Date endTime, Pageable pageable);
+    Page<Quote> findWithinTimespan(Date startTime, Date endTime, Pageable pageable);
     
     @Query("{ 'person.$id': {'$in': ?0}, 'airedTime': {'$gte' : ?1, '$lte': ?2}, 'isDeleted': false }")
-    Slice<Quote> findByAuthorsAndTimespan(List<String> name, Date startTime, Date endTime, Pageable pageable);
+    Page<Quote> findByAuthorsAndTimespan(List<String> name, Date startTime, Date endTime, Pageable pageable);
     
     @Query("{ 'channelId': {'$in': ?0}, 'airedTime': {'$gte' : ?1, '$lte': ?2}, 'isDeleted': false }")
-    Slice<Quote> findByChannelIdAndTimespan(List<String> channelId, Date startTime, Date endTime, Pageable pageable);
+    Page<Quote> findByChannelIdAndTimespan(List<String> channelId, Date startTime, Date endTime, Pageable pageable);
     
     @Query("{ 'person.$id': {'$in': ?0}, 'channelId': {'$in': ?1}, 'airedTime': {'$gte' : ?2, '$lte': ?3}, 'isDeleted': false }")
-    Slice<Quote> findByAuthorAndChannelIdAndTimespan(List<String> name, List<String> channelId, Date startTime, Date endTime, Pageable pageable);
+    Page<Quote> findByAuthorAndChannelIdAndTimespan(List<String> name, List<String> channelId, Date startTime, Date endTime, Pageable pageable);
     
 }

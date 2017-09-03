@@ -5,9 +5,9 @@
   search.hidden-print(:onQueryChange="search", :onYoutubeVideoIdDetected="onYoutubeVideoIdDetected")
   video-player.hidden-print(v-if="showVideo", :quote="selectedQuote", :close="closeVideo", :videoId="videoId")
   playlist(v-if="showPlaylist", :onQuoteSelect="onSelectQuote")
-  page-loader-header(:onload="loadLess", :enable="scroll", v-if="searchDTO.page > 0", :class="{hide: !scroll}")
+  page-loader-header(:onload="loadLess", :enable="scroll", v-if="!firstPage", :class="{hide: !scroll}")
   grid(:items="items", :onQuoteSelect="onSelectQuote", :class="{noscroll: !scroll}")
-  page-loader-footer(:onload="loadMore", :enable="scroll", v-if="items.length > 0", :class="{hide: !scroll}")
+  page-loader-footer(:onload="loadMore", :enable="scroll", v-if="!lastPage", :class="{hide: !scroll}")
   login(:close="cancelLogin")
   page-loader.hidden-print
 </template>
@@ -31,8 +31,6 @@ console.log('QuoteSvc', QuoteSvc)
 // https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats
 let v = {}
 let $set = (k, v) => {}
-
-const NUMBER_OF_QUOTES_IN_GRID = 200;
 
 var returnFromOAuth = window.location.pathname.match(/\/OAuth\//) != null;
 if (returnFromOAuth) {
@@ -71,7 +69,7 @@ function onQueryChange(searchDTO, cb = ()=>{}) {
   req.xhr.abort()
   isLoading = true
   console.log('onQueryChange', searchDTO)
-  req = QuoteSvc.search(searchDTO)
+  req = QuoteSvc.search(searchDTO.tags, searchDTO.personIds, searchDTO.channelIds, searchDTO.start, searchDTO.end, searchDTO.page, searchDTO.size, searchDTO.sort)
           .success((response) => {
             //console.log(response)
             // //TODO: NEEDS FIX
@@ -79,16 +77,20 @@ function onQueryChange(searchDTO, cb = ()=>{}) {
             response.forEach((quote)=>{
               quote.person = {name: 'author'};
             })//*/
-            items.push(...response)
-            if (items.length > NUMBER_OF_QUOTES_IN_GRID) {
-              items.splice(0, NUMBER_OF_QUOTES_IN_GRID / 2)
+            
+            if (items.length > response.size) {
+              items.splice(response.size / 2)
             }
+            items.push(...response.content)
             $set('items', items)
             $set('searchDTO', searchDTO)
 
             $set('showPlaylist', false)
             $set('showVideo', false)
             $set('scroll', true)
+
+            $set('firstPage', response.first)
+            $set('lastPage', response.last)
             //closeVideo()
 
             isLoading = false
@@ -147,12 +149,13 @@ export default {
       showVideo: false,
       showPlaylist: false,
       selectedQuote: {},
-      NUMBER_OF_QUOTES_IN_GRID,
       //*/
       videoId: null,
       scroll: true,
       searchDTO: searchDTO,
-      items: []
+      items: [],
+      firstPage: true,
+      lastPage: false
     }
   },
 
