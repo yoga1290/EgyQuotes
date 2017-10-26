@@ -7,7 +7,11 @@ package videoquotes.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -17,7 +21,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Person extends BasicRecord {
 
 	@Getter @Setter
+	@NotEmpty(groups = {POST.class}, message = "invalid Person")
+	@NotNull(groups = {POST.class}, message = "invalid Person")
+	@Size(min = 3, groups = {POST.class, PUT.class})
     private String name;
+
+	public Person() {}
 
     public Person(String name) {
 	this.name = name;

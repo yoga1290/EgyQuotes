@@ -22,12 +22,22 @@ export default {
     query += arrayString('enddate', [enddate])
     query += arrayString('page', [page])
     query += arrayString('size', [size])
-    query += arrayString('sort', sort)
+    query += arrayString('sort', [sort])
     return $http.get(CONFIG.BASE_URL + '/Quote/query' + query);
   },
 
-  insert (quote) {
-    return $http.post(CONFIG.BASE_URL + '/Quote/insert', quote);
+  insert (person, quote, start, end, videoId) {
+    return $http.post(CONFIG.BASE_URL + '/Quote', {
+                    "person": {
+                      "name": person
+                    },
+                    "quote": quote,
+                    "start": start,
+                    "end": end,
+                    "video": {
+                      "id": videoId
+                    }
+                  });
   },
 
   getVideoData (videoId) {

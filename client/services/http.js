@@ -96,6 +96,11 @@ function get(url, noauth) {
   return wrap(xhr, undefined ,noauth);
 }
 
+function del(url, noauth) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('DELETE', url);
+  return wrap(xhr, undefined ,noauth);
+}
 function post(url, data) {
   var xhr = new XMLHttpRequest();
   xhr.open('POST', url);
@@ -105,5 +110,6 @@ function post(url, data) {
 
 export default {
   get,
-  post
+  post,
+  delete: del
 }

@@ -5,8 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 @Document
@@ -14,16 +17,22 @@ public class Video extends BasicRecord {
 
 //	@Id
     //TODO: useless field now?
-	private @Getter @Setter String videoId;
-	
+	@NotEmpty(groups = {POST.class, PUT.class})
+	@NotNull(groups = {POST.class, PUT.class})
+	@Size(min = 3, groups = {POST.class, PUT.class})
+	@Override
+	public String getId() {
+		return super.getId();
+	}
+
 	private @Getter @Setter List<Integer> start;
-	
+
 	private @Getter @Setter List<Integer> end;
-	
+
 	private @Getter @Setter List<String> quotes;
-	
+
 	private @Getter @Setter String channelId;
-	
+
 	private @Getter @Setter Date time;
 
 	public Video() {
@@ -34,7 +43,7 @@ public class Video extends BasicRecord {
 	
 	public Video(String videoId,String channelId,List<String> quotes,List<Integer> start,List<Integer> end){
 	    this.setId(videoId);
-	    this.videoId = videoId;
+//	    this.videoId = videoId;
 	    this.channelId = channelId;
 	    this.quotes=quotes;
 	    this.start=start;
@@ -43,7 +52,7 @@ public class Video extends BasicRecord {
 	}
 	public Video(String videoId,Date time,String channelId,List<String> quotes,List<Integer> start,List<Integer> end){
 	    this.setId(videoId);
-	    this.videoId = videoId;
+//	    this.videoId = videoId;
 	    this.channelId = channelId;
 	    this.quotes=quotes;
 	    this.start=start;
