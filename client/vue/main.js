@@ -2,8 +2,10 @@ import jQuery from 'jquery'
 import Vue from 'vue'
 import App from './app.vue'
 import 'bootstrap.css' //webpack alias
+import 'bootstrap.min.css.map' //webpack alias
 import 'animate.css' //webpack alias
 
+import QuotePreview from './quotePreview.vue'
 window.$ = jQuery
 // window.document.body.style.cssText = 'background-color: #606060';
 window.document.body.style.cssText = 'background-color: #ccc';
@@ -16,7 +18,7 @@ const views = {
 
 const routes = {
   '/\\$' : App, // require('./video/video.vue'), //
-  '/q/([^/]*)\$' : require('./quotePreview.vue')
+  '/q/([^/]*)\$' : QuotePreview//require('./quotePreview.vue')
 }
 
 new Vue({
@@ -39,7 +41,7 @@ new Vue({
     if (!route) {
       route = App
     }
-    
+
     return {
       route,
       params

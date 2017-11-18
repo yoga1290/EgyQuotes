@@ -7,7 +7,7 @@ var VaadinIconsPath = path.join(__dirname, 'node_modules', 'vaadin-icons', 'asse
 var BootstrapPath = path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css')
 var mainPath = path.join(__dirname, 'vue', 'main.js')
 
-var outputDirectories = ['public', 'electron']
+var outputDirectories = ['public', 'electron', path.join('../', 'src', 'main', 'webapp')]
 var entries = {}
 var fileLoaderUseOption = []
 Array.from(outputDirectories).forEach((outputDirectory) => {
@@ -71,13 +71,27 @@ var config = {
 
       // copy fonts to output dir (after resolving their "alias")
       {
-          test: /\.(eot|svg|ttf|woff|woff2|map|css)$/,
+          test: /\.(eot|svg|ttf|woff|woff2|map)$/,
           use: [{
             loader: 'file-loader',
             options: {
               outputPath: 'public' + path.sep,
               context: '',
               name: '../[name].[ext]'
+            }
+          }]
+      },
+
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              // minimize: true
             }
           }]
       },
