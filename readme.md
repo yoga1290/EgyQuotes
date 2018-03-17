@@ -29,28 +29,32 @@ You'll need to change properties in the following files:
 
 ## Docker:
 
-#### Build
-+ build image: `docker build -t videoquotes .`
-
-+ build w env variables:
+#### 1.Copy src & pom.xml
 
 ```bash
-docker build \
-    --build-arg db_username=*** \
-    --build-arg db_password=*** \
-    --build-arg db_host=*** \
-    --build-arg db_port=*** \
-    --build-arg db_database=*** \
-    --build-arg mail_host=*** \
-    --build-arg mail_port=*** \
-    --build-arg mail_username=*** \
-    --build-arg mail_token=*** \
-    -t videoquotes .
+cd docker # Go to the docker directory
+cp -R ../src src
+cp ../pom.xml .
 ```
 
-##### Run
+#### 2.Build image
 
-+ run container: `docker run -p 8080:8080 --name videoquotes-container videoquotes`
++ build image: `docker build -t videoquotes .`
+
+##### 3.Run container
+
++ Optionally, you can set a different path to the properties instead of `/app/src/resources/config`
+
+```
+CONFIG_DIR=$(pwd)/config
+
+docker run \
+-p 8080:8080 \
+--name videoquotes-container \
+-v $CONFIG_DIR:/app/src/resources/config \
+videoquotes
+```
+
 
 #### Remove
 
