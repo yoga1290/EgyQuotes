@@ -1,0 +1,16 @@
+.dialog.animated.fadeInDown.col-sm-offset-1.col-sm-11.col-xs-12
+	.video-container
+		.overlay
+		app-video-menu(:onQuoteEditor="onQuoteEditor", :onAddToPlaylist="onAddToPlaylist", :close="close")
+		app-add-to-playlist.video-overlay.animated.slideInDown.col-xs-12.col-md-8(v-if="showAddToPlaylist", :quote="quote")
+		.video-overlay.col-xs-12.col-md-offset-1.col-md-8.animated.slideInDown.ng-cloak(v-if="showQuoteEditor")
+			app-quote-editor([player]="Player")
+
+		.col-xs-12.col-md-8.embed-responsive.embed-responsive-16by9
+			#video
+		.padding0.col-xs-12.col-md-3
+			app-quote.col-xs-12(*ngIf="quote", [quote]="quote", :isActive="true")
+
+		.col-xs-12.col-md-offset-2.col-md-6(v-if="otherQuote in quotes")
+			.connector.col-md-offset-6
+			app-quote.clickable(v-if="otherQuote.id!==quote.id", :quote="otherQuote")

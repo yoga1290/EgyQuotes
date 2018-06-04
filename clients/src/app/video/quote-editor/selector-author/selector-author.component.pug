@@ -1,0 +1,9 @@
+.col-xs-12
+  i.icon#author user
+  input#author(:placeholder="translation.VIDEO.AUTHOR",name="author", [(ngModel)]="authorName", (keyup)="onAuthorNameChange(authorName)",required,ng-class="{'has-error': quoteForm.author.$invalid}")
+  #author-list(*ngIf="suggestedAuthors.length && suggestedAuthors.length>0")
+    .author(*ngFor="let author of suggestedAuthors", (click)="onSelectAuthor(author)") {{author.name}}
+  #author-list(*ngIf="suggestedAuthors.length === 0 && authorName.length > 0 && !authorSelected")
+    .author((click)="newAuthor(authorName)")
+      i.icon.new-author
+      | {{authorName}}

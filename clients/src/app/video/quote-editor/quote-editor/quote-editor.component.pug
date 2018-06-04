@@ -1,0 +1,18 @@
+form.col-xs-12(name="quoteForm")
+
+  .vmenu.col-xs-12
+    i.icon.btn-circle(click="onDecreasePlaybackRate()") backwards
+    i.icon.btn-circle(click="onIncreasePlaybackRate()") forward
+    i.icon.btn-circle(click="stopVideo()") pause
+  app-timer([onChange]="onTimerChange",endTimePlaceholder="endTimePlaceholder")
+
+  app-selector-author(onAuthorSelect="onSelectAuthor")
+
+  .col-xs-12(style="padding:0px;")
+    #edit-tip
+    textarea#quote.col-xs-12(placeholder="VIDEO.QUOTE",name="quote", (change)="quoteText=$event; console.log(quoteText)", ng-class="{'has-error': (quoteForm.quote.$invalid)}")
+    i.icon.quote.right
+    i.icon.quote.left
+  .btn-box.col-xs-12.col-sm-3.gray(click="save()", ng-disabled="quoteForm.$invalid")
+    i.icon paperplane
+    | SAVE
