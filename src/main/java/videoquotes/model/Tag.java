@@ -2,9 +2,13 @@ package videoquotes.model;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.Entity;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
+//@Entity
 @Document
 public class Tag extends BasicRecord {
     

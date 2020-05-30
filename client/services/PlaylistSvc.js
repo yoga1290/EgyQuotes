@@ -1,5 +1,6 @@
 import $http from './http.js'
-import CONFIG from 'configuration'
+//import CONFIG from 'configuration'
+const { CONFIG } = window
 
 export default {
 

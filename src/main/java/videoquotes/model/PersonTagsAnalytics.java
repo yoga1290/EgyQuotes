@@ -5,6 +5,8 @@
  */
 package videoquotes.model;
 
+import javax.persistence.Entity;
+
 /**
  *
  * @author yoga1290
@@ -13,6 +15,7 @@ package videoquotes.model;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
+//@Entity
 @Document
 public class PersonTagsAnalytics extends BasicRecord {
     private String person;

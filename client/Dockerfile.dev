@@ -1,0 +1,32 @@
+FROM node:8-alpine
+
+EXPOSE 3000
+WORKDIR /usr/app
+
+# backend
+ENV BACKEND_URL='http://localhost:8081'
+ENV FACEBOOK_APP_ID=''
+ENV FACEBOOK_REDIRECT_URI='/OAuth/facebook/'
+ENV YT_KEY=''
+ENV OPENGRAPH_QUOTE_PREFIX='https://videoquotes.herokuapp.com/og/q/'
+
+COPY . .
+RUN npm i
+
+CMD echo -e "var config = {}; \n\
+        config.BASE_URL = \"${BACKEND_URL}\"; \n\n\
+        config.OAuth = {}; \n\
+        config.OAuth.facebook = {}; \n\
+        config.OAuth.facebook.APP_ID = \"${FACEBOOK_APP_ID}\"; \n\
+        config.OAuth.facebook.REDIRECT_URI = config.BASE_URL + \"${FACEBOOK_REDIRECT_URI}\"; \n\
+        config.OAuth.facebook.login = 'https://www.facebook.com/dialog/oauth?client_id=' \n\
+                                        + config.OAuth.facebook.APP_ID \n\
+                                        + '&redirect_uri=' \n\
+                                        + config.OAuth.facebook.REDIRECT_URI \n\
+                                        + '&scope=email&state=/index'; \n\n\n\
+        config.GOOGLE = {}; \n\
+        config.GOOGLE.YT_KEY = \"${YT_KEY}\"; \n\n\
+        config.OPEN_GRAPH = {}; \n\
+        config.OPEN_GRAPH.QUOTE = \"${OPENGRAPH_QUOTE_PREFIX}\"; \
+        window.CONFIG = config; \n" > public/configuration.js && \
+    npm run watch

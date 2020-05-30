@@ -1,0 +1,16 @@
+maven-repo
+target
+.settings
+.github
+.idea
+.classpath
+.factorypath
+.settings
+.project
+client/node_modules
+src/main/webapp
+src/.DS_Store
+src/main/.DS_Store
+src/main/java/.DS_Store
+backend.env
+client

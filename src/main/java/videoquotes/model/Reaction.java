@@ -2,11 +2,15 @@ package videoquotes.model;
 
 import java.security.Principal;
 import java.util.Arrays;
+
+import javax.persistence.Entity;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
+//@Entity
 @Document
 public class Reaction extends BasicRecord {
     

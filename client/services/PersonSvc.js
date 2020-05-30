@@ -1,13 +1,14 @@
 import $http from './http.js'
-import config from 'configuration'
-
+//import CONFIG from 'configuration'
+const { CONFIG } = window
+ 
 export default {
   findByName (name) {
-    return $http.get('https://videoquotes.herokuapp.com/person/find?name=' + encodeURIComponent(name));
+    return $http.get(CONFIG.BASE_URL + '/person/find?name=' + encodeURIComponent(name));
   },
 
   insert (name) {
-    return $http.post('https://videoquotes.herokuapp.com/person', {name: name});
+    return $http.post(CONFIG.BASE_URL + '/person', {name: name});
   }
 
 }

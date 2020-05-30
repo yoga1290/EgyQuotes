@@ -37,7 +37,7 @@ public class ChannelApi {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public @ResponseBody List<Channel> list(@RequestParam(required = false, defaultValue = "0") int page,
 	    @RequestParam(required = false, defaultValue = "50") int size) {
-	return channelRepository.findAll(new PageRequest(page, size)).getContent();
+	return channelRepository.findAll(PageRequest.of(page, size)).getContent();
     }
     
     @ApiOperation(
@@ -56,7 +56,7 @@ public class ChannelApi {
 	    @RequestParam String name,
 	    @RequestParam(required = false, defaultValue = "0") int page,
 	    @RequestParam(required = false, defaultValue = "10") int size) {
-	return channelRepository.findByName(name, new PageRequest(page, size)).getContent();
+	return channelRepository.findByName(name, PageRequest.of(page, size)).getContent();
     }
     
     @ApiOperation(
@@ -66,8 +66,7 @@ public class ChannelApi {
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public @ResponseBody Channel insertChannel(@RequestParam String channelId) {
-	Channel channel = new Channel();
-	channel.setId(channelId);
+	Channel channel = new Channel(channelId);
 	channel.setName(youtubeUtil.getChannelName(channelId));
 	return channelRepository.save(channel);
     }

@@ -1,0 +1,32 @@
+#########################################
+###############  BACKEND  ###############
+#########################################
+# FROM maven:3.6.3-jdk-14 as backend-builder
+FROM maven:3.6.3-jdk-11-openj9 as backend-builder
+WORKDIR /usr/app
+
+# https://spring.io/guides/gs/spring-boot-docker/
+# RUN addgroup -S spring && adduser -S spring -G spring
+# USER spring:spring
+# ENV db_username
+# ENV db_password
+# ENV db_host
+# ENV db_port
+# ENV db_database
+
+COPY src ./src
+COPY pom.xml .
+
+COPY ci/keytool.sh .
+RUN sh -x keytool.sh
+
+RUN mvn install
+# RUN mvn spring-boot:repackage
+CMD mvn spring-boot:run
+
+HEALTHCHECK \
+        --interval=30s \
+        --timeout=30s \
+        --start-period=5s \
+        --retries=3 \
+        CMD [ "curl http://localhost:8080/" ]

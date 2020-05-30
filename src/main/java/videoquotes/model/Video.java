@@ -8,10 +8,12 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
+//@Entity
 @Document
 public class Video extends BasicRecord {
 
@@ -34,6 +36,8 @@ public class Video extends BasicRecord {
 	private @Getter @Setter String channelId;
 
 	private @Getter @Setter Date time;
+
+	private @Getter @Setter String previewImage;
 
 	public Video() {
 	    start = new LinkedList<Integer>();

@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+import videoquotes.cron.FFMPEGTask;
 import videoquotes.model.BasicRecord;
 import videoquotes.model.Quote;
 import videoquotes.repository.mongo.QuoteRepository;
@@ -23,6 +22,14 @@ import javax.servlet.http.HttpServletResponse;
 public class HomeApi
 {
 
+
+    @Autowired
+    FFMPEGTask ffmpegTask;
+
+    @Value("${stream}")
+    private String streamURL;
+
+
   // @Secured({})
   @RequestMapping("/")
   public String index() {
@@ -36,7 +43,7 @@ public class HomeApi
   // }
 
   @RequestMapping("/anonymous")
-  public @ResponseBody Principal anonymous(Principal u) {
+  public @ResponseBody Principal anonymous(@ApiIgnore Principal u) {
      return u;
   }
 

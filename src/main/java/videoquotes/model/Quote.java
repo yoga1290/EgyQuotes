@@ -7,10 +7,12 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 
+//@Entity
 @Document
 public class Quote extends BasicRecord {
     
@@ -29,19 +31,23 @@ public class Quote extends BasicRecord {
 	@Valid
     private Person person;
 
+//	@NotEmpty(groups = {POST.class, PUT.class})
 	@NotNull(groups = {POST.class, PUT.class})
 	@Size(min = 3, groups = {POST.class, PUT.class})
     private @Getter @Setter String quote;
 
 	@NotNull(groups = {POST.class, PUT.class})
+//	@Positive(groups = {POST.class, PUT.class})
     private @Getter @Setter int start;
 
 	@NotNull(groups = {POST.class, PUT.class})
+//	@Positive(groups = {POST.class, PUT.class})
 	private @Getter @Setter int end;
 
 	@NotNull//(groups = {POST.class, PUT.class})
 	@NotEmpty//(groups = {POST.class, PUT.class})
-    private @Getter @Setter Date airedTime;
+	private @Getter @Setter Date airedTime;
+
     
     
 

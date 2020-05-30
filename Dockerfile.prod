@@ -1,0 +1,34 @@
+########################################################
+#####  BUILDING BACKEND (Java,Maven,Spring,..etc)  #####
+########################################################
+FROM maven:3.6.3-jdk-14 as backend-builder
+WORKDIR /usr/app
+
+COPY src ./src
+COPY ci/keytool.sh .
+
+RUN sh -x keytool.sh
+
+COPY pom.xml .
+
+RUN mvn install spring-boot:repackage
+
+############################################
+############################################
+############################################
+
+# https://spring.io/guides/gs/spring-boot-docker/
+FROM openjdk:8-jdk-alpine
+WORKDIR /usr/app
+COPY --from=backend-builder /usr/app/target/* /usr/app/
+
+RUN ls /usr/app/
+# HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "curl http://localhost/app.js" ]
+ENTRYPOINT ["java", "-jar", "videoquotes-0.1.0.jar"]
+
+HEALTHCHECK \
+        --interval=30s \
+        --timeout=30s \
+        --start-period=5s \
+        --retries=3 \
+        CMD [ "curl http://localhost:8080/" ]

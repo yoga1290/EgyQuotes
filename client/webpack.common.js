@@ -2,6 +2,7 @@
 
 var path = require('path')
 var webpack = require('webpack')
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 var VaadinIconsPath = path.join(__dirname, 'node_modules', 'vaadin-icons', 'assets', 'fonts')
 var BootstrapPath = path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css')
@@ -33,12 +34,19 @@ var config = {
     filename: path.join('[name]','app.js')
   },
 
-// https://webpack.js.org/configuration/plugins/#plugins
-  plugins: [
-  ],
-
+// // https://webpack.js.org/configuration/plugins/#plugins
+//   plugins: [
+//     new MiniCssExtractPlugin({
+//       // Options similar to the same options in webpackOptions.output
+//       // both options are optional
+//       filename: '[name].css',
+//       chunkFilename: '[id].css',
+//     }),
+//   ],
   resolve: {
     alias: {
+      'configuration': path.join(__dirname, 'configuration.js'),
+      
       // https://vuejs.org/v2/guide/installation.html
       'vue$': 'vue/dist/vue.esm.js',
 
@@ -75,9 +83,10 @@ var config = {
           use: [{
             loader: 'file-loader',
             options: {
-              outputPath: 'public' + path.sep,
-              context: '',
-              name: '../[name].[ext]'
+              // context: 'public',
+              name: '[name].[ext]',
+              // relative to webpack's output.path
+              outputPath: (url) => (path.join(url))
             }
           }]
       },

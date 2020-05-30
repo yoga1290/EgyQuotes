@@ -33,12 +33,6 @@ var config = {
     })
   ],
 
-  resolve: {
-    alias: {
-      'configuration': path.join(__dirname, 'config', 'prod.js')
-    }
-  },
-
 };
 
 module.exports = merge(common, config)

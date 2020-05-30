@@ -1,6 +1,9 @@
 package videoquotes.model;
 
 import java.util.List;
+
+import javax.persistence.Entity;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *
  * @author yoga1290
  */
+//@Entity
 @Document
 public class User extends BasicRecord {
     

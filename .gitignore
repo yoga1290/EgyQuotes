@@ -1,6 +1,10 @@
 target
 build
 .idea
+.classpath
+.factorypath
+.project
+.settings
 heroku/src
 heroku/target
 heroku/build
@@ -35,3 +39,11 @@ client/public/Vaadin-Icons\.woff
 client/public/bootstrap\.min\.css\.map
 
 client/vue/config\.js
+client/electron/app.js
+src/main/webapp/**
+client/public
+backend.env
+
+client/frontend.env
+
+client/frontend-prod.env

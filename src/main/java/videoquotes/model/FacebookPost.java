@@ -5,59 +5,30 @@
  */
 package videoquotes.model;
 
+import javax.persistence.Entity;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  *
  * @author yoga1290
  */
+@Document
 public class FacebookPost extends BasicRecord {
     
-    private String quoteId;
-    private long lastSync;
-    private long likes;
-    private long shares;
-    
-    
-    
-    
-    
-    
-    
-    
-    /// ===================
+    private @Getter @Setter
+	String quoteId;
 
-    public String getQuoteId() {
-	return quoteId;
-    }
+	private @Getter @Setter
+	long lastSync;
 
-    public long getLastSync() {
-	return lastSync;
-    }
+	private @Getter @Setter
+	long likes;
 
-    public long getLikes() {
-	return likes;
-    }
-
-    public long getShares() {
-	return shares;
-    }
-
-    public void setQuoteId(String quoteId) {
-	this.quoteId = quoteId;
-    }
-
-    public void setLastSync(long lastSync) {
-	this.lastSync = lastSync;
-    }
-
-    public void setLikes(long likes) {
-	this.likes = likes;
-    }
-
-    public void setShares(long shares) {
-	this.shares = shares;
-    }
-    
-    
-    
+	private @Getter @Setter
+	long shares;
     
 }

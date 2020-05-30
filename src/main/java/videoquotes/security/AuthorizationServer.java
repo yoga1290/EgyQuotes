@@ -80,14 +80,14 @@ class AuthorizationServer extends
 		    .scopes("openid");
 	}
 	
-	@Autowired
-	AuthenticationManager authenticationManager;
+	// @Autowired
+	// AuthenticationManager authenticationManager;
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints)
 			throws Exception {
 	    endpoints
-		    .authenticationManager(authenticationManager)
+		    // .authenticationManager(authenticationManager)
 		    .accessTokenConverter(jwtAccessTokenConverter())
 //		    .addInterceptor(new AuthorizationEndpointInterceptor())
 		    ;

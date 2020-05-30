@@ -20,6 +20,12 @@ public interface QuoteRepository extends BasicRecordRepository<Quote> {
     
     @Query(value = "{'isDeleted': false}", fields = "{ 'creatorId' : 0 }")
     Slice<Quote> findAllByPerson(Pageable pageable);
+
+    @Query("{'video.$id': ?0, 'isDeleted': false}")
+    List<Quote> findAllByVideoId(String videoId);
+
+    @Query("{'video.$id': ?0, 'isDeleted': false}")
+    List<Quote> findAllByVideoId(String videoId, Pageable pageable);
     
     @Query(value = "{ 'airedTime': {'$gte' : ?0, '$lte': ?1}, 'isDeleted': false }", fields = "{ 'person': 0 }")
     Page<Quote> findWithinTimespan(Date startTime, Date endTime, Pageable pageable);

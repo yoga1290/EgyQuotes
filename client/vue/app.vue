@@ -24,7 +24,8 @@ import { QuoteSvc } from 'services'
 import ErrorDialog from './error-dialog.vue'
 import PageLoaderHeader from './page-loader-header.vue'
 import PageLoaderFooter from './page-loader-footer.vue'
-import CONFIG from 'configuration'
+//import CONFIG from 'configuration'
+const { CONFIG } = window
 
 console.log('QuoteSvc', QuoteSvc)
 // https://vuejs.org/v2/guide/list.html#Caveats

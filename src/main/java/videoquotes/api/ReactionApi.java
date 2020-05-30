@@ -36,7 +36,7 @@ public class ReactionApi {
     public @ResponseBody List<Reaction> findByQuoteId(@RequestParam String quoteId,
 	    @RequestParam(required = false, defaultValue = "0") int page,
 	    @RequestParam(required = false, defaultValue = "10") int size) {
-	return reactionRepository.findByQuoteId(quoteId, new PageRequest(page, size)).getContent();
+	return reactionRepository.findByQuoteId(quoteId, PageRequest.of(page, size)).getContent();
     }
 
     @RequestMapping(value = "/reaction/countByQuoteId", method = RequestMethod.GET)

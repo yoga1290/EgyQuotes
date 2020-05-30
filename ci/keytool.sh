@@ -23,5 +23,3 @@ keytool -list -rfc --keystore $KEYSTORE -storepass $PASSWORD | openssl x509 -inf
 # Update oauth2server.properties:
 echo 'oauth2.storepass='$PASSWORD'\noauth2.key='$APP_NAME >src/main/resources/oauth2server.properties;
 
-# Copy configuration
-cp ci/prod/*.properties src/main/resources;

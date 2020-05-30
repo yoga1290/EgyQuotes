@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+    prod:
+      image: videoquotes-client
+      build:
+        context: .
+        dockerfile: Dockerfile.prod
+      env_file: 
+        - frontend-template.env #TODO
+      ports:
+        - 8080:80
+
+    dev:
+      image: videoquotes-client-dev
+      build:
+        context: .
+        dockerfile: Dockerfile.dev
+      env_file: 
+        - frontend-template.env #TODO
+      volumes:
+        # watch for file change
+        - type: bind
+          source: ./services
+          target: /usr/app/services
+        
+        # watch for file change
+        - type: bind
+          source: ./vue
+          target: /usr/app/vue
+
+      # watch for file change
+        - type: bind
+          source: ./webpack.dev.js
+          target: /usr/app/webpack.dev.js
+      # watch for file change
+        - type: bind
+          source: ./webpack.common.js
+          target: /usr/app/webpack.common.js
+      ports:
+        - 3000:3000

@@ -1,0 +1,113 @@
+version: '3.7'
+
+volumes:
+  dbdata:
+  dev-backend-src:
+  dev-backend-maven-repo:
+    # type: bind
+    # source: ./client
+
+services:
+
+    database:
+      # https://hub.docker.com/_/mongo
+      image: mongo:4.0
+      # command: [--auth]
+      ports:
+        - 27017:27017
+      volumes:
+        # - dbdata:/data/db
+        - ./docker-database-mongod.conf:/etc/mongod.conf.orig 
+        - ./docker-database-init.sh:/docker-entrypoint-initdb.d/00.sh
+      environment: 
+        - MONGO_INITDB_ROOT_USERNAME=root1
+        - MONGO_INITDB_ROOT_PASSWORD=root1
+        - MONGO_INITDB_DATABASE=local #videoquotes
+      # command: --authenticationDatabase videoquotes -u root -proot 
+
+    database-web:
+      # https://hub.docker.com/_/mongo-express
+      image: mongo-express
+      environment: 
+        - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+        - ME_CONFIG_OPTIONS_EDITORTHEME="ambiance"
+        - ME_CONFIG_MONGODB_SERVER=database
+        - ME_CONFIG_MONGODB_PORT=27017
+        - ME_CONFIG_MONGODB_ADMINUSERNAME=root1
+        - ME_CONFIG_MONGODB_ADMINPASSWORD=root1
+        - ME_CONFIG_BASICAUTH_USERNAME=root1
+        - ME_CONFIG_BASICAUTH_PASSWORD=root1
+      depends_on: 
+        - database
+      ports:
+        - 3001:8081
+
+    frontend:
+      image: docker.pkg.github.com/yoga1290/videoquotes/videoquotes-frontend:2020.05
+      build:
+        context: client
+        dockerfile: Dockerfile.prod
+      env_file: 
+        - ./client/frontend-template.env
+      volumes:
+        # avoid re-installing everytime
+        - ./client/node_modules:/usr/app/node_modules
+      ports:
+        - 3000:80
+      depends_on: 
+        - dev-backend
+
+    # backend:
+    #   # see https://help.github.com/en/github/managing-packages-with-github-packages/configuring-docker-for-use-with-github-packages
+    #   image: docker.pkg.github.com/yoga1290/videoquotes/videoquotes:latest
+    #   build:
+    #     context: .
+    #     dockerfile: Dockerfile.prod
+    #   env_file:
+    #     - backend-template.env #TODO
+    #   ports:
+    #     - 8082:8080
+    #   depends_on: 
+    #     - database
+
+#######################################
+############# DEVELOPMENT #############
+#######################################
+    dev-backend:
+      image: docker.pkg.github.com/yoga1290/videoquotes/videoquotes-backend:2020.05
+      build:
+        context: .
+        dockerfile: Dockerfile.dev
+      depends_on: 
+        - database
+      env_file:
+        - backend-template.env #TODO
+      volumes: 
+        # reuse the maven repository
+        # see https://github.com/carlossg/docker-maven/tree/d3dd6bc261c6173c5e52e3a7a36b6a3d8d2800b4#reusing-the-maven-local-repository
+        - dev-backend-maven-repo:/root/.m2
+        - ./src:/usr/app/src
+      ports:
+        - 8081:8080
+
+    dev-frontend:
+      build:
+        context: client
+        dockerfile: Dockerfile.dev
+      env_file: 
+        - ./client/frontend-template.env
+      volumes:
+        # avoid re-installing everytime
+        # - ./client/node_modules:/usr/app/node_modules
+
+        # watch for file change
+        - type: bind
+          source: ./client/services
+          target: /usr/app/services
+        
+        # watch for file change
+        - type: bind
+          source: ./client/vue
+          target: /usr/app/vue
+      ports:
+        - 3000:3000

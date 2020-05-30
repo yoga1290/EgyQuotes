@@ -34,6 +34,6 @@ public class TagNameApi
 	    @RequestParam String tag,
 	    @RequestParam(required = false, defaultValue = "0") int page,
 	    @RequestParam(required = false, defaultValue = "10") int size) {
-	return tagRepository.findByTag(tag, new PageRequest(page, size)).getContent();
+	return tagRepository.findByTag(tag, PageRequest.of(page, size)).getContent();
     }
 }

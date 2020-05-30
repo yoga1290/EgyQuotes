@@ -24,7 +24,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	@Value("${videoquotes.assets:}")
 	private String assets;
 
-	@Value("${videoquotes.cachePeriod:}")
+	@Value("${videoquotes.cachePeriod:0}")
 	private Integer cachePeriod;
 
 	@Override

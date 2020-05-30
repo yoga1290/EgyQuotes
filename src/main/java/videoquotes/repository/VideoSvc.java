@@ -67,6 +67,7 @@ public class VideoSvc {
 	}
 	video.setChannelId(channelId);
 	video.setTime(new Date(publishedTime));
+	video.setPreviewImage(youtubeUtil.getVideoPreview(videoId+""));
 	videoRepository.save(video);
 	
 	quote.setAiredTime(new Date(publishedTime));

@@ -1,7 +1,6 @@
 package videoquotes.util;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
+import okhttp3.*;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;

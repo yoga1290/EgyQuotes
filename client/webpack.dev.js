@@ -18,15 +18,11 @@ var config = {
     new BrowserSyncPlugin({
       host: 'localhost',
       port: 3000,
+      // Stop the browser from automatically opening
+      open: false,
       server: { baseDir: ['public'] }
     })
-  ],
-
-  resolve: {
-    alias: {
-      'configuration': path.join(__dirname, 'config', 'dev.js')
-    }
-  },
+  ]
 
 };
 

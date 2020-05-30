@@ -30,7 +30,7 @@ public class PersonApi
 			@RequestParam String name,
 			@RequestParam(required = false, defaultValue = "0") int page,
 			@RequestParam(required = false, defaultValue = "50") int size) {
-		return personRepository.findByName(name, new PageRequest(page, size)).getContent();
+		return personRepository.findByName(name, PageRequest.of(page, size)).getContent();
 	}
 
 	@RequestMapping(value = "/findById", method = RequestMethod.GET)
