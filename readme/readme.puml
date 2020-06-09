@@ -1,0 +1,35 @@
+@startuml 
+interface ":27017" as DB_PORT 
+
+FILE "backend.env" as BE_CONFIG 
+interface ":8080" as BE_PORT 
+package "Backend" { 
+  component [SpringBootApp] as BE_SERVER 
+  
+  BE_CONFIG ..> BE_SERVER 
+  BE_SERVER --> BE_PORT 
+  BE_SERVER -- DB_PORT 
+} 
+
+FILE "docker-database-mongod.conf" as DB_CONFIG 
+package "Database" { 
+  FILE "mongod.conf.orig" as iDB_CONFIG 
+  FILE "docker-database-init.sh" as DB_CONFIG2 
+  database "MongoDB" as BE_BD 
+  BE_BD -- DB_PORT 
+  iDB_CONFIG ..> BE_BD 
+  DB_CONFIG2 ..> BE_BD 
+  
+  DB_CONFIG --|> iDB_CONFIG 
+} 
+
+FILE "frontend.env" as FE_CONFIG 
+interface ":3000" as FE_PORT 
+package "Frontend" { 
+  component "NINGX" as FE_NGINX 
+  database "Bundled JS/HTML" as FE_ASSETS 
+  FE_ASSETS ..> FE_NGINX 
+  FE_CONFIG ..> FE_NGINX 
+  FE_NGINX -- FE_PORT 
+} 
+@enduml

@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-import videoquotes.cron.FFMPEGTask;
+// import videoquotes.cron.FFMPEGTask;
 import videoquotes.model.BasicRecord;
 import videoquotes.model.Quote;
 import videoquotes.repository.mongo.QuoteRepository;
@@ -23,8 +23,8 @@ public class HomeApi
 {
 
 
-    @Autowired
-    FFMPEGTask ffmpegTask;
+   //  @Autowired
+   //  FFMPEGTask ffmpegTask;
 
     @Value("${stream}")
     private String streamURL;

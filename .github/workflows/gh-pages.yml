@@ -1,0 +1,72 @@
+# This is a basic workflow to help you get started with Actions
+
+name: gp-pages
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  # push:
+  #   branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    # https://help.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners#supported-runners-and-hardware-resources
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+    # https://github.com/actions/setup-node#usage
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+
+#     # Runs a single command using the runners shell
+#     - name: Run a one-line script
+#       run: echo Hello, world!
+
+    # Runs a set of commands using the runners shell
+    - name: Run a multi-line script
+      # env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        cd $GITHUB_WORKSPACE
+        d=$(date +%y.%m)
+        v=$(git tag -l | wc -l)
+        tag="$d.$v"
+        
+        echo -e "var config = {}; \n\
+        config.BASE_URL = \"${BACKEND_URL}\"; \n\n\
+        config.OAuth = {}; \n\
+        config.OAuth.facebook = {}; \n\
+        config.OAuth.facebook.APP_ID = \"${FACEBOOK_APP_ID}\"; \n\
+        config.OAuth.facebook.REDIRECT_URI = config.BASE_URL + \"${FACEBOOK_REDIRECT_URI}\"; \n\
+        config.OAuth.facebook.login = 'https://www.facebook.com/dialog/oauth?client_id=' \n\
+                                        + config.OAuth.facebook.APP_ID \n\
+                                        + '&redirect_uri=' \n\
+                                        + config.OAuth.facebook.REDIRECT_URI \n\
+                                        + '&scope=email&state=/index'; \n\n\n\
+        config.GOOGLE = {}; \n\
+        config.GOOGLE.YT_KEY = \"${YT_KEY}\"; \n\n\
+        config.OPEN_GRAPH = {}; \n\
+        config.OPEN_GRAPH.QUOTE = \"${OPENGRAPH_QUOTE_PREFIX}\"; \
+        window.CONFIG = config; \n" > client/public/configuration.js;
+
+        npm i
+        npm run build
+        cp -r client/public ./
+
+        git checkout gh-pages
+        # ls docs || mkdir docs && touch docs/index.html
+        git add .
+        git config --global user.email "yoga1290@gmail.com"
+        git config --global user.name "Youssef Gamil"
+        git commit -m "$tag"
+        git tag $tag
+        git push
