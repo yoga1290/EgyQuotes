@@ -1,4 +1,4 @@
-package videoquotes.security;
+package videoquotes.security.authorizationserver;
 
 import java.util.Collection;
 import java.util.Iterator;

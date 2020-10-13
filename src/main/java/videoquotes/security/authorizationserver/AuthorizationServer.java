@@ -1,4 +1,4 @@
-package videoquotes.security;
+package videoquotes.security.authorizationserver;
 
 import java.security.KeyPair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,10 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 
+// import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.core.annotation.Order;
 
+// @Order(101)
 @Configuration
 @EnableAuthorizationServer
 class AuthorizationServer extends
@@ -52,6 +55,7 @@ class AuthorizationServer extends
 //	}
 	/////////////////////////////////////////
 
+	// https://docs.spring.io/spring-security/oauth/apidocs/org/springframework/security/oauth2/config/annotation/web/configuration/AuthorizationServerConfigurerAdapter.html
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		//TODO: clients.withClientDetails(...);
@@ -59,37 +63,26 @@ class AuthorizationServer extends
 		    .withClient("h5")
 		    .secret("")
 		    .authorities("ROLE_H5")
-			.autoApprove(true)
 		    .accessTokenValiditySeconds(5 * 60 * 60)
-		    .authorizedGrantTypes("authorization_code", "refresh_token", "password")
-		    .scopes("openid")
-		.and()
-		    .withClient("swagger")
-		    .secret("")
-		    .authorities("ROLE_SWAGGER")
-			.autoApprove(true)
-		    .accessTokenValiditySeconds(5 * 60 * 60)
-		    .authorizedGrantTypes("authorization_code", "refresh_token", "password")
-		    .scopes("read")
-		.and()
-		    .withClient("mobile")
-		    .secret("")
-		    .authorities("ROLE_MOBILE")
-		    .accessTokenValiditySeconds(5 * 60 * 60)
-		    .authorizedGrantTypes("authorization_code", "refresh_token", "client_credentials", "password")
-		    .scopes("openid");
+		    .authorizedGrantTypes("authorization_code", "refresh_token", "password") //, AuthorizationGrantType.PASSWORD.getValue()
+			.scopes("openid")
+			.autoApprove(true);
 	}
 	
-	// @Autowired
-	// AuthenticationManager authenticationManager;
+	// see https://docs.spring.io/spring-security-oauth2-boot/docs/2.3.4.RELEASE/reference/html5/#oauth2-boot-authorization-server-password-grant-autowired-authentication-manager
+	AuthenticationManager authenticationManager;
+    public AuthorizationServer(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints)
 			throws Exception {
 	    endpoints
-		    // .authenticationManager(authenticationManager)
-		    .accessTokenConverter(jwtAccessTokenConverter())
-//		    .addInterceptor(new AuthorizationEndpointInterceptor())
+		    .authenticationManager(authenticationManager)
+			.accessTokenConverter(jwtAccessTokenConverter())
+			.allowedTokenEndpointRequestMethods(org.springframework.http.HttpMethod.GET)
+		    // .addInterceptor(new AuthorizationEndpointInterceptor())
 		    ;
 	}
 

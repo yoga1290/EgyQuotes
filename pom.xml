@@ -72,6 +72,11 @@
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-security</artifactId>
 	</dependency>
+
+	<!-- =================================================== -->
+	<!-- Authorization Server -->
+	<!-- https://docs.spring.io/spring-security-oauth2-boot/docs/2.3.4.RELEASE/reference/html5/#oauth2-boot-authorization-server-minimal -->
+	<!-- =================================================== -->
 	<dependency>
 	    <groupId>org.springframework.security.oauth</groupId>
 	    <artifactId>spring-security-oauth2</artifactId>
@@ -79,11 +84,17 @@
 		<version>2.4.0.RELEASE</version>
 	</dependency>
 	<dependency>
+	    <groupId>org.springframework.security.oauth.boot</groupId>
+	    <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+		<version>2.3.4.RELEASE</version>
+	</dependency>
+	<dependency>
 	    <groupId>org.springframework.security</groupId>
 	    <artifactId>spring-security-jwt</artifactId>
 		<!-- <version>1.0.7.RELEASE</version> -->
 		<version>1.1.0.RELEASE</version>
 	</dependency>
+	<!-- =================================================== -->
 
 	<!-- https://spring.io/guides/gs/accessing-data-jpa/ -->
 	<dependency>

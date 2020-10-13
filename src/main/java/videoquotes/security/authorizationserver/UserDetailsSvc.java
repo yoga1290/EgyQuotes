@@ -1,11 +1,15 @@
-package videoquotes.security;
+package videoquotes.security.authorizationserver;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +22,7 @@ import videoquotes.util.FacebookUtil;
  * @author yoga1290
  */
 @Configuration
+@Log
 public class UserDetailsSvc implements UserDetailsService {
 
     @Value("${videoquotes.admin}")
@@ -28,7 +33,17 @@ public class UserDetailsSvc implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-	//TODO: findUserDetailsByUsername()
+	
+	System.out.println("===================================");
+	System.out.println("===================================");
+	System.out.println("===================================");
+	System.out.println("===================================");
+	System.out.println("===================================");
+	System.out.println("===================================");
+	System.out.println("===================================");
+	System.out.println("=================================== loadUserByUsername"+ username);
+	
+		//TODO: findUserDetailsByUsername()
 	//TODO: findUserDetailsByFacebookToken()
 	//TODO: findUserDetailsByGoogleToken()
  /*
@@ -75,7 +90,9 @@ public class UserDetailsSvc implements UserDetailsService {
 	return new UserDetailsImpl(user);
     }
 
+	// Generates token
 	private UserDetails findUserDetailsByEmail(String email) {
+
 		User user = userRepository.findOneByEmail(email);
 		if (user == null) {
 			user = new User();
@@ -93,6 +110,7 @@ public class UserDetailsSvc implements UserDetailsService {
     
     private UserDetails findUserDetailsByGoogleAccessToken(String accessToken) {
 	System.out.println("\n\n\n\n\n\n\n\n\n\n findUserDetailsByFacebookAccessToken");
+		log.info("findUserDetailsByFacebookAccessToken");
 	String facebookId = FacebookUtil.getFacebookId(accessToken);
 	User user = userRepository.findOneByFacebookId(facebookId);
 	if (user == null) {
