@@ -1,0 +1,18 @@
+#grid.col-md-11.col-sm-9.col-xs-12.section
+	.col-xs-12(:class="{noscroll: show}")
+		.hidden-xs.hidden-sm(v-if="screen.other")
+			.col-1.col-md-3.clickable
+				app-quote(*ngFor="let quote of items; let $index = index", [key]="quote.id", v-if="$index%4==0", [quote]="quote", [click]="onQuoteSelect")
+			.col-2.col-md-3.clickable
+				app-quote(*ngFor="let quote of items; let $index = index", [key]="quote.id", v-if="$index%4==1", [quote]="quote", [click]="onQuoteSelect")
+			.col-3.col-md-3.clickable
+				app-quote(*ngFor="let quote of items; let $index = index", [key]="quote.id", v-if="$index%4==2", [quote]="quote", [click]="onQuoteSelect")
+			.col-4.col-md-3.clickable
+				app-quote(*ngFor="let quote of items; let $index = index", [key]="quote.id", v-if="$index%4==3", [quote]="quote", [click]="onQuoteSelect")
+		.visible-sm(v-if="screen.sm")
+			.col-1.col-sm-6.clickable
+				app-quote(*ngFor="let quote of items; let $index = index", v-if="$index%2==0", [quote]="quote", [key]="quote.id", [click]="onQuoteSelect")
+			.col-2.col-sm-6.clickable
+				app-quote(*ngFor="let quote of items; let $index = index", v-if="$index%2==1", [quote]="quote", [key]="quote.id", [click]="onQuoteSelect")
+		.visible-xs.col-xs-12.clickable(v-if="screen.xs")
+			app-quote(*ngFor="let quote of items; let $index = index", [quote]="quote", [key]="quote.id", [click]="onQuoteSelect")

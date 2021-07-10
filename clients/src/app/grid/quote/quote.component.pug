@@ -1,0 +1,7 @@
+.quote.quotemenu.fadeInUp.animated.clickable(*ngIf="quote", [ngStyle]="{'backgroundImage': quote.thumbnail}", (click)="click(quote)")
+  .date {{date}}
+  .author-name(*ngIf="quote.person") {{quote.person.name}}
+  i.icon.quote.right
+  p.body {{quote.quote}}
+  i.icon.quote.left
+  img.logo.img-circle.col-xs-3([src]="logo")

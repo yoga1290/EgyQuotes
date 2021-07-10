@@ -1,0 +1,8 @@
+.timer
+  .col-xs-12
+    .col-sm-6.col-xs-12
+      i.left.icon
+      input(type="tel", autocomplete="off", name="startTime", [(ngModel)]="startTime", placeholder="0", (keyup)="onStartTimeChange(startTime)", ng-class="{'has-error': (quoteForm.startTime.$invalid)}", ng-pattern="[/d]{1-2}[:]+[/d]{2}")
+    .col-sm-6.col-xs-12
+      i.col-sm-offset-6.col-xs-offset-12.right.icon
+      input(type="tel", autocomplete="off", name="endTime", [(ngModel)]="endTime", placeholder="endTimePlaceholder", (keyup)="onEndTimeChange(endTime)", ng-class="{'has-error': (quoteForm.endTime.$invalid)}",ng-pattern="[/d]{1-2}[:]+[/d]{2}")
